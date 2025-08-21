@@ -1,0 +1,6 @@
+@WorkVerseAPI_HostAddress = http://localhost:5263
+
+GET {{WorkVerseAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
