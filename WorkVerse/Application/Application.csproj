@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Interfaces\IRepositories\" />
     <Folder Include="Interfaces\IServicies\" />
     <Folder Include="Mappers\" />
     <Folder Include="DTOs\" />

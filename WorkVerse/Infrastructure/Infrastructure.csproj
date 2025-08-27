@@ -9,10 +9,10 @@
   <ItemGroup>
     <Folder Include="Data\" />
     <Folder Include="Servicies\" />
-    <Folder Include="Repositories\" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Application\Application.csproj" />
     <ProjectReference Include="..\Domain\Domain.csproj" />
   </ItemGroup>
 
