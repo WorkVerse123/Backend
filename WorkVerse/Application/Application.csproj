@@ -7,9 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Folder Include="DTOs\Response\" />
+    <Folder Include="Interfaces\IRepositories\" />
     <Folder Include="Interfaces\IServicies\" />
     <Folder Include="Mappers\" />
-    <Folder Include="DTOs\" />
     <Folder Include="ExceptionHandler\" />
     <Folder Include="Servicies\" />
   </ItemGroup>
