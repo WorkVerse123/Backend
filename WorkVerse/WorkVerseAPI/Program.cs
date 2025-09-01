@@ -2,6 +2,7 @@
 using Autofac.Extensions.DependencyInjection;
 using Autofac;
 using WorkVerseAPI.Configurations;
+using Application.Mappers;
 
 namespace WorkVerseAPI
 {
@@ -18,9 +19,17 @@ namespace WorkVerseAPI
                 containerBuilder.RegisterModule(new ServiceRegistration(builder.Configuration));
             });
 
-            // Add services to the container.
 
+            //Add mapper as the DI (It will seek all asembly have in mapper)
+            builder.Services.AddAutoMapper(typeof(EmployeeProfile));
+
+
+
+
+            // Add services to the container.
             builder.Services.AddControllers();
+
+
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();

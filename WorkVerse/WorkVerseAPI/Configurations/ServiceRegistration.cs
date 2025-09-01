@@ -1,5 +1,9 @@
-﻿using Autofac;
+﻿using Application.Interfaces.IRepositories;
+using Application.Interfaces.IServicies;
+using Application.Servicies;
+using Autofac;
 using Infrastructure.Data;
+using Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 namespace WorkVerseAPI.Configurations
 {
@@ -26,8 +30,8 @@ namespace WorkVerseAPI.Configurations
 
             //builder.RegisterType<JWTService>().As<IJWTService>().InstancePerLifetimeScope();
             //builder.RegisterType<AuthService>().As<IAuthService>().InstancePerLifetimeScope();
-            //builder.RegisterType<UnitOfWork>().As<IUnitOfWork>().InstancePerLifetimeScope();
-
+            builder.RegisterType<UnitOfWork>().As<IUnitOfWork>().InstancePerLifetimeScope();
+            builder.RegisterType<EmployeeProfileServices>().As<IEmployeeProfileServices>().InstancePerLifetimeScope();
 
         }
     }
