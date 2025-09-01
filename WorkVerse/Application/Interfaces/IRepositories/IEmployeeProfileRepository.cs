@@ -9,9 +9,9 @@ namespace Application.Interfaces.IRepositories
 {
     public interface IEmployeeProfileRepository : IGenericRepository<EmployeeProfile>
     {
-        // Employee profile
-        Task<EmployeeProfile?> GetByIdAsync(int employeeId);                     // GET /employees/{id}
-
+       
+        Task<EmployeeProfile?> GetByIdAsync(int employeeId);
+        Task<EmployeeProfile?> GetByUserIdAsync(int userId);
     }
 
 }

@@ -24,7 +24,11 @@ namespace Infrastructure.Repositories
             var result = await _dbContext.EmployeeProfiles.Include(c => c.User).FirstOrDefaultAsync(u => u.EmployeeId == employeeId);
             return result;
         }
+        public async Task<EmployeeProfile?> GetByUserIdAsync(int userId)
+        {
+            var result = await _dbContext.EmployeeProfiles.Include(c => c.User).FirstOrDefaultAsync(u => u.UserId == userId);
+            return result;
+        }
 
-       
     }
 }

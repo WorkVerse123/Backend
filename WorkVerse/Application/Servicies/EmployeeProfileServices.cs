@@ -68,21 +68,21 @@ namespace Application.Servicies
             }
         }
 
-        public async Task<EmployeeProfileDTOResponse> UpdateProfileAsync(EmployeeProfileDTOPutRequest employeeProfile)
+        public async Task<EmployeeProfileDTOResponse> UpdateProfileAsync(int employeeId, EmployeeProfileDTOPutRequest employeeProfile)
         {
             try
             {
                 if (employeeProfile == null)
                 {
-                    _logger.LogWarning("Attempted to update a null profile with ID: {Id}", employeeProfile.EmployeeId);
+                    _logger.LogWarning("Attempted to update a null profile with ID: {Id}", employeeId);
                     throw new ArgumentNullException(nameof(employeeProfile), "Profile cannot be null");
                 }
 
-                var existingProfile = await _unitOfWork.EmployeeProfile.GetByIdAsync(employeeProfile.EmployeeId);
+                var existingProfile = await _unitOfWork.EmployeeProfile.GetByIdAsync(employeeId);
                 if (existingProfile == null)
                 {
-                    _logger.LogWarning("Profile with ID {Id} not found", employeeProfile.EmployeeId);
-                    throw new KeyNotFoundException($"Profile with ID {employeeProfile.EmployeeId} not found");
+                    _logger.LogWarning("Profile with ID {Id} not found", employeeId);
+                    throw new KeyNotFoundException($"Profile with ID {employeeId} not found");
                 }
 
                 // Map dữ liệu request vào entity có sẵn
@@ -95,7 +95,21 @@ namespace Application.Servicies
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error updating profile with ID: {Id}", employeeProfile.EmployeeId);
+                _logger.LogError(ex, "Error updating profile with ID: {Id}", employeeId);
+                throw;
+            }
+        }
+
+        public async Task<EmployeeProfileDTOResponse?> GetByUserIdAsync(int userId)
+        {
+            try
+            {
+                var entity = await _unitOfWork.EmployeeProfile.GetByUserIdAsync(userId);
+                return _mapper.Map<EmployeeProfileDTOResponse>(entity);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error retrieving EmployeeProfile with UserId: {Id}", userId);
                 throw;
             }
         }

@@ -10,9 +10,9 @@ using System.Threading.Tasks;
 
 namespace Application.Mappers
 {
-    public class EmployeeProfile : Profile
+    public class EmployeeProfileMapper : Profile
     {
-        public EmployeeProfile()
+        public EmployeeProfileMapper()
         {
             // Create
             CreateMap<EmployeeProfileDTOPostRequest, EmployeeProfile>();

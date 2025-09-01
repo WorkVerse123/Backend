@@ -21,7 +21,7 @@ namespace WorkVerseAPI
 
 
             //Add mapper as the DI (It will seek all asembly have in mapper)
-            builder.Services.AddAutoMapper(typeof(EmployeeProfile));
+            builder.Services.AddAutoMapper(typeof(EmployeeProfileMapper));
 
 
 

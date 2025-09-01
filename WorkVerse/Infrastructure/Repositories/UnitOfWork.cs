@@ -21,6 +21,8 @@ namespace Infrastructure.Repositories
         {
             _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+
+            EmployeeProfile = new EmployeeProfileRepository(_dbContext);
         }
 
         public async Task BeginTransactionAsync()

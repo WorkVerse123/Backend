@@ -8,7 +8,6 @@ namespace Application.DTOs.Request
 {
     public class EmployeeProfileDTOPutRequest
     {
-        public int EmployeeId { get; set; }
         public string FullName { get; set; } = null!;
         public DateTime? DateOfBirth { get; set; }
         public string? Gender { get; set; }

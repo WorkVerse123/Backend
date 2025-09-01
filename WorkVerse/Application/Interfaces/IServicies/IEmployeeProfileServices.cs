@@ -14,6 +14,8 @@ namespace Application.Interfaces.IServicies
     {
         Task<EmployeeProfileDTOResponse> CreateProfileAsync(EmployeeProfileDTOPostRequest employeeProfile);
         Task<EmployeeProfileDTOResponse?> GetByIdAsync(int employeeId);
-        Task<EmployeeProfileDTOResponse> UpdateProfileAsync(EmployeeProfileDTOPutRequest employeeProfile);
+        Task<EmployeeProfileDTOResponse> UpdateProfileAsync(int employeeId, EmployeeProfileDTOPutRequest employeeProfile);
+        Task<EmployeeProfileDTOResponse?> GetByUserIdAsync(int userId);
+
     }
 }
