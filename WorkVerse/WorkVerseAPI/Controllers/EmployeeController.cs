@@ -19,8 +19,8 @@ namespace WorkVerseAPI.Controllers
             _employeeProfileService = employeeProfileService;
         }
 
-        [HttpPost]
-        public async Task<IActionResult> CreateProfile([FromBody] EmployeeProfileDTOPostRequest request)
+        [HttpPost("{userId}")]
+        public async Task<IActionResult> CreateProfile([FromRoute] int userId,[FromBody] EmployeeProfileDTORequest request)
         {
             try
             {
@@ -29,13 +29,13 @@ namespace WorkVerseAPI.Controllers
                     return BadRequest(new ApiResponse<object>("Invalid request",
                         new List<string> { "Profile request cannot be null" }, 400));
                 }
-                var check = await _employeeProfileService.GetByUserIdAsync(request.UserId);
+                var check = await _employeeProfileService.GetByUserIdAsync(userId);
                 if (check != null)
                 {
                     return Ok(new ApiResponse<EmployeeProfileDTOResponse>("Profile founded",check,200
                     ));
                 }
-                var result = await _employeeProfileService.CreateProfileAsync(request);
+                var result = await _employeeProfileService.CreateProfileAsync(userId,request);
                 return Ok(new ApiResponse<EmployeeProfileDTOResponse>("Profile created successfully", result, 201));
             }
             catch (Exception ex)
@@ -71,7 +71,7 @@ namespace WorkVerseAPI.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateProfile([FromBody] EmployeeProfileDTOPutRequest request, [FromRoute] int id)
+        public async Task<IActionResult> UpdateProfile([FromBody] EmployeeProfileDTORequest request, [FromRoute] int id)
         {
             try
             {

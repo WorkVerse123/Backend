@@ -12,9 +12,9 @@ namespace Application.Interfaces.IServicies
 {
     public interface IEmployeeProfileServices
     {
-        Task<EmployeeProfileDTOResponse> CreateProfileAsync(EmployeeProfileDTOPostRequest employeeProfile);
+        Task<EmployeeProfileDTOResponse> CreateProfileAsync(int userId, EmployeeProfileDTORequest employeeProfile);
         Task<EmployeeProfileDTOResponse?> GetByIdAsync(int employeeId);
-        Task<EmployeeProfileDTOResponse> UpdateProfileAsync(int employeeId, EmployeeProfileDTOPutRequest employeeProfile);
+        Task<EmployeeProfileDTOResponse> UpdateProfileAsync(int employeeId, EmployeeProfileDTORequest employeeProfile);
         Task<EmployeeProfileDTOResponse?> GetByUserIdAsync(int userId);
 
     }

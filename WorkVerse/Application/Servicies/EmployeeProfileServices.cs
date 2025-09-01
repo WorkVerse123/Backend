@@ -26,7 +26,7 @@ namespace Application.Servicies
             _logger = logger;
         }
 
-        public async Task<EmployeeProfileDTOResponse> CreateProfileAsync(EmployeeProfileDTOPostRequest employeeProfile)
+        public async Task<EmployeeProfileDTOResponse> CreateProfileAsync(int userId, EmployeeProfileDTORequest employeeProfile)
         {
             try
             {
@@ -38,7 +38,7 @@ namespace Application.Servicies
 
                 // Map DTO request sang entity
                 var entity = _mapper.Map<EmployeeProfile>(employeeProfile);
-
+                entity.UserId = userId;
                 // Add vào DB
                 await _unitOfWork.EmployeeProfile.AddAsync(entity);
                 await _unitOfWork.SaveChangesAsync();
@@ -48,7 +48,7 @@ namespace Application.Servicies
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error creating employee profile for UserId: {UserId}", employeeProfile.UserId);
+                _logger.LogError(ex, "Error creating employee profile for UserId: {UserId}", userId);
                 throw;
             }
         }
@@ -68,7 +68,7 @@ namespace Application.Servicies
             }
         }
 
-        public async Task<EmployeeProfileDTOResponse> UpdateProfileAsync(int employeeId, EmployeeProfileDTOPutRequest employeeProfile)
+        public async Task<EmployeeProfileDTOResponse> UpdateProfileAsync(int employeeId, EmployeeProfileDTORequest employeeProfile)
         {
             try
             {

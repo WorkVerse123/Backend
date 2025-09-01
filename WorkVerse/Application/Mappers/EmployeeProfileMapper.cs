@@ -14,11 +14,8 @@ namespace Application.Mappers
     {
         public EmployeeProfileMapper()
         {
-            // Create
-            CreateMap<EmployeeProfileDTOPostRequest, EmployeeProfile>();
-
-            // Update
-            CreateMap<EmployeeProfileDTOPutRequest, EmployeeProfile>();
+            // Create, Update
+            CreateMap<EmployeeProfileDTORequest, EmployeeProfile>();
 
             // Response
             CreateMap<EmployeeProfile, EmployeeProfileDTOResponse>();
