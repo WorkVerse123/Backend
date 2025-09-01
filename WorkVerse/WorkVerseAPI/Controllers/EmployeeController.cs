@@ -1,5 +1,6 @@
 ﻿using Application.DTOs.Request;
 using Application.DTOs.Response;
+using Application.Helper;
 using Application.Interfaces.IServicies;
 using Microsoft.AspNetCore.Mvc;
 using WorkVerseAPI.Models;
@@ -24,11 +25,9 @@ namespace WorkVerseAPI.Controllers
         {
             try
             {
-                if (request == null)
-                {
-                    return BadRequest(new ApiResponse<object>("Invalid request",
-                        new List<string> { "Profile request cannot be null" }, 400));
-                }
+                var (isValid, error) = EmployeeProfileValidationHelper.ValidateEmployeeProfileRequest(request);
+                if (!isValid)
+                    return BadRequest(new ApiResponse<object>("Invalid request", new List<string> { error }, 400));
                 var check = await _employeeProfileService.GetByUserIdAsync(userId);
                 if (check != null)
                 {
@@ -75,10 +74,13 @@ namespace WorkVerseAPI.Controllers
         {
             try
             {
-                if (request == null || id == null)
+                var (isValid, error) = EmployeeProfileValidationHelper.ValidateEmployeeProfileRequest(request);
+                if (!isValid)
+                    return BadRequest(new ApiResponse<object>("Invalid request", new List<string> {error}, 400));
+                if (id == null)
                 {
                     return BadRequest(new ApiResponse<object>("Invalid request",
-                        new List<string> { "Request body is null or EmployeeId mismatch" }, 400));
+                        new List<string> { "EmployeeId mismatch" }, 400));
                 }
 
                 var result = await _employeeProfileService.UpdateProfileAsync(id,request);
