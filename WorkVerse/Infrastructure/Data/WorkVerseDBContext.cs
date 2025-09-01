@@ -22,7 +22,7 @@ namespace Infrastructure.Data
         public virtual DbSet<Shift> Shifts { get; set; }
         public virtual DbSet<JobCategory> JobCategories { get; set; }
         public virtual DbSet<JobCategoryMapping> JobCategoryMappings { get; set; }
-        public virtual DbSet<Application> Applications { get; set; }
+        public virtual DbSet<Domain.Entities.Application> Applications { get; set; }
         public virtual DbSet<Bookmark> Bookmarks { get; set; }
         public virtual DbSet<Review> Reviews { get; set; }
         public virtual DbSet<Message> Messages { get; set; }
@@ -197,7 +197,7 @@ namespace Infrastructure.Data
             });
 
             //  APPLICATION 
-            modelBuilder.Entity<Application>(entity =>
+            modelBuilder.Entity<Domain.Entities.Application>(entity =>
             {
                 entity.ToTable("Application");
                 entity.HasKey(e => e.ApplicationId);

@@ -1,4 +1,5 @@
 ﻿using Application.Interfaces.IRepositories;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,66 +9,104 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Repositories
 {
-    public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
+    public class GenericRepository<T> : IGenericRepository<T> where T : class
     {
-        public Task AddAsync(T entity)
+        protected readonly DbContext _context;
+        protected readonly DbSet<T> _dbSet;
+
+        public GenericRepository(DbContext context)
         {
-            throw new NotImplementedException();
+            _context = context;
+            _dbSet = _context.Set<T>();
         }
 
-        public Task AddRangeAsync(List<T> entities)
+        public async Task AddAsync(T entity)
         {
-            throw new NotImplementedException();
+            await _dbSet.AddAsync(entity);
         }
 
-        public Task<PaginationResult<List<T>>> GetAllAsync(Expression<Func<T, bool>>? filter = null, Func<IQueryable<T>, IOrderedQueryable<T>>? order = null, Func<IQueryable<T>, IQueryable<T>>? include = null, int? pageIndex = null, int? pageSize = null)
+        public async Task AddRangeAsync(List<T> entities)
         {
-            throw new NotImplementedException();
+            await _dbSet.AddRangeAsync(entities);
         }
 
-        public Task<T?> GetAsync(Guid id, Func<IQueryable<T>, IQueryable<T>>? include = null)
+        public async Task<T?> GetAsync(Guid id, Func<IQueryable<T>, IQueryable<T>>? include = null)
         {
-            throw new NotImplementedException();
-        }
+            IQueryable<T> query = _dbSet;
 
-        public void HardRemove(T entity, bool? isOwnerRequired = false)
-        {
-            throw new NotImplementedException();
-        }
+            if (include != null)
+                query = include(query);
 
-        public void HardRemoveRange(List<T> entities, bool? isOwnerRequired = false)
-        {
-            throw new NotImplementedException();
-        }
+            // Assumes entity has a property named "Id" of type Guid
+            var parameter = Expression.Parameter(typeof(T), "x");
+            var property = Expression.Property(parameter, "Id");
+            var idValue = Expression.Constant(id);
+            var equal = Expression.Equal(property, idValue);
+            var lambda = Expression.Lambda<Func<T, bool>>(equal, parameter);
 
-        public void Restore(T entity, bool? isOwnerRequired = false)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void RestoreRange(List<T> entities, bool? isOwnerRequired = false)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void SoftRemove(T entity, bool? isOwnerRequired = false)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void SoftRemoveRange(List<T> entities, bool? isOwnerRequired = false)
-        {
-            throw new NotImplementedException();
+            return await query.FirstOrDefaultAsync(lambda);
         }
 
         public void Update(T entity, bool? isOwnerRequired = false)
         {
-            throw new NotImplementedException();
+            _dbSet.Update(entity);
         }
 
         public void UpdateRange(List<T> entities, bool? isOwnerRequired = false)
         {
-            throw new NotImplementedException();
+            _dbSet.UpdateRange(entities);
+        }
+
+        public void SoftRemove(T entity, bool? isOwnerRequired = false)
+        {
+            SetIsDeleted(entity, true);
+            _dbSet.Update(entity);
+        }
+
+        public void SoftRemoveRange(List<T> entities, bool? isOwnerRequired = false)
+        {
+            foreach (var entity in entities)
+            {
+                SetIsDeleted(entity, true);
+            }
+            _dbSet.UpdateRange(entities);
+        }
+
+        public void Restore(T entity, bool? isOwnerRequired = false)
+        {
+            SetIsDeleted(entity, false);
+            _dbSet.Update(entity);
+        }
+
+        public void RestoreRange(List<T> entities, bool? isOwnerRequired = false)
+        {
+            foreach (var entity in entities)
+            {
+                SetIsDeleted(entity, false);
+            }
+            _dbSet.UpdateRange(entities);
+        }
+
+        public void HardRemove(T entity, bool? isOwnerRequired = false)
+        {
+            _dbSet.Remove(entity);
+        }
+
+        public void HardRemoveRange(List<T> entities, bool? isOwnerRequired = false)
+        {
+            _dbSet.RemoveRange(entities);
+        }
+
+        /// <summary>
+        /// Sets the IsDeleted property if it exists.
+        /// </summary>
+        private void SetIsDeleted(T entity, bool value)
+        {
+            var prop = typeof(T).GetProperty("IsDeleted");
+            if (prop != null && prop.PropertyType == typeof(bool))
+            {
+                prop.SetValue(entity, value);
+            }
         }
     }
 }
