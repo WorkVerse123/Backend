@@ -10,19 +10,18 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Repositories
 {
-    public class EmployeeRepository : GenericRepository<EmployeeProfile>, IEmployeeRepository
+    public class EmployeeProfileRepository : GenericRepository<EmployeeProfile>, IEmployeeProfileRepository
     {
         private readonly WorkVerseDBContext _dbContext;
-        public EmployeeRepository(WorkVerseDBContext dbContext) : base(dbContext)
+        public EmployeeProfileRepository(WorkVerseDBContext dbContext) : base(dbContext)
         {
             _dbContext = dbContext;
         }
-
-       
+    
 
         public async Task<EmployeeProfile?> GetByIdAsync(int employeeId)
         {
-            var result = await _dbContext.EmployeeProfiles.FirstOrDefaultAsync(u => u.EmployeeId == employeeId);
+            var result = await _dbContext.EmployeeProfiles.Include(c => c.User).FirstOrDefaultAsync(u => u.EmployeeId == employeeId);
             return result;
         }
 

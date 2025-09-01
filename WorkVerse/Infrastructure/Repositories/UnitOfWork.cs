@@ -122,5 +122,8 @@ namespace Infrastructure.Repositories
                 await _transaction.RollbackAsync();
             }
         }
+
+        //This place to start progress dependency injection
+        public IEmployeeProfileRepository EmployeeProfile { get; private set; }
     }
 }

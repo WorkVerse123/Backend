@@ -14,5 +14,7 @@ namespace Application.Interfaces.IRepositories
         Task CommitTransactionAsync();
         Task RollbackTransactionAsync();
         Task<ITransaction?> GetCurrentTransactionAsync();
+
+        IEmployeeProfileRepository EmployeeProfile { get; }
     }
 }
