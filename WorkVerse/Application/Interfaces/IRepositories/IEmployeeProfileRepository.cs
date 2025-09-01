@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Application.Interfaces.IRepositories
 {
-    public interface IEmployeeRepository : IGenericRepository<EmployeeProfile>
+    public interface IEmployeeProfileRepository : IGenericRepository<EmployeeProfile>
     {
         // Employee profile
         Task<EmployeeProfile?> GetByIdAsync(int employeeId);                     // GET /employees/{id}

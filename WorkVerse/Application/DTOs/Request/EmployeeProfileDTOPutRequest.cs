@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Application.DTOs.Request
 {
-    public class EmployeeProfileDTOUpdateRequest
+    public class EmployeeProfileDTOPutRequest
     {
         public int EmployeeId { get; set; }
         public string FullName { get; set; } = null!;
