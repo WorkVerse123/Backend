@@ -1,4 +1,8 @@
 
+using Autofac.Extensions.DependencyInjection;
+using Autofac;
+using WorkVerseAPI.Configurations;
+
 namespace WorkVerseAPI
 {
     public class Program
@@ -6,6 +10,13 @@ namespace WorkVerseAPI
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            // Use Autofac as the DI container
+            builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
+            builder.Host.ConfigureContainer<ContainerBuilder>(containerBuilder =>
+            {
+                containerBuilder.RegisterModule(new ServiceRegistration(builder.Configuration));
+            });
 
             // Add services to the container.
 
