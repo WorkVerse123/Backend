@@ -32,6 +32,7 @@ namespace WorkVerseAPI.Configurations
             //builder.RegisterType<AuthService>().As<IAuthService>().InstancePerLifetimeScope();
             builder.RegisterType<UnitOfWork>().As<IUnitOfWork>().InstancePerLifetimeScope();
             builder.RegisterType<EmployeeProfileServices>().As<IEmployeeProfileServices>().InstancePerLifetimeScope();
+            builder.RegisterType<BusyTimeService>().As<IBusyTimeService>().InstancePerLifetimeScope();
 
         }
     }

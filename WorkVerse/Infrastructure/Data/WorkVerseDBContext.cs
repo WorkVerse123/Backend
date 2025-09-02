@@ -101,6 +101,33 @@ namespace Infrastructure.Data
                 entity.HasCheckConstraint("CK_EmployeeProfile_Mode", "Mode IN ('private','public')");
             });
 
+            // BusyTime
+            modelBuilder.Entity<BusyTime>(entity =>
+            {
+                entity.ToTable("BusyTime");
+
+                entity.HasKey(e => e.BusyTimeId);
+
+                entity.Property(e => e.DayOfWeek)
+                      .IsRequired();
+
+                entity.Property(e => e.StartTime)
+                      .IsRequired();
+
+                entity.Property(e => e.EndTime)
+                      .IsRequired();
+
+                entity.HasOne(e => e.Employee)
+                      .WithMany(ep => ep.BusyTimes)   
+                      .HasForeignKey(e => e.EmployeeId)
+                      .HasConstraintName("FK_BusyTime_Employee");
+
+                // Constraint check day_of_week (0–6)
+                entity.HasCheckConstraint("CK_BusyTime_DayOfWeek", "[DayOfWeek] BETWEEN 0 AND 6");
+
+                // Constraint check Start < End
+                entity.HasCheckConstraint("CK_BusyTime_TimeRange", "[StartTime] < [EndTime]");
+            });
             // EmployerProfile
             modelBuilder.Entity<EmployerProfile>(entity =>
             {

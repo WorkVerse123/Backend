@@ -393,7 +393,7 @@ namespace Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "BusyTimes",
+                name: "BusyTime",
                 columns: table => new
                 {
                     BusyTimeId = table.Column<int>(type: "int", nullable: false)
@@ -405,9 +405,11 @@ namespace Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_BusyTimes", x => x.BusyTimeId);
+                    table.PrimaryKey("PK_BusyTime", x => x.BusyTimeId);
+                    table.CheckConstraint("CK_BusyTime_DayOfWeek", "[DayOfWeek] BETWEEN 0 AND 6");
+                    table.CheckConstraint("CK_BusyTime_TimeRange", "[StartTime] < [EndTime]");
                     table.ForeignKey(
-                        name: "FK_BusyTimes_EmployeeProfile_EmployeeId",
+                        name: "FK_BusyTime_Employee",
                         column: x => x.EmployeeId,
                         principalTable: "EmployeeProfile",
                         principalColumn: "EmployeeId",
@@ -615,8 +617,8 @@ namespace Infrastructure.Migrations
                 column: "JobId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_BusyTimes_EmployeeId",
-                table: "BusyTimes",
+                name: "IX_BusyTime_EmployeeId",
+                table: "BusyTime",
                 column: "EmployeeId");
 
             migrationBuilder.CreateIndex(
@@ -763,7 +765,7 @@ namespace Infrastructure.Migrations
                 name: "Bookmark");
 
             migrationBuilder.DropTable(
-                name: "BusyTimes");
+                name: "BusyTime");
 
             migrationBuilder.DropTable(
                 name: "Feedback");

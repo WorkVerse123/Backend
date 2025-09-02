@@ -16,5 +16,7 @@ namespace Application.Interfaces.IRepositories
         Task<ITransaction?> GetCurrentTransactionAsync();
 
         IEmployeeProfileRepository EmployeeProfile { get; }
+        IBusyTimeRepository BusyTime { get; }
+
     }
 }

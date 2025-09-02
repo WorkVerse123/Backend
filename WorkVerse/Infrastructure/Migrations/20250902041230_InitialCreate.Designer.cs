@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(WorkVerseDBContext))]
-    [Migration("20250826145132_InitialCreate")]
+    [Migration("20250902041230_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -196,7 +196,12 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("EmployeeId");
 
-                    b.ToTable("BusyTimes");
+                    b.ToTable("BusyTime", null, t =>
+                        {
+                            t.HasCheckConstraint("CK_BusyTime_DayOfWeek", "[DayOfWeek] BETWEEN 0 AND 6");
+
+                            t.HasCheckConstraint("CK_BusyTime_TimeRange", "[StartTime] < [EndTime]");
+                        });
                 });
 
             modelBuilder.Entity("Domain.Entities.EmployeeProfile", b =>
@@ -937,7 +942,8 @@ namespace Infrastructure.Migrations
                         .WithMany("BusyTimes")
                         .HasForeignKey("EmployeeId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("FK_BusyTime_Employee");
 
                     b.Navigation("Employee");
                 });

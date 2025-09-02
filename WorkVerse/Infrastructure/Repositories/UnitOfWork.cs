@@ -23,6 +23,7 @@ namespace Infrastructure.Repositories
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
             EmployeeProfile = new EmployeeProfileRepository(_dbContext);
+            BusyTime = new BusyTimeRepository(_dbContext);
         }
 
         public async Task BeginTransactionAsync()
@@ -127,5 +128,7 @@ namespace Infrastructure.Repositories
 
         //This place to start progress dependency injection
         public IEmployeeProfileRepository EmployeeProfile { get; private set; }
+        public IBusyTimeRepository BusyTime { get; private set; }
+
     }
 }
