@@ -26,6 +26,7 @@ namespace Infrastructure.Repositories
             BusyTime = new BusyTimeRepository(_dbContext);
             Bookmark = new BookmarkRepository(_dbContext);
             Job = new JobRepository(_dbContext);
+            Application = new ApplicationRepository(_dbContext);
         }
 
         public async Task BeginTransactionAsync()
@@ -134,6 +135,8 @@ namespace Infrastructure.Repositories
         public IBookmarkRepository Bookmark { get; private set; }
 
         public IJobRepository Job { get; private set; }
+
+        public IApplicationRepository Application { get; private set; }
 
     }
 }

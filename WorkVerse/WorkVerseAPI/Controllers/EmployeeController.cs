@@ -17,12 +17,13 @@ namespace WorkVerseAPI.Controllers
         private readonly IEmployeeProfileServices _employeeProfileService;
         private readonly IBusyTimeService _busyTimeService;
         private readonly IBookmarkService _bookmarkService;
-
-        public EmployeeController(IEmployeeProfileServices employeeProfileService, IBusyTimeService busyTimeService, IBookmarkService bookmarkService)
+        private readonly IApplicationService _applicationService;
+        public EmployeeController(IEmployeeProfileServices employeeProfileService, IBusyTimeService busyTimeService, IBookmarkService bookmarkService, IApplicationService applicationService)
         {
             _employeeProfileService = employeeProfileService;
             _busyTimeService = busyTimeService;
             _bookmarkService = bookmarkService;
+            _applicationService = applicationService;
         }
         // POST /employees/{id}
         [HttpPost("{userId}")]
@@ -261,6 +262,32 @@ namespace WorkVerseAPI.Controllers
             }
         }
 
+        // GET /employees/{id}/applications
+        [HttpGet("{id}/applications")]
+        public async Task<IActionResult> GetApplications([FromRoute] int id)
+        {
+            try
+            {
+                if (id <= 0)
+                {
+                    return BadRequest(new ApiResponse<object>(
+                        "Employee ID must be greater than 0", 400));
+                }
+
+                var result = await _applicationService.GetByEmployeeIdAsync(id);
+                if (result == null)
+                {
+                    return NotFound(new ApiResponse<object>(
+                        $"No Application found for employee with ID {id}", 404));
+                }
+
+                return Ok(new ApiResponse<ApplicationResponseDTO>("Applications retrieved successfully", result, 200));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ApiResponse<object>(ex.Message, 500));
+            }
+        }
     }
 
 }

@@ -6,17 +6,17 @@ using System.Threading.Tasks;
 
 namespace Application.DTOs.Response
 {
-    public class BookmarkDTOResponse
+    public class ApplicationResponseDTO
     {
-        public int EmployeeId { get; set; }
-        public List<BookmarkItemDTO> Bookmarks { get; set; } = new();
+        public List<ApplicationItemDTO> Applications { get; set; } = new();
     }
-    public class BookmarkItemDTO
+
+    public class ApplicationItemDTO
     {
-        public int BookmarkId { get; set; }
+        public int ApplicationId { get; set; }
         public string JobTitle { get; set; } = null!;
         public string JobLocation { get; set; } = null!;
         public List<string> JobCategory { get; set; } = new();
+        public string ApplicationStatus { get; set; } = null!;
     }
-
 }

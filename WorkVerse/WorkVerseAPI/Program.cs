@@ -24,6 +24,7 @@ namespace WorkVerseAPI
             builder.Services.AddAutoMapper(typeof(EmployeeProfileMapper));
             builder.Services.AddAutoMapper(typeof(BusyTimeProfile));
             builder.Services.AddAutoMapper(typeof(BookmarkProfile));
+            builder.Services.AddAutoMapper(typeof(ApplicationProfile));
 
 
 

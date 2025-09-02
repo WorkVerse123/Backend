@@ -19,6 +19,7 @@ namespace Application.Interfaces.IRepositories
         IBusyTimeRepository BusyTime { get; }
         IBookmarkRepository Bookmark { get; }
         IJobRepository Job { get; }
+        IApplicationRepository Application { get; }
 
 
     }

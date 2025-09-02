@@ -34,6 +34,7 @@ namespace WorkVerseAPI.Configurations
             builder.RegisterType<EmployeeProfileServices>().As<IEmployeeProfileServices>().InstancePerLifetimeScope();
             builder.RegisterType<BusyTimeService>().As<IBusyTimeService>().InstancePerLifetimeScope();
             builder.RegisterType<BookmarkService>().As<IBookmarkService>().InstancePerLifetimeScope();
+            builder.RegisterType<ApplicationService>().As<IApplicationService>().InstancePerLifetimeScope();
 
         }
     }
