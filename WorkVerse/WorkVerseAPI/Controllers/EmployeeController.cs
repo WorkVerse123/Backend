@@ -131,12 +131,40 @@ namespace WorkVerseAPI.Controllers
         {
             try
             {
-                var (isValid, error) = BusyTimeValidationHelper.ValidateBusyTimeRequest(request);
+                var (isValid, error) = BusyTimeValidationHelper.ValidateBusyTimePostRequest(request);
                 if (!isValid)
                     return BadRequest(new ApiResponse<object>(error, 400));
 
                 var result = await _busyTimeService.CreateBusyTimesAsync(id, request);
                 return Ok(new ApiResponse<IEnumerable<BusyTimeDTOResponse>>("BusyTime created successfully", result, 201));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ApiResponse<object>(ex.Message, 500));
+            }
+        }
+
+        // PUT /employees/{id}/busy-times/{busy_time_id}
+
+        [HttpPut("{id}/busy-times")]
+        public async Task<IActionResult> UpdateBusyTime([FromBody] BusyTimeDTORequest request, [FromRoute] int id)
+        {
+            try
+            {
+                var (isValid, error) = BusyTimeValidationHelper.ValidateBusyTimePutRequest(request);
+                if (!isValid)
+                    return BadRequest(new ApiResponse<object>(error, 400));
+                if (id == null)
+                {
+                    return BadRequest(new ApiResponse<object>("EmployeeId mismatch", 400));
+                }
+
+                var result = await _busyTimeService.UpdateBusyTimesAsync(id, request);
+                return Ok(new ApiResponse<IEnumerable<BusyTimeDTOResponse>>("BusyTime updated successfully", result, 200));
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new ApiResponse<object>(ex.Message, 404));
             }
             catch (Exception ex)
             {

@@ -73,7 +73,7 @@ namespace Application.Servicies
                         _ => throw new ArgumentException($"Invalid dayOfWeek: {bt.DayOfWeek}")
                     };
 
-                    var isOverlap = await _unitOfWork.BusyTime.ExistsOverlapAsync(employeeId, (byte)dayNumber, bt.StartTime, bt.EndTime);
+                    var isOverlap = await _unitOfWork.BusyTime.ExistsOverlapAsync(employeeId, (byte)dayNumber, bt.StartTime, bt.EndTime,null);
 
                     if (isOverlap)
                     {
@@ -107,6 +107,79 @@ namespace Application.Servicies
                 throw;
             }
         }
+
+        public async Task<IEnumerable<BusyTimeDTOResponse>> UpdateBusyTimesAsync(int employeeId, BusyTimeDTORequest requests)
+        {
+            try
+            {
+                // Check employee
+                var employee = await _unitOfWork.EmployeeProfile.GetByIdAsync(employeeId);
+                if (employee == null)
+                    throw new KeyNotFoundException($"Employee with ID {employeeId} not found");
+
+                // Lấy tất cả busyTimes của employee trước
+                var existingBusyTimes = (await _unitOfWork.BusyTime.GetByEmployeeIdAsync(employeeId)).ToList();
+
+                foreach (var request in requests.BusyTimes)
+                {
+                    // Kiểm tra request có busyTimeId không
+                    if (request.BusyTimeId == null)
+                        throw new ArgumentException("BusyTimeId is required for update");
+
+                    var busyTime = existingBusyTimes.FirstOrDefault(b => b.BusyTimeId == request.BusyTimeId);
+                    if (busyTime == null)
+                        throw new KeyNotFoundException(
+                            $"BusyTime with ID {request.BusyTimeId} not found for Employee {employeeId}");
+
+                    // Map string dayOfWeek -> số (0-6)
+                    var dayNumber = request.DayOfWeek switch
+                    {
+                        "Sunday" => 0,
+                        "Monday" => 1,
+                        "Tuesday" => 2,
+                        "Wednesday" => 3,
+                        "Thursday" => 4,
+                        "Friday" => 5,
+                        "Saturday" => 6,
+                        _ => throw new ArgumentException($"Invalid dayOfWeek: {request.DayOfWeek}")
+                    };
+
+                    // Kiểm tra overlap với những busyTime khác (ngoại trừ chính nó)
+                    var isOverlap = await _unitOfWork.BusyTime.ExistsOverlapAsync(
+                        employeeId, (byte)dayNumber, request.StartTime, request.EndTime, excludeBusyTimeId: request.BusyTimeId.Value);
+
+                    if (isOverlap)
+                        throw new InvalidOperationException(
+                            $"Busy time overlaps with existing schedule on {request.DayOfWeek} ({request.StartTime}-{request.EndTime})");
+
+                    // Update entity
+                    busyTime.DayOfWeek = (byte)dayNumber;
+                    busyTime.StartTime = request.StartTime;
+                    busyTime.EndTime = request.EndTime;
+
+                    _unitOfWork.BusyTime.Update(busyTime);
+                }
+
+                // Save changes 1 lần   
+                await _unitOfWork.SaveChangesAsync();
+
+                // Trả về tất cả sau update
+                var updatedBusyTimes = await _unitOfWork.BusyTime.GetByEmployeeIdAsync(employeeId);
+                return updatedBusyTimes.Select(b => new BusyTimeDTOResponse
+                {
+                    BusyTimeId = b.BusyTimeId,
+                    DayOfWeek = Enum.GetName(typeof(DayOfWeek), b.DayOfWeek) ?? b.DayOfWeek.ToString(),
+                    StartTime = b.StartTime,
+                    EndTime = b.EndTime
+                }).ToList();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error updating busy times for employee {EmployeeId}", employeeId);
+                throw;
+            }
+        }
+
 
 
     }

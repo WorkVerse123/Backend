@@ -15,5 +15,7 @@ namespace Application.Interfaces.IServicies
 
         Task<IEnumerable<BusyTimeDTOResponse>> CreateBusyTimesAsync(int employeeId, BusyTimeDTORequest request);
 
+        Task<IEnumerable<BusyTimeDTOResponse>> UpdateBusyTimesAsync(int employeeId, BusyTimeDTORequest requests);
+
     }
 }

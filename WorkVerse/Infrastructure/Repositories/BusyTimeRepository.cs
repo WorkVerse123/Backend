@@ -24,14 +24,21 @@ namespace Infrastructure.Repositories
             return result;
         }
 
-        public async Task<bool> ExistsOverlapAsync(int employeeId, byte dayOfWeek, TimeSpan start, TimeSpan end)
+        public async Task<bool> ExistsOverlapAsync(int employeeId, byte dayOfWeek, TimeSpan start, TimeSpan end, int? excludeBusyTimeId = null)
         {
             return await _dbContext.BusyTimes.AnyAsync(x =>
                 x.EmployeeId == employeeId &&
                 x.DayOfWeek == dayOfWeek &&
                 x.StartTime < end &&
-                x.EndTime > start
+                x.EndTime > start &&
+                (excludeBusyTimeId == null || x.BusyTimeId != excludeBusyTimeId)
             );
+        }
+
+        public async Task<BusyTime> GetByIdAsync(int busyTimeId)
+        {
+            var result = await _dbContext.BusyTimes.FirstOrDefaultAsync(u => u.BusyTimeId == busyTimeId);
+            return result;
         }
     }
 }

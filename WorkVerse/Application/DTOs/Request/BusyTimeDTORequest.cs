@@ -13,6 +13,7 @@ namespace Application.DTOs.Request
 
     public class EmployeeBusyTimesDTORequest
     {
+        public int? BusyTimeId { get; set; }  // null nếu POST, có giá trị nếu PUT
         public string DayOfWeek { get; set; }
         public TimeSpan StartTime { get; set; }
         public TimeSpan EndTime { get; set; }
