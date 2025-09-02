@@ -30,5 +30,15 @@ namespace Infrastructure.Repositories
             return result;
         }
 
+        public async Task<Bookmark?> ExistsAsync(int employeeId, int jobId)
+        {
+            var result = await _dbContext.Bookmarks.Include(b => b.Job)
+                .ThenInclude(j => j.JobCategoryMappings)
+                .ThenInclude(m => m.Category)
+                .FirstOrDefaultAsync(b => b.EmployeeId == employeeId && b.JobId == jobId);
+            return result;
+        }
+
+
     }
 }

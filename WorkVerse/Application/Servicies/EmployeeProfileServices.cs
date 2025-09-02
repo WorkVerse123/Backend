@@ -36,6 +36,12 @@ namespace Application.Servicies
                     throw new ArgumentNullException(nameof(employeeProfile), "Profile cannot be null");
                 }
 
+                var existsProfile = await _unitOfWork.EmployeeProfile.GetByUserIdAsync(userId);
+                if (existsProfile != null)
+                {
+                    throw new InvalidOperationException($"Profile already exists for User {userId}");
+                }
+
                 // Map DTO request sang entity
                 var entity = _mapper.Map<EmployeeProfile>(employeeProfile);
                 entity.UserId = userId;

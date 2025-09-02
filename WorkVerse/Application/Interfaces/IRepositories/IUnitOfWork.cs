@@ -18,6 +18,8 @@ namespace Application.Interfaces.IRepositories
         IEmployeeProfileRepository EmployeeProfile { get; }
         IBusyTimeRepository BusyTime { get; }
         IBookmarkRepository Bookmark { get; }
+        IJobRepository Job { get; }
+
 
     }
 }

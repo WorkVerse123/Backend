@@ -1,4 +1,5 @@
-﻿using Application.DTOs.Response;
+﻿using Application.DTOs.Request;
+using Application.DTOs.Response;
 using Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -12,5 +13,6 @@ namespace Application.Interfaces.IServicies
     {
         Task<BookmarkDTOResponse> GetByEmployeeIdAsync(int employeeId);
 
+        Task<BookmarkItemDTO> CreateBookmarkAsync(int employeeId, int jobId);
     }
 }

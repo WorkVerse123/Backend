@@ -61,5 +61,53 @@ namespace Application.Servicies
             }
         }
 
+        public async Task<BookmarkItemDTO> CreateBookmarkAsync(int employeeId, int jobId)
+        {
+            try
+            {
+               
+                var employee = await _unitOfWork.EmployeeProfile.GetByIdAsync(employeeId);
+                if (employee == null)
+                {
+                    throw new KeyNotFoundException($"Employee with ID {employeeId} not found");
+                }
+
+         
+                var job = await _unitOfWork.Job.GetByIdAsync(jobId);
+                if (job == null)
+                {
+                    throw new KeyNotFoundException($"Job with ID {jobId} not found");
+                }
+
+                var exists = await _unitOfWork.Bookmark.ExistsAsync(employeeId, jobId);
+                if (exists != null)
+                {
+                    throw new InvalidOperationException($"Bookmark already exists for Employee {employeeId} and Job {jobId}");
+                }
+
+       
+                var bookmark = new Bookmark
+                {
+                    EmployeeId = employeeId,
+                    JobId = jobId,
+                    SavedAt = DateTime.UtcNow
+                };
+
+                await _unitOfWork.Bookmark.AddAsync(bookmark);
+                await _unitOfWork.SaveChangesAsync();
+
+                exists = await _unitOfWork.Bookmark.ExistsAsync(employeeId, jobId);
+                return _mapper.Map<BookmarkItemDTO>(exists);
+
+             
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error creating bookmark for Employee {EmployeeId} and Job {JobId}", employeeId, jobId);
+                throw;
+            }
+        }
+
+
     }
 }

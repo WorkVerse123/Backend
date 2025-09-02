@@ -33,12 +33,6 @@ namespace WorkVerseAPI.Controllers
                 var (isValid, error) = EmployeeProfileValidationHelper.ValidateEmployeeProfileRequest(request);
                 if (!isValid)
                     return BadRequest(new ApiResponse<object>(error, 400));
-                var check = await _employeeProfileService.GetByUserIdAsync(userId);
-                if (check != null)
-                {
-                    return Ok(new ApiResponse<EmployeeProfileDTOResponse>("Profile founded",check,200
-                    ));
-                }
                 var result = await _employeeProfileService.CreateProfileAsync(userId,request);
                 return Ok(new ApiResponse<EmployeeProfileDTOResponse>("Profile created successfully", result, 201));
             }
@@ -226,6 +220,20 @@ namespace WorkVerseAPI.Controllers
             }
         }
 
+        // POST /employees/{id}/bookmarks/jobs/{job_id}
+        [HttpPost("{id}/bookmarks/jobs/{job_id}")]
+        public async Task<IActionResult> CreateBookmark([FromRoute] int id, [FromRoute] int job_id)
+        {
+            try
+            {
+                var result = await _bookmarkService.CreateBookmarkAsync(id, job_id);
+                return Ok(new ApiResponse<BookmarkItemDTO>("Bookmark created successfully", result, 201));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ApiResponse<object>(ex.Message, 500));
+            }
+        }
     }
 
 }

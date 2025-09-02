@@ -25,6 +25,7 @@ namespace Infrastructure.Repositories
             EmployeeProfile = new EmployeeProfileRepository(_dbContext);
             BusyTime = new BusyTimeRepository(_dbContext);
             Bookmark = new BookmarkRepository(_dbContext);
+            Job = new JobRepository(_dbContext);
         }
 
         public async Task BeginTransactionAsync()
@@ -130,8 +131,9 @@ namespace Infrastructure.Repositories
         //This place to start progress dependency injection
         public IEmployeeProfileRepository EmployeeProfile { get; private set; }
         public IBusyTimeRepository BusyTime { get; private set; }
-
         public IBookmarkRepository Bookmark { get; private set; }
+
+        public IJobRepository Job { get; private set; }
 
     }
 }
