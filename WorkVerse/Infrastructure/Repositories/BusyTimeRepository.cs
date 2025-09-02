@@ -23,5 +23,15 @@ namespace Infrastructure.Repositories
             var result = await _dbContext.BusyTimes.Where(u => u.EmployeeId == employeeId).ToListAsync();
             return result;
         }
+
+        public async Task<bool> ExistsOverlapAsync(int employeeId, byte dayOfWeek, TimeSpan start, TimeSpan end)
+        {
+            return await _dbContext.BusyTimes.AnyAsync(x =>
+                x.EmployeeId == employeeId &&
+                x.DayOfWeek == dayOfWeek &&
+                x.StartTime < end &&
+                x.EndTime > start
+            );
+        }
     }
 }

@@ -123,6 +123,26 @@ namespace WorkVerseAPI.Controllers
                 return StatusCode(500, new ApiResponse<object>(ex.Message,500));
             }
         }
+
+        // POST /employees/{id}/busy-times
+
+        [HttpPost("{id}/busy-times")]
+        public async Task<IActionResult> CreateBusyTimes([FromRoute] int id, [FromBody] BusyTimeDTORequest request)
+        {
+            try
+            {
+                var (isValid, error) = BusyTimeValidationHelper.ValidateBusyTimeRequest(request);
+                if (!isValid)
+                    return BadRequest(new ApiResponse<object>(error, 400));
+
+                var result = await _busyTimeService.CreateBusyTimesAsync(id, request);
+                return Ok(new ApiResponse<IEnumerable<BusyTimeDTOResponse>>("BusyTime created successfully", result, 201));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ApiResponse<object>(ex.Message, 500));
+            }
+        }
     }
 
 }

@@ -10,6 +10,8 @@ namespace Application.Interfaces.IRepositories
     public interface IBusyTimeRepository : IGenericRepository<BusyTime>
     {
         Task<IEnumerable<BusyTime>> GetByEmployeeIdAsync(int employeeId);
+
+        Task<bool> ExistsOverlapAsync(int employeeId, byte dayOfWeek, TimeSpan start, TimeSpan end);
     }
 
 }

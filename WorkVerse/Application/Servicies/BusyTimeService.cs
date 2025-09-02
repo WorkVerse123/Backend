@@ -1,4 +1,5 @@
-﻿using Application.DTOs.Response;
+﻿using Application.DTOs.Request;
+using Application.DTOs.Response;
 using Application.Interfaces.IRepositories;
 using Application.Interfaces.IServicies;
 using AutoMapper;
@@ -44,6 +45,69 @@ namespace Application.Servicies
                 throw;
             }
         }
+
+        public async Task<IEnumerable<BusyTimeDTOResponse>> CreateBusyTimesAsync(int employeeId, BusyTimeDTORequest request)
+        {
+            try
+            {
+                var employee = await _unitOfWork.EmployeeProfile.GetByIdAsync(employeeId);
+                if (employee == null)
+                {
+                    throw new KeyNotFoundException($"Employee with ID {employeeId} not found");
+                }
+
+                var busyTimeEntities = new List<BusyTime>();
+
+                foreach (var bt in request.BusyTimes)
+                {
+                    // Map string dayOfWeek -> (0–6)
+                    var dayNumber = bt.DayOfWeek switch
+                    {
+                        "Sunday" => 0,
+                        "Monday" => 1,
+                        "Tuesday" => 2,
+                        "Wednesday" => 3,
+                        "Thursday" => 4,
+                        "Friday" => 5,
+                        "Saturday" => 6,
+                        _ => throw new ArgumentException($"Invalid dayOfWeek: {bt.DayOfWeek}")
+                    };
+
+                    var isOverlap = await _unitOfWork.BusyTime.ExistsOverlapAsync(employeeId, (byte)dayNumber, bt.StartTime, bt.EndTime);
+
+                    if (isOverlap)
+                    {
+                        throw new InvalidOperationException(
+                            $"Busy time overlaps with existing schedule on {bt.DayOfWeek} ({bt.StartTime}-{bt.EndTime})");
+                    }
+
+                    busyTimeEntities.Add(new BusyTime
+                    {
+                        EmployeeId = employeeId,
+                        DayOfWeek = (byte)dayNumber,
+                        StartTime = bt.StartTime,
+                        EndTime = bt.EndTime
+                    });
+                }
+
+                await _unitOfWork.BusyTime.AddRangeAsync(busyTimeEntities);
+                await _unitOfWork.SaveChangesAsync();
+
+                return busyTimeEntities.Select(b => new BusyTimeDTOResponse
+                {
+                    BusyTimeId = b.BusyTimeId,
+                    DayOfWeek = Enum.GetName(typeof(DayOfWeek), b.DayOfWeek) ?? b.DayOfWeek.ToString(),
+                    StartTime = b.StartTime,
+                    EndTime = b.EndTime
+                }).ToList();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error creating busy times for employee {EmployeeId}", employeeId);
+                throw;
+            }
+        }
+
 
     }
 }
