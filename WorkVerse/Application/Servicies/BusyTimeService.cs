@@ -130,7 +130,7 @@ namespace Application.Servicies
                     if (busyTime == null)
                         throw new KeyNotFoundException(
                             $"BusyTime with ID {request.BusyTimeId} not found for Employee {employeeId}");
-
+                    
                     // Map string dayOfWeek -> số (0-6)
                     var dayNumber = request.DayOfWeek switch
                     {
@@ -180,6 +180,35 @@ namespace Application.Servicies
             }
         }
 
+        public async Task<bool> DeleteBusyTimesAsync(int employeeId, int busyTimeId)
+        {
+            try
+            {
+            
+                var employee = await _unitOfWork.EmployeeProfile.GetByIdAsync(employeeId);
+                if (employee == null)
+                    throw new KeyNotFoundException($"Employee with ID {employeeId} not found");
+
+              
+                var busyTime = await _unitOfWork.BusyTime.GetByIdAsync(busyTimeId);
+                if (busyTime == null || busyTime.EmployeeId != employeeId)
+                    throw new KeyNotFoundException(
+                        $"BusyTime with ID {busyTimeId} not found for Employee {employeeId}");
+
+               
+                _unitOfWork.BusyTime.HardRemove(busyTime);
+
+              
+                await _unitOfWork.SaveChangesAsync();
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error deleting busy time {BusyTimeId} for employee {EmployeeId}", busyTimeId, employeeId);
+                throw;
+            }
+        }
 
 
     }

@@ -171,6 +171,32 @@ namespace WorkVerseAPI.Controllers
                 return StatusCode(500, new ApiResponse<object>(ex.Message, 500));
             }
         }
+
+        // DELETE /employees/{id}/busy-times/{busy_time_id}
+        [HttpDelete("{id}/busy-times/{busy_time_id}")]
+        public async Task<IActionResult> DeleteBusyTime([FromRoute] int id, [FromRoute] int busy_time_id)
+        {
+            try
+            {
+                if (id <= 0 || busy_time_id <= 0)
+                    return BadRequest(new ApiResponse<object>("Invalid EmployeeId or BusyTimeId", 400));
+
+                var result = await _busyTimeService.DeleteBusyTimesAsync(id, busy_time_id);
+
+                if (!result)
+                    return NotFound(new ApiResponse<object>($"BusyTime with ID {busy_time_id} not found for Employee {id}", 404));
+
+                return Ok(new ApiResponse<object>("BusyTime deleted successfully", null, 200));
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new ApiResponse<object>(ex.Message, 404));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ApiResponse<object>(ex.Message, 500));
+            }
+        }
     }
 
 }

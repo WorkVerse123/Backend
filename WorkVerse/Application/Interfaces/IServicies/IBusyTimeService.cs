@@ -17,5 +17,6 @@ namespace Application.Interfaces.IServicies
 
         Task<IEnumerable<BusyTimeDTOResponse>> UpdateBusyTimesAsync(int employeeId, BusyTimeDTORequest requests);
 
+        Task<bool> DeleteBusyTimesAsync(int employeeId, int busyTimeId);
     }
 }
