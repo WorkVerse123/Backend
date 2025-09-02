@@ -108,6 +108,35 @@ namespace Application.Servicies
             }
         }
 
+        public async Task<bool> DeleteBookmarkAsync(int employeeId, int bookmarkId)
+        {
+            try
+            {
+
+                var employee = await _unitOfWork.EmployeeProfile.GetByIdAsync(employeeId);
+                if (employee == null)
+                    throw new KeyNotFoundException($"Employee with ID {employeeId} not found");
+
+
+                var bookmark = await _unitOfWork.Bookmark.GetByIdAsync(bookmarkId);
+                if (bookmark == null || bookmark.EmployeeId != employeeId)
+                    throw new KeyNotFoundException(
+                        $"BusyTime with ID {bookmarkId} not found for Employee {employeeId}");
+
+
+                _unitOfWork.Bookmark.HardRemove(bookmark);
+
+
+                await _unitOfWork.SaveChangesAsync();
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error deleting bookmark {BookmarkId} for employee {EmployeeId}", bookmarkId, employeeId);
+                throw;
+            }
+        }
 
     }
 }

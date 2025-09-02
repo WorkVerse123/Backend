@@ -39,6 +39,11 @@ namespace Infrastructure.Repositories
             return result;
         }
 
+        public async Task<Bookmark> GetByIdAsync(int bookmarkId)
+        {
+            var result = await _dbContext.Bookmarks.FirstOrDefaultAsync(u => u.BookmarkId == bookmarkId);
+            return result;
+        }
 
     }
 }

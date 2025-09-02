@@ -14,5 +14,7 @@ namespace Application.Interfaces.IServicies
         Task<BookmarkDTOResponse> GetByEmployeeIdAsync(int employeeId);
 
         Task<BookmarkItemDTO> CreateBookmarkAsync(int employeeId, int jobId);
+        Task<bool> DeleteBookmarkAsync(int employeeId, int bookmarkId);
+
     }
 }

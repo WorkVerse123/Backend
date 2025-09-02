@@ -181,7 +181,7 @@ namespace WorkVerseAPI.Controllers
                 if (!result)
                     return NotFound(new ApiResponse<object>($"BusyTime with ID {busy_time_id} not found for Employee {id}", 404));
 
-                return Ok(new ApiResponse<object>("BusyTime deleted successfully", null, 200));
+                return Ok(new ApiResponse<object>("BusyTime deleted successfully", 200));
             }
             catch (KeyNotFoundException ex)
             {
@@ -234,6 +234,33 @@ namespace WorkVerseAPI.Controllers
                 return StatusCode(500, new ApiResponse<object>(ex.Message, 500));
             }
         }
+
+        // DELETE /employees/{id}/bookmarks/{bookmark_id}
+        [HttpDelete("{id}/bookmarks/{bookmark_id}")]
+        public async Task<IActionResult> DeleteBookmark([FromRoute] int id, [FromRoute] int bookmark_id)
+        {
+            if (id <= 0 || bookmark_id <= 0)
+                return BadRequest(new ApiResponse<object>("Invalid EmployeeId or BookmarkId", 400));
+
+            try
+            {
+                var result = await _bookmarkService.DeleteBookmarkAsync(id, bookmark_id);
+
+                if (!result)
+                    return NotFound(new ApiResponse<object>($"Bookmark with ID {bookmark_id} not found for Employee {id}", 404));
+
+                return Ok(new ApiResponse<object>("Bookmark deleted successfully", 200));
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new ApiResponse<object>(ex.Message, 404));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ApiResponse<object>(ex.Message, 500));
+            }
+        }
+
     }
 
 }

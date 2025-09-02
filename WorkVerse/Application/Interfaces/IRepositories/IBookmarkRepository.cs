@@ -12,5 +12,8 @@ namespace Application.Interfaces.IRepositories
         Task<IEnumerable<Bookmark>> GetByEmployeeIdAsync(int employeeId);
 
         Task<Bookmark> ExistsAsync(int employeeId, int jobId);
+
+        Task<Bookmark> GetByIdAsync(int bookmarkId);
+
     }
 }
