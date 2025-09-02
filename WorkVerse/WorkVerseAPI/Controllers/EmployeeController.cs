@@ -16,12 +16,13 @@ namespace WorkVerseAPI.Controllers
         // This is a placeholder for the actual implementation of user service
         private readonly IEmployeeProfileServices _employeeProfileService;
         private readonly IBusyTimeService _busyTimeService;
+        private readonly IBookmarkService _bookmarkService;
 
-
-        public EmployeeController(IEmployeeProfileServices employeeProfileService, IBusyTimeService busyTimeService)
+        public EmployeeController(IEmployeeProfileServices employeeProfileService, IBusyTimeService busyTimeService, IBookmarkService bookmarkService)
         {
             _employeeProfileService = employeeProfileService;
             _busyTimeService = busyTimeService;
+            _bookmarkService = bookmarkService;
         }
         // POST /employees/{id}
         [HttpPost("{userId}")]
@@ -197,6 +198,34 @@ namespace WorkVerseAPI.Controllers
                 return StatusCode(500, new ApiResponse<object>(ex.Message, 500));
             }
         }
+
+        // GET /employees/{id}/bookmarks
+        [HttpGet("{id}/bookmarks")]
+        public async Task<IActionResult> GetBookmark([FromRoute] int id)
+        {
+            try
+            {
+                if (id <= 0)
+                {
+                    return BadRequest(new ApiResponse<object>(
+                        "Employee ID must be greater than 0", 400));
+                }
+
+                var result = await _bookmarkService.GetByEmployeeIdAsync(id);
+                if (result == null)
+                {
+                    return NotFound(new ApiResponse<object>(
+                        $"No Bookmark found for employee with ID {id}", 404));
+                }
+
+                return Ok(new ApiResponse<BookmarkDTOResponse>("Busy times retrieved successfully", result, 200));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ApiResponse<object>(ex.Message, 500));
+            }
+        }
+
     }
 
 }

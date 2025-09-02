@@ -33,6 +33,7 @@ namespace WorkVerseAPI.Configurations
             builder.RegisterType<UnitOfWork>().As<IUnitOfWork>().InstancePerLifetimeScope();
             builder.RegisterType<EmployeeProfileServices>().As<IEmployeeProfileServices>().InstancePerLifetimeScope();
             builder.RegisterType<BusyTimeService>().As<IBusyTimeService>().InstancePerLifetimeScope();
+            builder.RegisterType<BookmarkService>().As<IBookmarkService>().InstancePerLifetimeScope();
 
         }
     }

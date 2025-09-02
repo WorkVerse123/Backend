@@ -1,0 +1,34 @@
+﻿using Application.DTOs.Response;
+using Application.Interfaces.IRepositories;
+using Domain.Entities;
+using Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Infrastructure.Repositories
+{
+    public class BookmarkRepository : GenericRepository<Bookmark>, IBookmarkRepository
+    {
+        private readonly WorkVerseDBContext _dbContext;
+        public BookmarkRepository(WorkVerseDBContext dbContext) : base(dbContext)
+        {
+            _dbContext = dbContext;
+        }
+        public async Task<IEnumerable<Bookmark>> GetByEmployeeIdAsync(int employeeId)
+        {
+            var result = await _dbContext.Bookmarks
+                .Include(b => b.Job)
+                .ThenInclude(j => j.JobCategoryMappings)
+                .ThenInclude(m => m.Category)
+                .Where(b => b.EmployeeId == employeeId)
+                .ToListAsync();
+
+            return result;
+        }
+
+    }
+}
