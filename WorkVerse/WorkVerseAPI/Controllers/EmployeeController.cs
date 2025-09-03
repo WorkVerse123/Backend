@@ -150,11 +150,7 @@ namespace WorkVerseAPI.Controllers
                 var (isValid, error) = BusyTimeValidationHelper.ValidateBusyTimePutRequest(request);
                 if (!isValid)
                     return BadRequest(new ApiResponse<object>(error, 400));
-                if (id == null)
-                {
-                    return BadRequest(new ApiResponse<object>("EmployeeId mismatch", 400));
-                }
-
+             
                 var result = await _busyTimeService.UpdateBusyTimesAsync(id, request);
                 return Ok(new ApiResponse<IEnumerable<BusyTimeDTOResponse>>("BusyTime updated successfully", result, 200));
             }
@@ -178,9 +174,6 @@ namespace WorkVerseAPI.Controllers
                     return BadRequest(new ApiResponse<object>("Invalid EmployeeId or BusyTimeId", 400));
 
                 var result = await _busyTimeService.DeleteBusyTimesAsync(id, busy_time_id);
-
-                if (!result)
-                    return NotFound(new ApiResponse<object>($"BusyTime with ID {busy_time_id} not found for Employee {id}", 404));
 
                 return Ok(new ApiResponse<object>("BusyTime deleted successfully", 200));
             }
@@ -246,9 +239,6 @@ namespace WorkVerseAPI.Controllers
             try
             {
                 var result = await _bookmarkService.DeleteBookmarkAsync(id, bookmark_id);
-
-                if (!result)
-                    return NotFound(new ApiResponse<object>($"Bookmark with ID {bookmark_id} not found for Employee {id}", 404));
 
                 return Ok(new ApiResponse<object>("Bookmark deleted successfully", 200));
             }

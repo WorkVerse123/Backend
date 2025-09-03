@@ -35,5 +35,14 @@ namespace Infrastructure.Repositories
             var result = await _dbContext.Applications.FirstOrDefaultAsync(u => u.ApplicationId == applicationId);
             return result;
         }
+
+        public async Task<Domain.Entities.Application?> ExistsAsync(int employeeId, int jobId)
+        {
+            var result = await _dbContext.Applications.Include(b => b.Job)
+                .ThenInclude(j => j.JobCategoryMappings)
+                .ThenInclude(m => m.Category)
+                .FirstOrDefaultAsync(b => b.EmployeeId == employeeId && b.JobId == jobId);
+            return result;
+        }
     }
 }
