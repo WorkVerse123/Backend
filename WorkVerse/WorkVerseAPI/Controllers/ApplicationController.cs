@@ -48,6 +48,26 @@ namespace WorkVerseAPI.Controllers
                 return StatusCode(500, new ApiResponse<object>(ex.Message, 500));
             }
         }
+
+        // PUT /applications/{id}/withdrawn
+
+        [HttpPut("{id}/withdrawn")]
+        public async Task<IActionResult> UpdateApplicationWithdrawn([FromRoute] int id)
+        {
+            try
+            {
+                var result = await _applicationService.UpdateApplicationWithdrawnAsync(id);
+                return Ok(new ApiResponse<ApplicationItemDTO>("Application updated successfully", result, 200));
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new ApiResponse<object>(ex.Message, 404));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ApiResponse<object>(ex.Message, 500));
+            }
+        }
     }
 
 }

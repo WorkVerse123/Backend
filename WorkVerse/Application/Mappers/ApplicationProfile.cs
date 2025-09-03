@@ -14,6 +14,7 @@ namespace Application.Mappers
         public ApplicationProfile()
         {
             CreateMap<Domain.Entities.Application, ApplicationItemDTO>()
+            .ForMember(dest => dest.ApplicationId, opt => opt.MapFrom(src => src.ApplicationId))
             .ForMember(dest => dest.JobTitle, opt => opt.MapFrom(src => src.Job.Title))
             .ForMember(dest => dest.JobLocation, opt => opt.MapFrom(src => src.Job.Location))
             .ForMember(dest => dest.JobCategory, opt => opt.MapFrom(

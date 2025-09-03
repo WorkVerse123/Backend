@@ -41,7 +41,9 @@ namespace Infrastructure.Repositories
             var result = await _dbContext.Applications.Include(b => b.Job)
                 .ThenInclude(j => j.JobCategoryMappings)
                 .ThenInclude(m => m.Category)
-                .FirstOrDefaultAsync(b => b.EmployeeId == employeeId && b.JobId == jobId);
+                .Where(b => b.EmployeeId == employeeId && b.JobId == jobId)
+                .OrderByDescending(b => b.AppliedAt)
+                .FirstOrDefaultAsync();
             return result;
         }
     }

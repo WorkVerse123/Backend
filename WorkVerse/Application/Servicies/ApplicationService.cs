@@ -45,9 +45,9 @@ namespace Application.Servicies
                 }
 
                 var exists = await _unitOfWork.Application.ExistsAsync(employeeId, request.JobId);
-                if (exists != null)
+                if (exists.Status == "pending")
                 {
-                    throw new InvalidOperationException($"Application already exists for Employee {employeeId} and Job {request.JobId}");
+                    throw new InvalidOperationException($"Application already applied and pending for Employee {employeeId} and Job {request.JobId}");
                 }
 
 
@@ -105,6 +105,36 @@ namespace Application.Servicies
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error retrieving Applications with EmployeeId: {Id}", employeeId);
+                throw;
+            }
+        }
+
+        public async Task<ApplicationItemDTO> UpdateApplicationWithdrawnAsync(int applicationId)
+        {
+            try
+            {
+                
+                var existingApplication = await _unitOfWork.Application.GetByIdAsync(applicationId);
+                if (existingApplication == null)
+                {
+                    throw new KeyNotFoundException($"Application with ID {applicationId} not found");
+                }
+
+                if (existingApplication.Status == "withdrawn")
+                {
+                    throw new InvalidOperationException($"Application already withdrawn for application ID {applicationId}");
+                }
+                existingApplication.Status = "withdrawn";
+
+                _unitOfWork.Application.Update(existingApplication);
+                await _unitOfWork.SaveChangesAsync();
+
+                var applicationUpdated = await _unitOfWork.Application.ExistsAsync(existingApplication.EmployeeId, existingApplication.JobId);
+                return _mapper.Map<ApplicationItemDTO>(applicationUpdated);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error updating apllication with ID: {Id}", applicationId);
                 throw;
             }
         }
