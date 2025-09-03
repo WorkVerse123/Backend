@@ -75,7 +75,7 @@ namespace Application.Servicies
             }
         }
 
-        public async Task<ApplicationResponseDTO> GetByEmployeeIdAsync(int employeeId)
+        public async Task<ApplicationResponseDTO> GetByEmployeeIdAsync(int employeeId, int pageNumber, int pageSize)
         {
             try
             {
@@ -85,9 +85,19 @@ namespace Application.Servicies
                     throw new KeyNotFoundException($"Employee with ID {employeeId} not found");
                 }
 
-                var entities = await _unitOfWork.Application.GetByEmployeeIdAsync(employeeId);
+              
 
-                if (entities == null || !entities.Any())
+                var query = (await _unitOfWork.Application.GetByEmployeeIdAsync(employeeId))
+                            .AsQueryable();
+
+                var totalRecords = query.Count();
+
+                var pagedData = query
+                    .Skip((pageNumber - 1) * pageSize)
+                    .Take(pageSize)
+                    .ToList();
+
+                if (pagedData == null || !pagedData.Any())
                 {
                     return new ApplicationResponseDTO
                     {
@@ -95,11 +105,17 @@ namespace Application.Servicies
                     };
                 }
 
-                var mapped = _mapper.Map<List<ApplicationItemDTO>>(entities);
+                var mapped = _mapper.Map<List<ApplicationItemDTO>>(pagedData);
 
                 return new ApplicationResponseDTO
                 {
-                    Applications = mapped
+                    Applications = mapped,
+                    Paging = new PaginatedResponse
+                    {
+                        Page = pageNumber,
+                        PageSize = pageSize,
+                        TotalPages = (int)Math.Ceiling(totalRecords / (double)pageSize)
+                    }
                 };
             }
             catch (Exception ex)

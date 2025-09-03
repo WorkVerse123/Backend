@@ -25,6 +25,7 @@ namespace Infrastructure.Repositories
                  .ThenInclude(j => j.JobCategoryMappings)
                  .ThenInclude(m => m.Category)
                  .Where(b => b.EmployeeId == employeeId)
+                 .OrderByDescending(b => b.AppliedAt)
                  .ToListAsync();
 
             return result;

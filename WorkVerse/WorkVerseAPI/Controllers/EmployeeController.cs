@@ -189,7 +189,7 @@ namespace WorkVerseAPI.Controllers
 
         // GET /employees/{id}/bookmarks
         [HttpGet("{id}/bookmarks")]
-        public async Task<IActionResult> GetBookmark([FromRoute] int id)
+        public async Task<IActionResult> GetBookmark([FromRoute] int id, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
             try
             {
@@ -199,7 +199,7 @@ namespace WorkVerseAPI.Controllers
                         "Employee ID must be greater than 0", 400));
                 }
 
-                var result = await _bookmarkService.GetByEmployeeIdAsync(id);
+                var result = await _bookmarkService.GetByEmployeeIdAsync(id, pageNumber, pageSize);
                 if (result == null)
                 {
                     return NotFound(new ApiResponse<object>(
@@ -254,7 +254,7 @@ namespace WorkVerseAPI.Controllers
 
         // GET /employees/{id}/applications
         [HttpGet("{id}/applications")]
-        public async Task<IActionResult> GetApplications([FromRoute] int id)
+        public async Task<IActionResult> GetApplications([FromRoute] int id, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
             try
             {
@@ -264,7 +264,7 @@ namespace WorkVerseAPI.Controllers
                         "Employee ID must be greater than 0", 400));
                 }
 
-                var result = await _applicationService.GetByEmployeeIdAsync(id);
+                var result = await _applicationService.GetByEmployeeIdAsync(id, pageNumber, pageSize);
                 if (result == null)
                 {
                     return NotFound(new ApiResponse<object>(

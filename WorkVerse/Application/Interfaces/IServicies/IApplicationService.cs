@@ -10,7 +10,7 @@ namespace Application.Interfaces.IServicies
 {
     public interface IApplicationService
     {
-        Task<ApplicationResponseDTO> GetByEmployeeIdAsync(int employeeId);
+        Task<ApplicationResponseDTO> GetByEmployeeIdAsync(int employeeId, int pageNumber, int pageSize);
         Task<ApplicationItemDTO> CreateApplicationAsync(int employeeId, ApplicationDTORequest request);
         Task<ApplicationItemDTO> UpdateApplicationWithdrawnAsync(int applicationId);
     }

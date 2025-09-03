@@ -25,7 +25,7 @@ namespace Application.Servicies
             _logger = logger;
         }
 
-        public async Task<BookmarkDTOResponse> GetByEmployeeIdAsync(int employeeId)
+        public async Task<BookmarkDTOResponse> GetByEmployeeIdAsync(int employeeId, int pageNumber, int pageSize)
         {
             try
             {
@@ -35,23 +35,28 @@ namespace Application.Servicies
                     throw new KeyNotFoundException($"Employee with ID {employeeId} not found");
                 }
 
-                var entities = await _unitOfWork.Bookmark.GetByEmployeeIdAsync(employeeId);
+                var query = (await _unitOfWork.Bookmark.GetByEmployeeIdAsync(employeeId))
+                            .AsQueryable();
 
-                if (entities == null || !entities.Any())
-                {
-                    return new BookmarkDTOResponse
-                    {
-                        EmployeeId = employeeId,
-                        Bookmarks = new List<BookmarkItemDTO>()
-                    };
-                }
+                var totalRecords = query.Count();
 
-                var mapped = _mapper.Map<List<BookmarkItemDTO>>(entities);
+                var pagedData = query
+                    .Skip((pageNumber - 1) * pageSize)
+                    .Take(pageSize)
+                    .ToList();
+
+                var mapped = _mapper.Map<List<BookmarkItemDTO>>(pagedData);
 
                 return new BookmarkDTOResponse
                 {
                     EmployeeId = employeeId,
-                    Bookmarks = mapped
+                    Bookmarks = mapped,
+                    Paging = new PaginatedResponse
+                    {
+                        Page = pageNumber,
+                        PageSize = pageSize,
+                        TotalPages = (int)Math.Ceiling(totalRecords / (double)pageSize)
+                    }
                 };
             }
             catch (Exception ex)
@@ -61,18 +66,20 @@ namespace Application.Servicies
             }
         }
 
+
+
         public async Task<BookmarkItemDTO> CreateBookmarkAsync(int employeeId, int jobId)
         {
             try
             {
-               
+
                 var employee = await _unitOfWork.EmployeeProfile.GetByIdAsync(employeeId);
                 if (employee == null)
                 {
                     throw new KeyNotFoundException($"Employee with ID {employeeId} not found");
                 }
 
-         
+
                 var job = await _unitOfWork.Job.GetByIdAsync(jobId);
                 if (job == null)
                 {
@@ -85,7 +92,7 @@ namespace Application.Servicies
                     throw new InvalidOperationException($"Bookmark already exists for Employee {employeeId} and Job {jobId}");
                 }
 
-       
+
                 var bookmark = new Bookmark
                 {
                     EmployeeId = employeeId,
@@ -99,7 +106,7 @@ namespace Application.Servicies
                 exists = await _unitOfWork.Bookmark.ExistsAsync(employeeId, jobId);
                 return _mapper.Map<BookmarkItemDTO>(exists);
 
-             
+
             }
             catch (Exception ex)
             {

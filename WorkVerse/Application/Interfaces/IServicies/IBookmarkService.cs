@@ -11,7 +11,7 @@ namespace Application.Interfaces.IServicies
 {
     public interface IBookmarkService
     {
-        Task<BookmarkDTOResponse> GetByEmployeeIdAsync(int employeeId);
+        Task<BookmarkDTOResponse> GetByEmployeeIdAsync(int employeeId, int pageNumber, int pageSize);
 
         Task<BookmarkItemDTO> CreateBookmarkAsync(int employeeId, int jobId);
         Task<bool> DeleteBookmarkAsync(int employeeId, int bookmarkId);

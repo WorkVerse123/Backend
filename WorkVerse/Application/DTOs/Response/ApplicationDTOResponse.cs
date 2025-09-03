@@ -8,6 +8,7 @@ namespace Application.DTOs.Response
 {
     public class ApplicationResponseDTO
     {
+        public PaginatedResponse Paging { get; set; }
         public List<ApplicationItemDTO> Applications { get; set; } = new();
     }
 

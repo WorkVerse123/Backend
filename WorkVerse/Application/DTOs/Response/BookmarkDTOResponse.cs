@@ -8,6 +8,7 @@ namespace Application.DTOs.Response
 {
     public class BookmarkDTOResponse
     {
+        public PaginatedResponse Paging { get; set; }
         public int EmployeeId { get; set; }
         public List<BookmarkItemDTO> Bookmarks { get; set; } = new();
     }
