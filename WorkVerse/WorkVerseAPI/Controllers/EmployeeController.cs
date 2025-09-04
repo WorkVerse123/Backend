@@ -279,7 +279,7 @@ namespace WorkVerseAPI.Controllers
             }
         }
 
-        // POST {id}/applications
+        // POST /employees/{id}/applications
         [HttpPost("{id}/applications")]
         public async Task<IActionResult> CreateApplication([FromRoute] int id, [FromBody] ApplicationDTORequest request)
         {
