@@ -26,28 +26,6 @@ namespace WorkVerseAPI.Controllers
             _applicationService = applicationService;
         }
 
-        // POST /employees/{id}/applications
-        [HttpPost("employees/{id}/applications")]
-        public async Task<IActionResult> CreateApplication([FromRoute] int id, [FromBody] ApplicationDTORequest request)
-        {
-            try
-            {
-                var (isValid, error) = ApplicationValidationHelper.ValidateApplicationPostRequest(request);
-                if (!isValid)
-                    return BadRequest(new ApiResponse<object>(error, 400));
-
-                var result = await _applicationService.CreateApplicationAsync(id, request);
-                return Ok(new ApiResponse<ApplicationItemDTO>("Application created successfully", result, 201));
-            }
-            catch (KeyNotFoundException ex)
-            {
-                return NotFound(new ApiResponse<object>(ex.Message, 404));
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new ApiResponse<object>(ex.Message, 500));
-            }
-        }
 
         // PUT /applications/{id}/withdrawn
 
