@@ -20,6 +20,12 @@ namespace Application.Mappers
             // Response
             CreateMap<EmployeeProfile, EmployeeProfileDTOResponse>();
 
+            CreateMap<EmployeeProfile, CandidateItemDTO>()
+            .ForMember(dest => dest.EmployeeLocation,
+                opt => opt.MapFrom(src => src.Address))
+            .ForMember(dest => dest.EmployeeEducation,
+                opt => opt.MapFrom(src => src.Education));
+
         }
     }
 }

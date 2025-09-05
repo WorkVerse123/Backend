@@ -34,5 +34,11 @@ namespace Infrastructure.Repositories
         {
             return await _dbContext.EmployeeProfiles.AnyAsync(j => j.EmployeeId == employeeId);
         }
+
+        public async Task<IEnumerable<EmployeeProfile>> GetAllCandidatesAsync()
+        {
+            var result = await _dbContext.EmployeeProfiles.Where(u => u.Mode == "public").ToListAsync();
+            return result;
+        }
     }
 }

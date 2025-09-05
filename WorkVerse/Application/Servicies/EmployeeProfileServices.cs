@@ -120,5 +120,38 @@ namespace Application.Servicies
             }
         }
 
+        public async Task<CandidateDTOResponse> GetAllCandidatesAsync(int pageNumber, int pageSize)
+        {
+            try
+            {
+                var query = (await _unitOfWork.EmployeeProfile.GetAllCandidatesAsync())
+                            .AsQueryable();
+
+                var totalRecords = query.Count();
+
+                var pagedData = query
+                    .Skip((pageNumber - 1) * pageSize)
+                    .Take(pageSize)
+                    .ToList();
+
+                var mapped = _mapper.Map<List<CandidateItemDTO>>(pagedData);
+
+                return new CandidateDTOResponse
+                {
+                    Candidates = mapped,
+                    Paging = new PaginatedResponse
+                    {
+                        Page = pageNumber,
+                        PageSize = pageSize,
+                        TotalPages = (int)Math.Ceiling(totalRecords / (double)pageSize)
+                    }
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error retrieving Candidates for Job");
+                throw;
+            }
+        }
     }
 }

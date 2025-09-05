@@ -131,5 +131,26 @@ namespace WorkVerseAPI.Controllers
                 return StatusCode(500, new ApiResponse<object>(ex.Message, 500));
             }
         }
+
+        // GET/candidates
+        [HttpGet("/cadidates")]
+        public async Task<IActionResult> GetAllCandidates([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
+        {
+            try
+            {
+                var result = await _employeeProfileService.GetAllCandidatesAsync(pageNumber, pageSize);
+                if (result == null)
+                {
+                    return NotFound(new ApiResponse<object>(
+                        "Something went wrong. Please try again later.", 404));
+                }
+
+                return Ok(new ApiResponse<CandidateDTOResponse>("Get list of candidates successfully", result, 200));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ApiResponse<object>(ex.Message, 500));
+            }
+        }
     }
 }
