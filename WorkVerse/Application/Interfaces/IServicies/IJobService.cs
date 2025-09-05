@@ -13,5 +13,6 @@ namespace Application.Interfaces.IServicies
         Task<JobDTOResponse> GetAllAsync(int pageNumber, int pageSize);
         Task<JobItemDetailDTO> GetByIdAsync(int jobId);
 
+        Task<JobCategoryDTOResponse> GetAllJobCategoriesAsync();
     }
 }

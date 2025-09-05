@@ -58,6 +58,27 @@ namespace Application.Servicies
             }
         }
 
+        public async Task<JobCategoryDTOResponse> GetAllJobCategoriesAsync()
+        {
+            try
+            {
+                var jobCategories = await _unitOfWork.JobCategory.GetAllAsync();
+
+                var mapped = _mapper.Map<List<JobCategoryItemDTO?>>(jobCategories);
+
+                return new JobCategoryDTOResponse
+                {
+                    JobCategories = mapped
+                };
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error retrieving JobCategories");
+                throw;
+            }
+        }
+
         public async Task<JobItemDetailDTO?> GetByIdAsync(int jobId)
         {
             try

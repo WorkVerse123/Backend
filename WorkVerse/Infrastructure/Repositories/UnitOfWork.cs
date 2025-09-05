@@ -27,6 +27,7 @@ namespace Infrastructure.Repositories
             Bookmark = new BookmarkRepository(_dbContext);
             Job = new JobRepository(_dbContext);
             Application = new ApplicationRepository(_dbContext);
+            JobCategory = new JobCategoryRepository(_dbContext);
         }
 
         public async Task BeginTransactionAsync()
@@ -133,10 +134,9 @@ namespace Infrastructure.Repositories
         public IEmployeeProfileRepository EmployeeProfile { get; private set; }
         public IBusyTimeRepository BusyTime { get; private set; }
         public IBookmarkRepository Bookmark { get; private set; }
-
         public IJobRepository Job { get; private set; }
-
         public IApplicationRepository Application { get; private set; }
 
+        public IJobCategoryRepository JobCategory { get; private set; }
     }
 }

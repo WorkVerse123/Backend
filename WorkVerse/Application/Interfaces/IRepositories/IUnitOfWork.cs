@@ -20,7 +20,7 @@ namespace Application.Interfaces.IRepositories
         IBookmarkRepository Bookmark { get; }
         IJobRepository Job { get; }
         IApplicationRepository Application { get; }
-
+        IJobCategoryRepository JobCategory { get; }
 
     }
 }

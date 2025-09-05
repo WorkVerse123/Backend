@@ -65,5 +65,26 @@ namespace WorkVerseAPI.Controllers
                 return StatusCode(500, new ApiResponse<object>(ex.Message, 500));
             }
         }
+
+        // GET /categories
+        [HttpGet("/categories")] // GET api/categories
+        public async Task<IActionResult> GetAllJobCategories()
+        {
+            try
+            {
+                var result = await _jobService.GetAllJobCategoriesAsync();
+                if (result == null)
+                {
+                    return NotFound(new ApiResponse<object>(
+                        "Something went wrong. Please try again later.", 404));
+                }
+
+                return Ok(new ApiResponse<JobCategoryDTOResponse>("Registration successful", result, 200));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ApiResponse<object>(ex.Message, 500));
+            }
+        }
     }
 }
