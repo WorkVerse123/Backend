@@ -55,7 +55,7 @@ namespace Application.Servicies
                 {
                     EmployeeId = employeeId,
                     JobId = request.JobId,
-                    AppliedAt = DateTime.UtcNow,
+                    AppliedAt = DateTime.Now,
                     CoverLetter = request.CoverLetter,
                     Status = "pending"
                 };

@@ -12,5 +12,11 @@ namespace Application.Interfaces.IRepositories
         Task<Review> GetByIdAsync(int reviewId);
 
         Task<IEnumerable<Review>> GetByJobIdAsync(int jobId);
+
+        Task<Review> GetByJobIdEmployeeIdAsync(int jobId, int employeeId);
+
+        Task<bool> ExistsAsync(int jobId, int employeeId);
+
+
     }
 }

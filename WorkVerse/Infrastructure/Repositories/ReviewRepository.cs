@@ -31,5 +31,19 @@ namespace Infrastructure.Repositories
                 .OrderByDescending(c => c.CreatedAt).ToListAsync();
             return result;
         }
+
+        public async Task<Review> GetByJobIdEmployeeIdAsync(int jobId, int employeeId)
+        {
+            var result = await _dbContext.Reviews
+                 .FirstOrDefaultAsync(c => c.EmployeeId == employeeId && c.JobId == jobId);
+            return result;
+        }
+
+        public async Task<bool> ExistsAsync(int jobId, int employeeId)
+        {
+            return await _dbContext.Reviews
+                .AnyAsync(r => r.JobId == jobId && r.EmployeeId == employeeId);
+        }
+
     }
 }

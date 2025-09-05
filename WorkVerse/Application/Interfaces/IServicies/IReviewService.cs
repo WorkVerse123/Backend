@@ -1,4 +1,5 @@
-﻿using Application.DTOs.Response;
+﻿using Application.DTOs.Request;
+using Application.DTOs.Response;
 using Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -11,5 +12,8 @@ namespace Application.Interfaces.IServicies
     public interface IReviewService
     {
         Task<ReviewDTOResponse> GetByJobIdAsync(int jobId, int pageNumber, int pageSize);
+
+        Task<ReviewItemDTO> CreateReviewAsync(int jobId, ReviewDTORequest request);
+
     }
 }

@@ -1,4 +1,5 @@
-﻿using Application.DTOs.Response;
+﻿using Application.DTOs.Request;
+using Application.DTOs.Response;
 using Application.Interfaces.IRepositories;
 using Application.Interfaces.IServicies;
 using AutoMapper;
@@ -24,6 +25,62 @@ namespace Application.Servicies
             _mapper = mapper;
             _logger = logger;
         }
+
+        public async Task<ReviewItemDTO> CreateReviewAsync(int jobId, ReviewDTORequest request)
+        {
+            try
+            {
+
+                var employee = await _unitOfWork.EmployeeProfile.ExistsAsync(request.EmployeeId);
+                if (!employee)
+                {
+                    throw new KeyNotFoundException($"Employee with ID {request.EmployeeId} not found");
+                }
+
+
+                var job = await _unitOfWork.Job.ExistsAsync(jobId);
+                if (!job)
+                {
+                    throw new KeyNotFoundException($"Job with ID {jobId} not found");
+                }
+
+                var isWorked = await _unitOfWork.Application.ExistsAsync(request.EmployeeId, jobId);
+                if (isWorked == null || isWorked.Status != "accepted")
+                {
+                    throw new InvalidOperationException($"Employee {request.EmployeeId} has never worked on job {jobId}, so evaluation is not allowed.");
+                }
+
+                var exists = await _unitOfWork.Review.ExistsAsync(jobId, request.EmployeeId);
+
+                if (exists)
+                {
+                    throw new InvalidOperationException($"Employee {request.EmployeeId} has already evaluated on job {jobId}");
+                }
+                var review = new Review
+                {
+                    EmployeeId = request.EmployeeId,
+                    JobId = jobId,
+                    Rating = request.Rating,
+                    Comment = request.Comment,
+                    CreatedAt = DateTime.Now,
+                };
+
+                await _unitOfWork.Review.AddAsync(review);
+                await _unitOfWork.SaveChangesAsync();
+
+                var reviewAdd = await _unitOfWork.Review.GetByJobIdEmployeeIdAsync(jobId, request.EmployeeId);
+
+                return _mapper.Map<ReviewItemDTO>(reviewAdd);
+
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex,$"Error creating review for Employee {request.EmployeeId} and Job {jobId}"  );
+                throw;
+            }
+        }
+
         public async Task<ReviewDTOResponse> GetByJobIdAsync(int jobId, int pageNumber, int pageSize)
         {
             try

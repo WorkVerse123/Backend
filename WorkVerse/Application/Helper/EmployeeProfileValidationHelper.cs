@@ -23,10 +23,10 @@ namespace Application.Helper
             if (request.DateOfBirth.HasValue)
             {
                 var dob = request.DateOfBirth.Value;
-                if (dob > DateTime.UtcNow)
+                if (dob > DateTime.Now)
                     return (false, "DateOfBirth cannot be in the future.");
 
-                var today = DateTime.UtcNow.Date;
+                var today = DateTime.Now.Date;
                 int age = today.Year - dob.Year;
                 if (dob.Date > today.AddYears(-age)) age--; 
 

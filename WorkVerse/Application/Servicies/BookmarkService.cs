@@ -97,7 +97,7 @@ namespace Application.Servicies
                 {
                     EmployeeId = employeeId,
                     JobId = jobId,
-                    SavedAt = DateTime.UtcNow
+                    SavedAt = DateTime.Now
                 };
 
                 await _unitOfWork.Bookmark.AddAsync(bookmark);

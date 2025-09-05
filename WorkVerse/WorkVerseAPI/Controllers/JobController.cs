@@ -1,4 +1,6 @@
-﻿using Application.DTOs.Response;
+﻿using Application.DTOs.Request;
+using Application.DTOs.Response;
+using Application.Helper;
 using Application.Interfaces.IServicies;
 using Microsoft.AspNetCore.Mvc;
 using WorkVerseAPI.Models;
@@ -105,6 +107,24 @@ namespace WorkVerseAPI.Controllers
                 }
 
                 return Ok(new ApiResponse<ReviewDTOResponse>("Registration successful", result, 200));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ApiResponse<object>(ex.Message, 500));
+            }
+        }
+
+        // POST /jobs/{id}/reviews
+        [HttpPost("{id}/reviews")]
+        public async Task<IActionResult> CreateReview([FromRoute] int id, [FromBody] ReviewDTORequest request)
+        {
+            try
+            {
+                var (isValid, error) = ReviewValidationHelper.ValidateReviewPostRequest(request);
+                if (!isValid)
+                    return BadRequest(new ApiResponse<object>(error, 400));
+                var result = await _reviewService.CreateReviewAsync(id, request);
+                return Ok(new ApiResponse<ReviewItemDTO>("Review created successfully", result, 201));
             }
             catch (Exception ex)
             {
