@@ -57,5 +57,19 @@ namespace Application.Servicies
                 throw;
             }
         }
+
+        public async Task<JobItemDetailDTO?> GetByIdAsync(int jobId)
+        {
+            try
+            {
+                var entity = await _unitOfWork.Job.GetByIdAsync(jobId);
+                return _mapper.Map<JobItemDetailDTO>(entity);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error retrieving Job with ID: {Id}", jobId);
+                throw;
+            }
+        }
     }
 }

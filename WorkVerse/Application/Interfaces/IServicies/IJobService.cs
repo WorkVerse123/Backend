@@ -11,5 +11,7 @@ namespace Application.Interfaces.IServicies
     public interface IJobService
     {
         Task<JobDTOResponse> GetAllAsync(int pageNumber, int pageSize);
+        Task<JobItemDetailDTO> GetByIdAsync(int jobId);
+
     }
 }
