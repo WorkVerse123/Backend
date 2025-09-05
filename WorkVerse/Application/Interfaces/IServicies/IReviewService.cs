@@ -8,11 +8,8 @@ using System.Threading.Tasks;
 
 namespace Application.Interfaces.IServicies
 {
-    public interface IJobService
+    public interface IReviewService
     {
-        Task<JobDTOResponse> GetAllAsync(int pageNumber, int pageSize);
-        Task<JobItemDetailDTO> GetByIdAsync(int jobId);
-
-        
+        Task<ReviewDTOResponse> GetByJobIdAsync(int jobId, int pageNumber, int pageSize);
     }
 }

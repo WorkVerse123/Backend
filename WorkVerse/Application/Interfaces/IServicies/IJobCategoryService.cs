@@ -1,5 +1,4 @@
 ﻿using Application.DTOs.Response;
-using Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,11 +7,8 @@ using System.Threading.Tasks;
 
 namespace Application.Interfaces.IServicies
 {
-    public interface IJobService
+    public interface IJobCategoryService
     {
-        Task<JobDTOResponse> GetAllAsync(int pageNumber, int pageSize);
-        Task<JobItemDetailDTO> GetByIdAsync(int jobId);
-
-        
+        Task<JobCategoryDTOResponse> GetAllJobCategoriesAsync();
     }
 }

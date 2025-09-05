@@ -22,5 +22,7 @@ namespace Application.Interfaces.IRepositories
         IApplicationRepository Application { get; }
         IJobCategoryRepository JobCategory { get; }
 
+        IReviewRepository Review { get; }
+
     }
 }

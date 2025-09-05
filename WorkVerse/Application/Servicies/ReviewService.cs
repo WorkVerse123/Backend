@@ -2,6 +2,7 @@
 using Application.Interfaces.IRepositories;
 using Application.Interfaces.IServicies;
 using AutoMapper;
+using Domain.Entities;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -11,24 +12,29 @@ using System.Threading.Tasks;
 
 namespace Application.Servicies
 {
-    public class JobService : IJobService
+    public class ReviewService : IReviewService
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        private readonly ILogger<JobService> _logger;
+        private readonly ILogger<ReviewService> _logger;
 
-        public JobService(IUnitOfWork unitOfWork, IMapper mapper, ILogger<JobService> logger)
+        public ReviewService(IUnitOfWork unitOfWork, IMapper mapper, ILogger<ReviewService> logger)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _logger = logger;
         }
-
-        public async Task<JobDTOResponse> GetAllAsync(int pageNumber, int pageSize)
+        public async Task<ReviewDTOResponse> GetByJobIdAsync(int jobId, int pageNumber, int pageSize)
         {
             try
             {
-                var query = (await _unitOfWork.Job.GetAllAsync())
+                var job = await _unitOfWork.Job.ExistsAsync(jobId);
+                if (!job)
+                {
+                    throw new KeyNotFoundException($"Job with ID {jobId} not found");
+                }
+
+                var query = (await _unitOfWork.Review.GetByJobIdAsync(jobId))
                             .AsQueryable();
 
                 var totalRecords = query.Count();
@@ -38,11 +44,12 @@ namespace Application.Servicies
                     .Take(pageSize)
                     .ToList();
 
-                var mapped = _mapper.Map<List<JobItemDTO>>(pagedData);
+                var mapped = _mapper.Map<List<ReviewItemDTO>>(pagedData);
 
-                return new JobDTOResponse
+                return new ReviewDTOResponse
                 {
-                    Jobs = mapped,
+                    JobId = jobId,
+                    Reviews = mapped,
                     Paging = new PaginatedResponse
                     {
                         Page = pageNumber,
@@ -53,20 +60,7 @@ namespace Application.Servicies
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error retrieving Jobs");
-                throw;
-            }
-        }
-        public async Task<JobItemDetailDTO?> GetByIdAsync(int jobId)
-        {
-            try
-            {
-                var entity = await _unitOfWork.Job.GetByIdAsync(jobId);
-                return _mapper.Map<JobItemDetailDTO>(entity);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error retrieving Job with ID: {Id}", jobId);
+                _logger.LogError(ex, "Error retrieving Reviews with JobId: {Id}", jobId);
                 throw;
             }
         }

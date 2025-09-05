@@ -36,6 +36,9 @@ namespace WorkVerseAPI.Configurations
             builder.RegisterType<BookmarkService>().As<IBookmarkService>().InstancePerLifetimeScope();
             builder.RegisterType<ApplicationService>().As<IApplicationService>().InstancePerLifetimeScope();
             builder.RegisterType<JobService>().As<IJobService>().InstancePerLifetimeScope();
+            builder.RegisterType<ReviewService>().As<IReviewService>().InstancePerLifetimeScope();
+            builder.RegisterType<JobCategoryService>().As<IJobCategoryService>().InstancePerLifetimeScope();
+
         }
     }
 }
