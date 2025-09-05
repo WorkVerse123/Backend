@@ -30,5 +30,9 @@ namespace Infrastructure.Repositories
             return result;
         }
 
+        public async Task<bool> ExistsAsync(int employeeId)
+        {
+            return await _dbContext.EmployeeProfiles.AnyAsync(j => j.EmployeeId == employeeId);
+        }
     }
 }

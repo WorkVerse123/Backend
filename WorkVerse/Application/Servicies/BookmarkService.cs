@@ -29,8 +29,8 @@ namespace Application.Servicies
         {
             try
             {
-                var employee = await _unitOfWork.EmployeeProfile.GetByIdAsync(employeeId);
-                if (employee == null)
+                var employee = await _unitOfWork.EmployeeProfile.ExistsAsync(employeeId);
+                if (!employee)
                 {
                     throw new KeyNotFoundException($"Employee with ID {employeeId} not found");
                 }
@@ -73,15 +73,15 @@ namespace Application.Servicies
             try
             {
 
-                var employee = await _unitOfWork.EmployeeProfile.GetByIdAsync(employeeId);
-                if (employee == null)
+                var employee = await _unitOfWork.EmployeeProfile.ExistsAsync(employeeId);
+                if (!employee)
                 {
                     throw new KeyNotFoundException($"Employee with ID {employeeId} not found");
                 }
 
 
-                var job = await _unitOfWork.Job.GetByIdAsync(jobId);
-                if (job == null)
+                var job = await _unitOfWork.Job.ExistsAsync(jobId);
+                if (!job)
                 {
                     throw new KeyNotFoundException($"Job with ID {jobId} not found");
                 }
@@ -120,8 +120,8 @@ namespace Application.Servicies
             try
             {
 
-                var employee = await _unitOfWork.EmployeeProfile.GetByIdAsync(employeeId);
-                if (employee == null)
+                var employee = await _unitOfWork.EmployeeProfile.ExistsAsync(employeeId);
+                if (!employee)
                     throw new KeyNotFoundException($"Employee with ID {employeeId} not found");
 
 

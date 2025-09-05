@@ -12,6 +12,7 @@ namespace Application.Interfaces.IRepositories
        
         Task<EmployeeProfile?> GetByIdAsync(int employeeId);
         Task<EmployeeProfile?> GetByUserIdAsync(int userId);
+        Task<bool> ExistsAsync(int employeeId);
     }
 
 }

@@ -20,7 +20,10 @@ namespace Infrastructure.Repositories
         
         public async Task<Job> GetByIdAsync(int jobId)
         {
-            var result = await _dbContext.Jobs.FirstOrDefaultAsync(u => u.JobId == jobId);
+            var result = await _dbContext.Jobs
+                .Include(j => j.JobCategoryMappings)
+                .ThenInclude(m => m.Category)
+                .FirstOrDefaultAsync(u => u.JobId == jobId);
             return result;
         }
 
@@ -32,5 +35,11 @@ namespace Infrastructure.Repositories
                 .OrderByDescending(c => c.CreatedAt).ToListAsync();
             return result;
         }
+
+        public async Task<bool> ExistsAsync(int jobId)
+        {
+            return await _dbContext.Jobs.AnyAsync(j => j.JobId == jobId);
+        }
+
     }
 }

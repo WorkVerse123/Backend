@@ -50,8 +50,8 @@ namespace Application.Servicies
         {
             try
             {
-                var employee = await _unitOfWork.EmployeeProfile.GetByIdAsync(employeeId);
-                if (employee == null)
+                var employee = await _unitOfWork.EmployeeProfile.ExistsAsync(employeeId);
+                if (!employee)
                 {
                     throw new KeyNotFoundException($"Employee with ID {employeeId} not found");
                 }
@@ -113,8 +113,8 @@ namespace Application.Servicies
             try
             {
                 // Check employee
-                var employee = await _unitOfWork.EmployeeProfile.GetByIdAsync(employeeId);
-                if (employee == null)
+                var employee = await _unitOfWork.EmployeeProfile.ExistsAsync(employeeId);
+                if (!employee)
                     throw new KeyNotFoundException($"Employee with ID {employeeId} not found");
 
                 // Lấy tất cả busyTimes của employee trước
@@ -185,8 +185,8 @@ namespace Application.Servicies
             try
             {
             
-                var employee = await _unitOfWork.EmployeeProfile.GetByIdAsync(employeeId);
-                if (employee == null)
+                var employee = await _unitOfWork.EmployeeProfile.ExistsAsync(employeeId);
+                if (!employee)
                     throw new KeyNotFoundException($"Employee with ID {employeeId} not found");
 
               
