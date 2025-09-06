@@ -47,5 +47,11 @@ namespace Infrastructure.Repositories
                 .FirstOrDefaultAsync();
             return result;
         }
+
+        public async Task<bool> ExistsAsync(int applicationId)
+        {
+            return await _dbContext.Applications
+                .AnyAsync(r => r.ApplicationId == applicationId);
+        }
     }
 }

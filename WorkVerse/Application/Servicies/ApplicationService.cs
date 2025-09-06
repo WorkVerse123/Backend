@@ -85,7 +85,7 @@ namespace Application.Servicies
                     throw new KeyNotFoundException($"Employee with ID {employeeId} not found");
                 }
 
-              
+
 
                 var query = (await _unitOfWork.Application.GetByEmployeeIdAsync(employeeId))
                             .AsQueryable();
@@ -129,7 +129,7 @@ namespace Application.Servicies
         {
             try
             {
-                
+
                 var existingApplication = await _unitOfWork.Application.GetByIdAsync(applicationId);
                 if (existingApplication == null)
                 {
@@ -151,6 +151,24 @@ namespace Application.Servicies
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error updating apllication with ID: {Id}", applicationId);
+                throw;
+            }
+        }
+
+        public async Task<ApplicationItemDetailDTO> GetApplicationDetailByIdAsync(int applicationId)
+        {
+            try
+            {
+                var exist = await _unitOfWork.Application.GetByIdAsync(applicationId);
+              
+
+                return _mapper.Map<ApplicationItemDetailDTO>(exist);
+
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error retrieving Applications with ID {applicationId}");
                 throw;
             }
         }

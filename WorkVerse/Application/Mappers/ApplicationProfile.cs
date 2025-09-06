@@ -23,6 +23,13 @@ namespace Application.Mappers
                     .ToList()
             ))
             .ForMember(dest => dest.ApplicationStatus, opt => opt.MapFrom(src => src.Status));
+
+            CreateMap<Domain.Entities.Application, ApplicationItemDetailDTO>()
+            .ForMember(dest => dest.ApplicationId, opt => opt.MapFrom(src => src.ApplicationId))
+            .ForMember(dest => dest.EmployeeId, opt => opt.MapFrom(src => src.EmployeeId))
+            .ForMember(dest => dest.AppliedAt, opt => opt.MapFrom(src => src.AppliedAt))
+            .ForMember(dest => dest.JobId, opt => opt.MapFrom(src => src.JobId))
+            .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status));
         }
     }
 }

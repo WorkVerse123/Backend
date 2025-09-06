@@ -13,5 +13,7 @@ namespace Application.Interfaces.IServicies
         Task<ApplicationResponseDTO> GetByEmployeeIdAsync(int employeeId, int pageNumber, int pageSize);
         Task<ApplicationItemDTO> CreateApplicationAsync(int employeeId, ApplicationDTORequest request);
         Task<ApplicationItemDTO> UpdateApplicationWithdrawnAsync(int applicationId);
+        Task<ApplicationItemDetailDTO> GetApplicationDetailByIdAsync(int applicationId);
+
     }
 }

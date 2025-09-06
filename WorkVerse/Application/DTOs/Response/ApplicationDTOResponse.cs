@@ -20,4 +20,13 @@ namespace Application.DTOs.Response
         public List<string> JobCategory { get; set; } = new();
         public string ApplicationStatus { get; set; } = null!;
     }
+
+    public class ApplicationItemDetailDTO
+    {
+        public int ApplicationId { get; set; }
+        public DateTime AppliedAt { get; set; }
+        public int EmployeeId { get; set; }
+        public int JobId { get; set; }
+        public string Status { get; set; } = null!;
+    }
 }

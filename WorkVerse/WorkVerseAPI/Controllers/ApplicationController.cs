@@ -46,6 +46,31 @@ namespace WorkVerseAPI.Controllers
                 return StatusCode(500, new ApiResponse<object>(ex.Message, 500));
             }
         }
+
+        // GET /applications/{id}
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetApplicationDetailById([FromRoute] int id)
+        {
+            try
+            {
+                if (id <= 0)
+                {
+                    return BadRequest(new ApiResponse<object>("Application ID must be greater than 0", 400));
+                }
+
+                var result = await _applicationService.GetApplicationDetailByIdAsync(id);
+                if (result == null)
+                {
+                    return NotFound(new ApiResponse<object>($"No application found with ID {id}", 404));
+                }
+
+                return Ok(new ApiResponse<ApplicationItemDetailDTO>("Get applications detail successfully", result, 200));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ApiResponse<object>(ex.Message, 500));
+            }
+        }
     }
 
 }
