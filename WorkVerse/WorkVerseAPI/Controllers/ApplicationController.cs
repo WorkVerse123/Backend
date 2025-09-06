@@ -93,6 +93,27 @@ namespace WorkVerseAPI.Controllers
                 return StatusCode(500, new ApiResponse<object>(ex.Message, 500));
             }
         }
+
+        // GET/stats
+        [HttpGet("/stats")]
+        public async Task<IActionResult> GetStatInformation()
+        {
+            try
+            {
+                var result = await _applicationService.GetStatsInformationAsync();
+                if (result == null)
+                {
+                    return NotFound(new ApiResponse<object>(
+                        $"Get stats information failed", 404));
+                }
+
+                return Ok(new ApiResponse<StatsInformationDTOResponse>("Get stats information successful", result, 200));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ApiResponse<object>(ex.Message, 500));
+            }
+        }
     }
 
 }

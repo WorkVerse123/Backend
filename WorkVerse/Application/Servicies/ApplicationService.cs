@@ -222,5 +222,36 @@ namespace Application.Servicies
                 throw;
             }
         }
+
+        public async Task<StatsInformationDTOResponse> GetStatsInformationAsync()
+        {
+            try
+            {
+                var jobsCount = await _unitOfWork.Job.CountJobsAsync();
+
+                var companiesCount = await _unitOfWork.EmployerProfile.CountCompaniesAsync();
+
+                var candidatesCount = await _unitOfWork.EmployeeProfile.CountCandidatesAsync();
+
+                var newJobsCount = await _unitOfWork.Job.CountNewJobsAsync(TimeSpan.FromDays(7));
+
+                return new StatsInformationDTOResponse
+                {
+                    Stats = new StatItemDTO
+                    {
+                        Jobs = jobsCount,
+                        Companies = companiesCount,
+                        Candidates = candidatesCount,
+                        NewJobs = newJobsCount
+                    }
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error retrieving stats information");
+                throw;
+            }
+        }
+
     }
 }

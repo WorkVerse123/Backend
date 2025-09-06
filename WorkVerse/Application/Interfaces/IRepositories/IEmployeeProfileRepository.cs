@@ -14,6 +14,7 @@ namespace Application.Interfaces.IRepositories
         Task<EmployeeProfile?> GetByUserIdAsync(int userId);
         Task<bool> ExistsAsync(int employeeId);
         Task<IEnumerable<EmployeeProfile>> GetAllCandidatesAsync();
+        Task<int> CountCandidatesAsync();
 
     }
 

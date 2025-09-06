@@ -42,5 +42,10 @@ namespace Infrastructure.Repositories
             var result = await _dbContext.EmployerProfiles.Include(c => c.User).FirstOrDefaultAsync(u => u.UserId == userId);
             return result;
         }
+
+        public async Task<int> CountCompaniesAsync()
+        {
+            return await _dbContext.EmployerProfiles.CountAsync();
+        }
     }
 }

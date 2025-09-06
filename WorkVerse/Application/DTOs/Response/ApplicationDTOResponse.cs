@@ -48,5 +48,15 @@ namespace Application.DTOs.Response
         public string EmployeeGender { get; set; } = null!;
     }
 
-
+    public class StatsInformationDTOResponse
+    {
+        public StatItemDTO Stats { get; set; } = new();
+    }
+    public class StatItemDTO
+    {
+        public int Jobs { get; set; }
+        public int Companies { get; set; }
+        public int Candidates { get; set; }
+        public int NewJobs { get; set; }
+    }
 }

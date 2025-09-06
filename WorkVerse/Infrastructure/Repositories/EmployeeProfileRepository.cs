@@ -40,5 +40,10 @@ namespace Infrastructure.Repositories
             var result = await _dbContext.EmployeeProfiles.Where(u => u.Mode == "public").ToListAsync();
             return result;
         }
+        public async Task<int> CountCandidatesAsync()
+        {
+            return await _dbContext.EmployeeProfiles.CountAsync();
+        }
+
     }
 }

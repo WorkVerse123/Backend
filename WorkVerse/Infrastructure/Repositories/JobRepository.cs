@@ -41,5 +41,16 @@ namespace Infrastructure.Repositories
             return await _dbContext.Jobs.AnyAsync(j => j.JobId == jobId);
         }
 
+        public async Task<int> CountJobsAsync()
+        {
+            return await _dbContext.Jobs.CountAsync();
+        }
+        public async Task<int> CountNewJobsAsync(TimeSpan range)
+        {
+            var fromDate = DateTime.Now.Subtract(range);
+            return await _dbContext.Jobs
+                .Where(j => j.CreatedAt >= fromDate)
+                .CountAsync();
+        }
     }
 }

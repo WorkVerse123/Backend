@@ -16,5 +16,6 @@ namespace Application.Interfaces.IServicies
         Task<ApplicationItemDetailDTO> GetApplicationDetailByIdAsync(int applicationId);
         Task<JobApplicationsResponseDTO> GetJobApplicationsAsync(int employerId, int jobId,int pageNumber, int pageSize);
 
+        Task<StatsInformationDTOResponse> GetStatsInformationAsync();
     }
 }

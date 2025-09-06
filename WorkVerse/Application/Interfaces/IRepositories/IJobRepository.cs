@@ -13,5 +13,9 @@ namespace Application.Interfaces.IRepositories
         Task<IEnumerable<Job>> GetAllAsync();
 
         Task<bool> ExistsAsync(int jobId);
+
+        Task<int> CountJobsAsync();
+
+        Task<int> CountNewJobsAsync(TimeSpan range);
     }
 }
