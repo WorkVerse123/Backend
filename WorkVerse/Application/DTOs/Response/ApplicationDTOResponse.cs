@@ -29,4 +29,24 @@ namespace Application.DTOs.Response
         public int JobId { get; set; }
         public string Status { get; set; } = null!;
     }
+
+    public class JobApplicationsResponseDTO
+    {
+        public int EmployerId { get; set; }
+        public int JobId { get; set; }
+        public string JobTitle { get; set; } = null!;
+        public string JobLocation { get; set; } = null!;
+        public PaginatedResponse Paging { get; set; } = new();
+        public List<ApplicationSummaryDTO> Applications { get; set; } = new();
+    }
+
+    public class ApplicationSummaryDTO
+    {
+        public int ApplicationId { get; set; }
+        public DateTime AppliedAt { get; set; }
+        public string EmployeeFullName { get; set; } = null!;
+        public string EmployeeGender { get; set; } = null!;
+    }
+
+
 }

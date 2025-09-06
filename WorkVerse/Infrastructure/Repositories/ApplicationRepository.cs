@@ -53,5 +53,16 @@ namespace Infrastructure.Repositories
             return await _dbContext.Applications
                 .AnyAsync(r => r.ApplicationId == applicationId);
         }
+
+        public async Task<IEnumerable<Domain.Entities.Application>> GetByJobIdAsync(int jobId)
+        {
+            var result = await _dbContext.Applications
+                .Include(b => b.Employee)
+                .Where(b => b.JobId == jobId)
+                 .OrderByDescending(b => b.AppliedAt)
+                 .ToListAsync();
+
+            return result;
+        }
     }
 }

@@ -14,5 +14,8 @@ namespace Application.Interfaces.IRepositories
         Task<Domain.Entities.Application> ExistsAsync(int employeeId, int jobId);
         Task<bool> ExistsAsync(int applicationId);
 
+        Task<IEnumerable<Domain.Entities.Application>> GetByJobIdAsync(int jobId);
+
+
     }
 }

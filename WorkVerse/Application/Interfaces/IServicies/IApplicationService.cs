@@ -14,6 +14,7 @@ namespace Application.Interfaces.IServicies
         Task<ApplicationItemDTO> CreateApplicationAsync(int employeeId, ApplicationDTORequest request);
         Task<ApplicationItemDTO> UpdateApplicationWithdrawnAsync(int applicationId);
         Task<ApplicationItemDetailDTO> GetApplicationDetailByIdAsync(int applicationId);
+        Task<JobApplicationsResponseDTO> GetJobApplicationsAsync(int employerId, int jobId,int pageNumber, int pageSize);
 
     }
 }

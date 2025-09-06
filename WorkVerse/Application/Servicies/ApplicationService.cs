@@ -172,5 +172,55 @@ namespace Application.Servicies
                 throw;
             }
         }
+
+        public async Task<JobApplicationsResponseDTO> GetJobApplicationsAsync(int employerId, int jobId, int pageNumber, int pageSize)
+        {
+            try
+            {
+                var employee = await _unitOfWork.EmployerProfile.ExistsAsync(employerId);
+                if (!employee)
+                {
+                    throw new KeyNotFoundException($"Employer with ID {employerId} not found");
+                }
+
+                var job = await _unitOfWork.Job.GetByIdAsync(jobId);
+                if (job == null || job.EmployerId != employerId)
+                {
+                    throw new KeyNotFoundException($"Job with ID {jobId} not found for employer with ID {employerId}");
+                }
+
+                var query = (await _unitOfWork.Application.GetByJobIdAsync(jobId))
+                            .AsQueryable();
+
+                var totalRecords = query.Count();
+
+                var pagedData = query
+                    .Skip((pageNumber - 1) * pageSize)
+                    .Take(pageSize)
+                    .ToList();
+
+                var mapped = _mapper.Map<List<ApplicationSummaryDTO>>(pagedData);
+
+                return new JobApplicationsResponseDTO
+                {
+                    EmployerId = employerId,
+                    Applications = mapped,
+                    JobId=jobId,
+                    JobLocation=job.Location,
+                    JobTitle=job.Title,
+                    Paging = new PaginatedResponse
+                    {
+                        Page = pageNumber,
+                        PageSize = pageSize,
+                        TotalPages = (int)Math.Ceiling(totalRecords / (double)pageSize)
+                    }
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex,$"Error retrieving Applications with JobId: {jobId}");
+                throw;
+            }
+        }
     }
 }
