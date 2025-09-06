@@ -29,6 +29,7 @@ namespace Infrastructure.Repositories
             Application = new ApplicationRepository(_dbContext);
             JobCategory = new JobCategoryRepository(_dbContext);
             Review = new ReviewRepository(_dbContext);
+            EmployerProfile = new EmployerProfileRepository(_dbContext);
         }
 
         public async Task BeginTransactionAsync()
@@ -141,5 +142,7 @@ namespace Infrastructure.Repositories
         public IJobCategoryRepository JobCategory { get; private set; }
 
         public IReviewRepository Review { get; private set; }
+
+        public IEmployerProfileRepository EmployerProfile { get; private set; }
     }
 }

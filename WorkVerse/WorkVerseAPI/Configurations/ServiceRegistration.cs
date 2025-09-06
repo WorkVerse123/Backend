@@ -38,6 +38,7 @@ namespace WorkVerseAPI.Configurations
             builder.RegisterType<JobService>().As<IJobService>().InstancePerLifetimeScope();
             builder.RegisterType<ReviewService>().As<IReviewService>().InstancePerLifetimeScope();
             builder.RegisterType<JobCategoryService>().As<IJobCategoryService>().InstancePerLifetimeScope();
+            builder.RegisterType<EmployerProfileService>().As<IEmployerProfileService>().InstancePerLifetimeScope();
 
         }
     }

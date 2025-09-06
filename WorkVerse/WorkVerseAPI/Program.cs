@@ -27,6 +27,7 @@ namespace WorkVerseAPI
             builder.Services.AddAutoMapper(typeof(ApplicationProfile));
             builder.Services.AddAutoMapper(typeof(JobProfile));
             builder.Services.AddAutoMapper(typeof(JobCategoryProfile));
+            builder.Services.AddAutoMapper(typeof(EmployerProfileMapper));
 
 
 
