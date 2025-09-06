@@ -1,7 +1,9 @@
-﻿using Application.DTOs.Response;
+﻿using Application.DTOs.Request;
+using Application.DTOs.Response;
 using Application.Interfaces.IRepositories;
 using Application.Interfaces.IServicies;
 using AutoMapper;
+using Domain.Entities;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -23,6 +25,32 @@ namespace Application.Servicies
             _mapper = mapper;
             _logger = logger;
         }
+
+        public async Task<bool> CreateEmployerProfileAsync(EmployerProfileDTORequest request)
+        {
+            try
+            {
+               
+                var existingProfile = await _unitOfWork.EmployerProfile.CheckExistByUserIdAsync(request.UserId);
+                if (existingProfile)
+                {
+                    throw new InvalidOperationException($"Employer profile already exists for User {request.UserId}");
+                }
+
+                var entity = _mapper.Map<EmployerProfile>(request);
+
+                await _unitOfWork.EmployerProfile.AddAsync(entity);
+                var result = await _unitOfWork.SaveChangesAsync();
+
+                return result > 0;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error creating employer profile for UserId: {UserId}", request.UserId);
+                throw;
+            }
+        }
+
 
         public async Task<EmployerProfileDTOResponse> GetAllCompaniesAsync(int pageNumber, int pageSize)
         {

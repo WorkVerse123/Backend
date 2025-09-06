@@ -1,4 +1,5 @@
-﻿using Application.DTOs.Response;
+﻿using Application.DTOs.Request;
+using Application.DTOs.Response;
 using AutoMapper;
 using Domain.Entities;
 using System;
@@ -20,6 +21,16 @@ namespace Application.Mappers
             .ForMember(dest => dest.Logo, opt => opt.MapFrom(src => src.LogoUrl))
             .ForMember(dest => dest.Industry,
            opt => opt.MapFrom(src => src.EmployerType.EmployerTypeName));
+
+            CreateMap<EmployerProfileDTORequest, EmployerProfile>()
+           .ForMember(dest => dest.Address, opt => opt.MapFrom(src => src.Address))
+           .ForMember(dest => dest.CompanyName, opt => opt.MapFrom(src => src.CompanyName))
+           .ForMember(dest => dest.EmployerTypeId, opt => opt.MapFrom(src => src.EmployerType))
+           .ForMember(dest => dest.WebsiteUrl, opt => opt.MapFrom(src => src.WebsiteUrl))
+           .ForMember(dest => dest.LogoUrl, opt => opt.MapFrom(src => src.LogoUrl))
+           .ForMember(dest => dest.DateEstablish, opt => opt.MapFrom(src => src.DateEstablished))
+           .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
+           .ForMember(dest => dest.EmployerType, opt => opt.Ignore());
         }
     }
 }

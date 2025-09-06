@@ -1,4 +1,6 @@
-﻿using Application.DTOs.Response;
+﻿using Application.DTOs.Request;
+using Application.DTOs.Response;
+using Application.Helper;
 using Application.Interfaces.IServicies;
 using Microsoft.AspNetCore.Mvc;
 using WorkVerseAPI.Models;
@@ -37,6 +39,24 @@ namespace WorkVerseAPI.Controllers
                 }
 
                 return Ok(new ApiResponse<EmployerProfileDTOResponse>("Get companies information successful", result, 200));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ApiResponse<object>(ex.Message, 500));
+            }
+        }
+
+        // POST/company-setup
+        [HttpPost("/company-setup")]
+        public async Task<IActionResult> CreateEmployerProfile([FromBody] EmployerProfileDTORequest request)
+        {
+            try
+            {
+                var (isValid, error) = EmployerProfileValidationHelper.ValidateEmployerProfilePostRequest(request);
+                if (!isValid)
+                    return BadRequest(new ApiResponse<object>(error, 400));
+                var result = await _employerProfileService.CreateEmployerProfileAsync(request);
+                return Ok(new ApiResponse<object>("Employer Profile created successfully", null, 201));
             }
             catch (Exception ex)
             {

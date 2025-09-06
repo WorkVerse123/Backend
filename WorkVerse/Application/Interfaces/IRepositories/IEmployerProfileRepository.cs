@@ -16,6 +16,8 @@ namespace Application.Interfaces.IRepositories
         Task<IEnumerable<EmployerProfile>> GetAllCompaniesAsync();
         Task<int> CountCompaniesAsync();
 
+        Task<bool> CheckExistByUserIdAsync(int userId);
+
     }
 }
 
