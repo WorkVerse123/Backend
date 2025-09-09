@@ -11,7 +11,7 @@ namespace Application.Interfaces.IRepositories
     {
         Task AddAsync(T entity);
         Task AddRangeAsync(List<T> entities);
-        Task<T?> GetAsync(Guid id, Func<IQueryable<T>, IQueryable<T>>? include = null);
+        Task<T?> GetAsync(int id, Func<IQueryable<T>, IQueryable<T>>? include = null);
 
         //Task<PaginationResult<List<T>>> GetAllAsync(Expression<Func<T, bool>>? filter = null,
         //    Func<IQueryable<T>, IOrderedQueryable<T>>? order = null, Func<IQueryable<T>, IQueryable<T>>? include = null,

@@ -30,7 +30,7 @@ namespace Infrastructure.Repositories
             await _dbSet.AddRangeAsync(entities);
         }
 
-        public async Task<T?> GetAsync(Guid id, Func<IQueryable<T>, IQueryable<T>>? include = null)
+        public async Task<T?> GetAsync(int  id, Func<IQueryable<T>, IQueryable<T>>? include = null)
         {
             IQueryable<T> query = _dbSet;
 

@@ -144,5 +144,6 @@ namespace Infrastructure.Repositories
         public IReviewRepository Review { get; private set; }
 
         public IEmployerProfileRepository EmployerProfile { get; private set; }
+        public IUserRepository User { get; private set; }
     }
 }

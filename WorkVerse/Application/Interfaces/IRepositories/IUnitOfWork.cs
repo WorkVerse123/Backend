@@ -21,10 +21,9 @@ namespace Application.Interfaces.IRepositories
         IJobRepository Job { get; }
         IApplicationRepository Application { get; }
         IJobCategoryRepository JobCategory { get; }
-
         IReviewRepository Review { get; }
-
         IEmployerProfileRepository EmployerProfile { get; }
+        IUserRepository User { get; }
 
     }
 }
