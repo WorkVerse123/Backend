@@ -30,6 +30,7 @@ namespace Infrastructure.Repositories
             JobCategory = new JobCategoryRepository(_dbContext);
             Review = new ReviewRepository(_dbContext);
             EmployerProfile = new EmployerProfileRepository(_dbContext);
+            User = new UserRepository(_dbContext);
         }
 
         public async Task BeginTransactionAsync()

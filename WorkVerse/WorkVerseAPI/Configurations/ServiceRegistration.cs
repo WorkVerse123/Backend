@@ -1,10 +1,14 @@
 ﻿using Application.Interfaces.IRepositories;
+using Application.Interfaces.IServices;
 using Application.Interfaces.IServicies;
+using Application.Services;
 using Application.Servicies;
 using Autofac;
 using Infrastructure.Data;
 using Infrastructure.Repositories;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
+using SchoolMedicalSystem.Application.Services;
 namespace WorkVerseAPI.Configurations
 {
     public class ServiceRegistration : Module
@@ -39,6 +43,8 @@ namespace WorkVerseAPI.Configurations
             builder.RegisterType<ReviewService>().As<IReviewService>().InstancePerLifetimeScope();
             builder.RegisterType<JobCategoryService>().As<IJobCategoryService>().InstancePerLifetimeScope();
             builder.RegisterType<EmployerProfileService>().As<IEmployerProfileService>().InstancePerLifetimeScope();
+            builder.RegisterType<AuthService>().As<IAuthService>().InstancePerLifetimeScope();
+            builder.RegisterType<JWTService>().As<IJWTService>().InstancePerLifetimeScope();
 
         }
     }
