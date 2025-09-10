@@ -13,7 +13,7 @@ namespace Application.Interfaces.IServicies
     {
         Task<JobDTOResponse> GetAllAsync(int pageNumber, int pageSize);
         Task<JobItemDetailDTO> GetByIdAsync(int jobId);
-        Task<JobDTOResponse> GetByIdAsynce(int jobId);
+        //Task<JobDTOResponse> GetByIdAsynce(int jobId);
         Task<JobDTOResponse> GetByEmployerIdAsync(int employerId, int pageNumber, int pageSize);
         Task AddAsyne(JobDTORequest job);
         Task<bool> UpdateAsync(int jobId, JobDTORequest job);

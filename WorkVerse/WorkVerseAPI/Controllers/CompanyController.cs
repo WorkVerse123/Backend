@@ -38,7 +38,7 @@ namespace WorkVerseAPI.Controllers
                         $"No Company found", 404));
                 }
 
-                return Ok(new ApiResponse<EmployerProfileDTOResponse>("Get companies information successful", result, 200));
+                return Ok(new ApiResponse<ListEmployerProfileDTOResponse>("Get companies information successful", result, 200));
             }
             catch (Exception ex)
             {
