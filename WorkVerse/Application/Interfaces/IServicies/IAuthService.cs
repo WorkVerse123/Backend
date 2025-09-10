@@ -1,0 +1,20 @@
+﻿
+using Application.DTOs.Request;
+using Application.DTOs.Response;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Application.Interfaces.IServices
+{
+    public interface IAuthService
+    {
+        Task<UserDTORespone?> ValidateUserAsync(string account, string password);
+        Task<UserDTORespone?> CreatedAccountAsync(UserDTORequest user);
+
+        bool VerifyPassword (string password, string hashPassword);
+        string EncryptPassword(string password);
+    }
+}

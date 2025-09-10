@@ -1,4 +1,12 @@
 
+using Autofac.Extensions.DependencyInjection;
+using Autofac;
+using WorkVerseAPI.Configurations;
+using Application.Mappers;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using System.Text;
+using Microsoft.IdentityModel.Tokens;
+
 namespace WorkVerseAPI
 {
     public class Program
@@ -7,9 +15,49 @@ namespace WorkVerseAPI
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
+            // Use Autofac as the DI container
+            builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
+            builder.Host.ConfigureContainer<ContainerBuilder>(containerBuilder =>
+            {
+                containerBuilder.RegisterModule(new ServiceRegistration(builder.Configuration));
+            });
 
+
+            //Add mapper as the DI (It will seek all asembly have in mapper)
+            builder.Services.AddAutoMapper(typeof(EmployeeProfileMapper));
+            builder.Services.AddAutoMapper(typeof(BusyTimeProfile));
+            builder.Services.AddAutoMapper(typeof(BookmarkProfile));
+            builder.Services.AddAutoMapper(typeof(ApplicationProfile));
+            builder.Services.AddAutoMapper(typeof(JobProfile));
+            builder.Services.AddAutoMapper(typeof(JobCategoryProfile));
+            builder.Services.AddAutoMapper(typeof(EmployerProfileMapper));
+
+
+            // Add Authentication
+            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    var key = Encoding.UTF8.GetBytes(builder.Configuration["Jwt:SecretKey"]!);
+
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidIssuer = builder.Configuration["Jwt:Issuer"],
+                        ValidateAudience = true,
+                        ValidAudience = builder.Configuration["Jwt:Audience"],
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(key),
+                        ClockSkew = TimeSpan.Zero
+                    };
+                });
+            builder.Services.AddAuthorization();
+
+
+            // Add services to the container.
             builder.Services.AddControllers();
+
+
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
