@@ -52,7 +52,7 @@ namespace Application.Servicies
         }
 
 
-        public async Task<EmployerProfileDTOResponse> GetAllCompaniesAsync(int pageNumber, int pageSize)
+        public async Task<ListEmployerProfileDTOResponse> GetAllCompaniesAsync(int pageNumber, int pageSize)
         {
             try
             {
@@ -68,7 +68,7 @@ namespace Application.Servicies
 
                 var mapped = _mapper.Map<List<CompanyItemDTO>>(pagedData);
 
-                return new EmployerProfileDTOResponse
+                return new ListEmployerProfileDTOResponse
                 {
                     Companies = mapped,
                     Paging = new PaginatedResponse
@@ -82,6 +82,67 @@ namespace Application.Servicies
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error retrieving Companies");
+                throw;
+            }
+        }
+
+        public async Task<EmployerProfileDTOResponse> GetEmployerProfileByIdAsync(int id)
+        {
+            try
+            {
+                var employerProfile = await _unitOfWork.EmployerProfile.GetByIdAsync(id);
+
+                if (employerProfile == null)
+                {
+                    throw new KeyNotFoundException($"Employer profile with ID {id} not found.");
+                }
+
+                return _mapper.Map<EmployerProfileDTOResponse>(employerProfile);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error retrieving employer profile with ID: {Id}", id);
+                throw;
+            }
+        }
+
+        public async Task<bool> UpdateEmployerProfileAsync(int id, EmployerProfileDTORequest request)
+        {
+            try
+            {
+                // Validate request
+                var (isValid, errorMessage) = Helper.EmployerProfileValidationHelper.ValidateEmployerProfilePostRequest(request);
+                if (!isValid)
+                {
+                    throw new ArgumentException(errorMessage);
+                }
+
+                // Get existing profile
+                var existingProfile = await _unitOfWork.EmployerProfile.GetByIdAsync(id);
+                var employerType = await _unitOfWork.EmployerType.GetAsync(request.EmployerType);
+                if (existingProfile == null)
+                {
+                    throw new KeyNotFoundException($"Employer profile with ID {id} not found.");
+                }
+
+                // Update fields
+                existingProfile.CompanyName = request.CompanyName;
+                existingProfile.EmployerType = employerType;
+                existingProfile.Address = request.Address;
+                existingProfile.WebsiteUrl = request.WebsiteUrl;
+                existingProfile.LogoUrl = request.LogoUrl;
+                existingProfile.DateEstablish = request.DateEstablished;
+                existingProfile.Description = request.Description;
+
+                // Save changes
+                _unitOfWork.EmployerProfile.Update(existingProfile);
+                var result = await _unitOfWork.SaveChangesAsync();
+
+                return result > 0;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error updating employer profile with ID: {Id}", id);
                 throw;
             }
         }

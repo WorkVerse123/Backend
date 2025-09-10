@@ -24,6 +24,7 @@ namespace Application.Interfaces.IRepositories
         IReviewRepository Review { get; }
         IEmployerProfileRepository EmployerProfile { get; }
         IUserRepository User { get; }
+        IEmployerTypeRepository EmployerType { get; }
 
     }
 }

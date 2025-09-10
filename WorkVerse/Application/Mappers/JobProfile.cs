@@ -1,4 +1,5 @@
-﻿using Application.DTOs.Response;
+﻿using Application.DTOs.Request;
+using Application.DTOs.Response;
 using AutoMapper;
 using Domain.Entities;
 using System;
@@ -48,6 +49,7 @@ namespace Application.Mappers
             .ForMember(dest => dest.JobExpiredAt, opt => opt.MapFrom(src => src.ExpiredAt))
             .ForMember(dest => dest.JobStatus, opt => opt.MapFrom(src => src.Status));
 
+            CreateMap<JobDTORequest, Job>();
         }
     }
 }

@@ -52,5 +52,14 @@ namespace Infrastructure.Repositories
                 .Where(j => j.CreatedAt >= fromDate)
                 .CountAsync();
         }
+        public async Task<IEnumerable<Job>> GetByEmployerIdAsync(int employerId)
+        {
+            var result = await _dbContext.Jobs
+                .Where(j => j.EmployerId == employerId)
+                .Include(j => j.JobCategoryMappings)
+                .ThenInclude(m => m.Category)
+                .OrderByDescending(c => c.CreatedAt).ToListAsync();
+            return result;
+        }
     }
 }

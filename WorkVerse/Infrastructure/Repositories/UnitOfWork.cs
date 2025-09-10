@@ -31,6 +31,7 @@ namespace Infrastructure.Repositories
             Review = new ReviewRepository(_dbContext);
             EmployerProfile = new EmployerProfileRepository(_dbContext);
             User = new UserRepository(_dbContext);
+            EmployerType = new EmployerTypeRepository(_dbContext);
         }
 
         public async Task BeginTransactionAsync()
@@ -146,5 +147,6 @@ namespace Infrastructure.Repositories
 
         public IEmployerProfileRepository EmployerProfile { get; private set; }
         public IUserRepository User { get; private set; }
+        public IEmployerTypeRepository EmployerType { get; private set; }
     }
 }

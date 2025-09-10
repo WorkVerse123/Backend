@@ -1,4 +1,5 @@
-﻿using Application.DTOs.Response;
+﻿using Application.DTOs.Request;
+using Application.DTOs.Response;
 using Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -12,7 +13,11 @@ namespace Application.Interfaces.IServicies
     {
         Task<JobDTOResponse> GetAllAsync(int pageNumber, int pageSize);
         Task<JobItemDetailDTO> GetByIdAsync(int jobId);
+        Task<JobDTOResponse> GetByIdAsynce(int jobId);
+        Task<JobDTOResponse> GetByEmployerIdAsync(int employerId, int pageNumber, int pageSize);
+        Task AddAsyne(JobDTORequest job);
+        Task<bool> UpdateAsync(int jobId, JobDTORequest job);
+        Task<bool> ChangeStatusAsynce(int jobId, string newStatus);
 
-        
     }
 }
