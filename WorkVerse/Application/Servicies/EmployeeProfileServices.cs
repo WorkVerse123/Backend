@@ -35,15 +35,15 @@ namespace Application.Servicies
                     _logger.LogWarning("Attempted to add a null employee profile");
                     throw new ArgumentNullException(nameof(employeeProfile), "Profile cannot be null");
                 }
-                var existsUser= await _unitOfWork.User.GetByIdAsync(userId);
-                if (existsUser == null)
+                var existsUser= await _unitOfWork.User.ExistByIdAsync(userId);
+                if (!existsUser)
                 {
-                    throw new ArgumentNullException($"User not exists for User {userId}");
+                    throw new InvalidOperationException($"User not exists for User {userId}");
                 }
                 var existsProfile = await _unitOfWork.EmployeeProfile.GetByUserIdAsync(userId);
                 if (existsProfile != null)
                 {
-                    throw new ArgumentNullException($"Profile already exists for User {userId}");
+                    throw new InvalidOperationException ($"Profile already exists for User {userId}");
                 }
 
                 // Map DTO request sang entity

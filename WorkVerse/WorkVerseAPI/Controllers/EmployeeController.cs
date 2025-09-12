@@ -37,6 +37,10 @@ namespace WorkVerseAPI.Controllers
                 var result = await _employeeProfileService.CreateEmployeeProfileAsync(userId,request);
                 return Ok(new ApiResponse<EmployeeProfileDTOResponse>("Profile created successfully", result, 201));
             }
+            catch (InvalidOperationException ex)
+            {
+                return StatusCode(400, new ApiResponse<object>(ex.Message, 400));
+            }
             catch (Exception ex)
             {
                 return StatusCode(500, new ApiResponse<object>(ex.Message, 500));

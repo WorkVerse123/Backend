@@ -12,6 +12,6 @@ namespace Application.Interfaces.IRepositories
         Task<User?> GetByEmailAsync(string email);
         Task<User?> GetByPhoneNumberAsync(string phoneNumber);
         Task<bool> ExistsAsync(string email, string phoneNumber);
-        Task<User?> GetByIdAsync(int userId);
+        Task<bool> ExistByIdAsync(int userId);
     }
 }

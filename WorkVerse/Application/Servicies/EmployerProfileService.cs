@@ -30,15 +30,15 @@ namespace Application.Servicies
         {
             try
             {
-                var existsUser = await _unitOfWork.User.GetByIdAsync(request.UserId);
-                if (existsUser == null)
+                var existsUser = await _unitOfWork.User.ExistByIdAsync(request.UserId);
+                if (!existsUser)
                 {
-                    throw new ArgumentNullException($"User not exists for User {request.UserId}");
+                    throw new InvalidOperationException($"User not exists for User {request.UserId}");
                 }
                 var existingProfile = await _unitOfWork.EmployerProfile.ExistsByUserIdAsync(request.UserId);
                 if (existingProfile)
                 {
-                    throw new ArgumentNullException($"Employer profile already exists for User {request.UserId}");
+                    throw new InvalidOperationException($"Employer profile already exists for User {request.UserId}");
                 }
 
                 var entity = _mapper.Map<EmployerProfile>(request);
