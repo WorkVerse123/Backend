@@ -13,7 +13,7 @@ namespace Application.Mappers
     {
         public ReviewProfile()
         {
-            CreateMap<Review, ReviewItemDTO>()
+            CreateMap<Review, JobReviewItemDTO>()
             .ForMember(dest => dest.EmployeeId, opt => opt.MapFrom(src => src.EmployeeId))
             .ForMember(dest => dest.ReviewId, opt => opt.MapFrom(src => src.ReviewId))
             .ForMember(dest => dest.Rating, opt => opt.MapFrom(src => src.Rating))

@@ -11,12 +11,12 @@ namespace Application.Interfaces.IServicies
 {
     public interface IBusyTimeService
     {
-        Task<IEnumerable<BusyTimeDTOResponse>> GetByEmployeeIdAsync(int employeeId);
+        Task<IEnumerable<BusyTimeItemDTO>> GetBusyTimesByEmployeeAsync(int employeeId);
 
-        Task<IEnumerable<BusyTimeDTOResponse>> CreateBusyTimesAsync(int employeeId, BusyTimeDTORequest request);
+        Task<IEnumerable<BusyTimeItemDTO>> AddBusyTimesAsync(int employeeId, BusyTimeDTORequest request);
 
-        Task<IEnumerable<BusyTimeDTOResponse>> UpdateBusyTimesAsync(int employeeId, BusyTimeDTORequest requests);
+        Task<IEnumerable<BusyTimeItemDTO>> UpdateBusyTimesByEmployeeAsync(int employeeId, BusyTimeDTORequest requests);
 
-        Task<bool> DeleteBusyTimesAsync(int employeeId, int busyTimeId);
+        Task<bool> RemoveBusyTimeAsync(int employeeId, int busyTimeId);
     }
 }

@@ -11,9 +11,9 @@ namespace Application.Interfaces.IServicies
 {
     public interface IReviewService
     {
-        Task<ReviewDTOResponse> GetByJobIdAsync(int jobId, int pageNumber, int pageSize);
+        Task<JobReviewListDTOResponse> GetJobReviewsByJobIdAsync(int jobId, int pageNumber, int pageSize);
 
-        Task<ReviewItemDTO> CreateReviewAsync(int jobId, ReviewDTORequest request);
+        Task<JobReviewItemDTO> CreateJobReviewAsync(int jobId, ReviewDTORequest request);
 
     }
 }

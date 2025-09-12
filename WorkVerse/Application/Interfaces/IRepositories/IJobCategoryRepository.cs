@@ -9,7 +9,7 @@ namespace Application.Interfaces.IRepositories
 {
     public interface IJobCategoryRepository : IGenericRepository<JobCategory>
     {
-        Task<IEnumerable<JobCategory>> GetAllAsync();
+        Task<IEnumerable<JobCategory>> GetAllJobCategoriesAsync();
 
     }
 }

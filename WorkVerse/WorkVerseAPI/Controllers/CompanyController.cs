@@ -8,7 +8,7 @@ using WorkVerseAPI.Models;
 namespace WorkVerseAPI.Controllers
 {
     [ApiController]
-    [Route("companies")]
+    [Route("api/companies")]
     public class CompanyController : ControllerBase
     {
         private readonly IEmployeeProfileServices _employeeProfileService;
@@ -31,7 +31,7 @@ namespace WorkVerseAPI.Controllers
         {
             try
             {
-                var result = await _employerProfileService.GetAllCompaniesAsync(pageNumber, pageSize);
+                var result = await _employerProfileService.GetAllEmployersAsync(pageNumber, pageSize);
                 if (result == null)
                 {
                     return NotFound(new ApiResponse<object>(
@@ -47,7 +47,7 @@ namespace WorkVerseAPI.Controllers
         }
 
         // POST/company-setup
-        [HttpPost("/company-setup")]
+        [HttpPost("company-setup")]
         public async Task<IActionResult> CreateEmployerProfile([FromBody] EmployerProfileDTORequest request)
         {
             try

@@ -12,36 +12,37 @@ namespace Infrastructure.Repositories
 {
     public class ReviewRepository : GenericRepository<Review>, IReviewRepository
     {
-        private readonly WorkVerseDBContext _dbContext;
         public ReviewRepository(WorkVerseDBContext dbContext) : base(dbContext)
         {
-            _dbContext = dbContext;
         }
 
+        // Lấy 1 review theo Id
         public async Task<Review> GetByIdAsync(int reviewId)
         {
-            var result = await _dbContext.Reviews           
+            var result = await _dbSet           
                  .FirstOrDefaultAsync(c => c.ReviewId == reviewId);
             return result;
         }
 
+        // Lấy tất cả review theo JobId
         public async Task<IEnumerable<Review>> GetByJobIdAsync(int jobId)
         {
-            var result = await _dbContext.Reviews.Where(c => c.JobId == jobId)
+            var result = await _dbSet.Where(c => c.JobId == jobId)
                 .OrderByDescending(c => c.CreatedAt).ToListAsync();
             return result;
         }
-
-        public async Task<Review> GetByJobIdEmployeeIdAsync(int jobId, int employeeId)
+        // Lấy review của 1 employee cho 1 job
+        public async Task<Review> GetByJobAndCandidateAsync(int jobId, int employeeId)
         {
-            var result = await _dbContext.Reviews
+            var result = await _dbSet
                  .FirstOrDefaultAsync(c => c.EmployeeId == employeeId && c.JobId == jobId);
             return result;
         }
 
-        public async Task<bool> ExistsAsync(int jobId, int employeeId)
+        // Kiểm tra review tồn tại theo job và candidate
+        public async Task<bool> ExistsByJobAndCandidateAsync(int jobId, int employeeId)
         {
-            return await _dbContext.Reviews
+            return await _dbSet
                 .AnyAsync(r => r.JobId == jobId && r.EmployeeId == employeeId);
         }
 

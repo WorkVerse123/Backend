@@ -25,11 +25,11 @@ namespace Application.Servicies
             _logger = logger;
         }
 
-        public async Task<BookmarkDTOResponse> GetByEmployeeIdAsync(int employeeId, int pageNumber, int pageSize)
+        public async Task<JobBookmarkListDTOResponse> GetBookmarksByEmployeeAsync(int employeeId, int pageNumber, int pageSize)
         {
             try
             {
-                var employee = await _unitOfWork.EmployeeProfile.ExistsAsync(employeeId);
+                var employee = await _unitOfWork.EmployeeProfile.ExistsByEmployeeIdAsync(employeeId);
                 if (!employee)
                 {
                     throw new KeyNotFoundException($"Employee with ID {employeeId} not found");
@@ -45,9 +45,9 @@ namespace Application.Servicies
                     .Take(pageSize)
                     .ToList();
 
-                var mapped = _mapper.Map<List<BookmarkItemDTO>>(pagedData);
+                var mapped = _mapper.Map<List<JobBookmarkItemDTO>>(pagedData);
 
-                return new BookmarkDTOResponse
+                return new JobBookmarkListDTOResponse
                 {
                     EmployeeId = employeeId,
                     Bookmarks = mapped,
@@ -68,25 +68,25 @@ namespace Application.Servicies
 
 
 
-        public async Task<BookmarkItemDTO> CreateBookmarkAsync(int employeeId, int jobId)
+        public async Task<JobBookmarkItemDTO> AddBookmarkAsync(int employeeId, int jobId)
         {
             try
             {
 
-                var employee = await _unitOfWork.EmployeeProfile.ExistsAsync(employeeId);
+                var employee = await _unitOfWork.EmployeeProfile.ExistsByEmployeeIdAsync(employeeId);
                 if (!employee)
                 {
                     throw new KeyNotFoundException($"Employee with ID {employeeId} not found");
                 }
 
 
-                var job = await _unitOfWork.Job.ExistsAsync(jobId);
+                var job = await _unitOfWork.Job.ExistsByJobIdAsync(jobId);
                 if (!job)
                 {
                     throw new KeyNotFoundException($"Job with ID {jobId} not found");
                 }
 
-                var exists = await _unitOfWork.Bookmark.ExistsAsync(employeeId, jobId);
+                var exists = await _unitOfWork.Bookmark.FindByEmployeeAndJobAsync(employeeId, jobId);
                 if (exists != null)
                 {
                     throw new InvalidOperationException($"Bookmark already exists for Employee {employeeId} and Job {jobId}");
@@ -103,8 +103,8 @@ namespace Application.Servicies
                 await _unitOfWork.Bookmark.AddAsync(bookmark);
                 await _unitOfWork.SaveChangesAsync();
 
-                exists = await _unitOfWork.Bookmark.ExistsAsync(employeeId, jobId);
-                return _mapper.Map<BookmarkItemDTO>(exists);
+                exists = await _unitOfWork.Bookmark.FindByEmployeeAndJobAsync(employeeId, jobId);
+                return _mapper.Map<JobBookmarkItemDTO>(exists);
 
 
             }
@@ -115,12 +115,12 @@ namespace Application.Servicies
             }
         }
 
-        public async Task<bool> DeleteBookmarkAsync(int employeeId, int bookmarkId)
+        public async Task<bool> RemoveBookmarkAsync(int employeeId, int bookmarkId)
         {
             try
             {
 
-                var employee = await _unitOfWork.EmployeeProfile.ExistsAsync(employeeId);
+                var employee = await _unitOfWork.EmployeeProfile.ExistsByEmployeeIdAsync(employeeId);
                 if (!employee)
                     throw new KeyNotFoundException($"Employee with ID {employeeId} not found");
 

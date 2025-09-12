@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace Application.DTOs.Response
 {
-    public class CandidateDTOResponse
+    // danh sách ứng viên
+    public class CandidateListDTOResponse
     {
         public PaginatedResponse Paging { get; set; }
         public List<CandidateItemDTO> Candidates { get; set; } = new();

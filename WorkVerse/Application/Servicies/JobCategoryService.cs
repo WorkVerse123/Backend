@@ -25,15 +25,15 @@ namespace Application.Servicies
         }
 
 
-        public async Task<JobCategoryDTOResponse> GetAllJobCategoriesAsync()
+        public async Task<JobCategoryListDTOResponse> GetAllJobCategoriesAsync()
         {
             try
             {
-                var jobCategories = await _unitOfWork.JobCategory.GetAllAsync();
+                var jobCategories = await _unitOfWork.JobCategory.GetAllJobCategoriesAsync();
 
                 var mapped = _mapper.Map<List<JobCategoryItemDTO?>>(jobCategories);
 
-                return new JobCategoryDTOResponse
+                return new JobCategoryListDTOResponse
                 {
                     JobCategories = mapped
                 };

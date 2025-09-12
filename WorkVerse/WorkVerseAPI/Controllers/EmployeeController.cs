@@ -10,7 +10,7 @@ namespace WorkVerseAPI.Controllers
 {
 
     [ApiController]
-    [Route("employees")]
+    [Route("api/employees")]
     public class EmployeeController : ControllerBase
     {
         // This is a placeholder for the actual implementation of user service
@@ -34,7 +34,7 @@ namespace WorkVerseAPI.Controllers
                 var (isValid, error) = EmployeeProfileValidationHelper.ValidateEmployeeProfileRequest(request);
                 if (!isValid)
                     return BadRequest(new ApiResponse<object>(error, 400));
-                var result = await _employeeProfileService.CreateProfileAsync(userId,request);
+                var result = await _employeeProfileService.CreateEmployeeProfileAsync(userId,request);
                 return Ok(new ApiResponse<EmployeeProfileDTOResponse>("Profile created successfully", result, 201));
             }
             catch (Exception ex)
@@ -53,7 +53,7 @@ namespace WorkVerseAPI.Controllers
                     return BadRequest(new ApiResponse<object>("Employee ID must be greater than 0", 400));
                 }
 
-                var result = await _employeeProfileService.GetByIdAsync(id);
+                var result = await _employeeProfileService.GetEmployeeProfileByIdAsync(id);
                 if (result == null)
                 {
                     return NotFound(new ApiResponse<object>($"No profile found with ID {id}", 404));
@@ -80,7 +80,7 @@ namespace WorkVerseAPI.Controllers
                     return BadRequest(new ApiResponse<object>("EmployeeId mismatch", 400));
                 }
 
-                var result = await _employeeProfileService.UpdateProfileAsync(id,request);
+                var result = await _employeeProfileService.UpdateEmployeeProfileAsync(id,request);
                 return Ok(new ApiResponse<EmployeeProfileDTOResponse>("Profile updated successfully", result, 200));
             }
             catch (KeyNotFoundException ex)
@@ -105,14 +105,14 @@ namespace WorkVerseAPI.Controllers
                         "Employee ID must be greater than 0", 400));
                 }
 
-                var result = await _busyTimeService.GetByEmployeeIdAsync(id);
+                var result = await _busyTimeService.GetBusyTimesByEmployeeAsync(id);
                 if (result == null || !result.Any())
                 {
                     return NotFound(new ApiResponse<object>(
                         $"No busy times found for employee with ID {id}", 404));
                 }
 
-                return Ok(new ApiResponse<IEnumerable<BusyTimeDTOResponse>>("Busy times retrieved successfully", result, 200));
+                return Ok(new ApiResponse<IEnumerable<BusyTimeItemDTO>>("Busy times retrieved successfully", result, 200));
             }
             catch (Exception ex)
             {
@@ -131,8 +131,8 @@ namespace WorkVerseAPI.Controllers
                 if (!isValid)
                     return BadRequest(new ApiResponse<object>(error, 400));
 
-                var result = await _busyTimeService.CreateBusyTimesAsync(id, request);
-                return Ok(new ApiResponse<IEnumerable<BusyTimeDTOResponse>>("BusyTime created successfully", result, 201));
+                var result = await _busyTimeService.AddBusyTimesAsync(id, request);
+                return Ok(new ApiResponse<IEnumerable<BusyTimeItemDTO>>("BusyTime created successfully", result, 201));
             }
             catch (Exception ex)
             {
@@ -151,8 +151,8 @@ namespace WorkVerseAPI.Controllers
                 if (!isValid)
                     return BadRequest(new ApiResponse<object>(error, 400));
              
-                var result = await _busyTimeService.UpdateBusyTimesAsync(id, request);
-                return Ok(new ApiResponse<IEnumerable<BusyTimeDTOResponse>>("BusyTime updated successfully", result, 200));
+                var result = await _busyTimeService.UpdateBusyTimesByEmployeeAsync(id, request);
+                return Ok(new ApiResponse<IEnumerable<BusyTimeItemDTO>>("BusyTime updated successfully", result, 200));
             }
             catch (KeyNotFoundException ex)
             {
@@ -173,7 +173,7 @@ namespace WorkVerseAPI.Controllers
                 if (id <= 0 || busy_time_id <= 0)
                     return BadRequest(new ApiResponse<object>("Invalid EmployeeId or BusyTimeId", 400));
 
-                var result = await _busyTimeService.DeleteBusyTimesAsync(id, busy_time_id);
+                var result = await _busyTimeService.RemoveBusyTimeAsync(id, busy_time_id);
 
                 return Ok(new ApiResponse<object>("BusyTime deleted successfully", 200));
             }
@@ -199,14 +199,14 @@ namespace WorkVerseAPI.Controllers
                         "Employee ID must be greater than 0", 400));
                 }
 
-                var result = await _bookmarkService.GetByEmployeeIdAsync(id, pageNumber, pageSize);
+                var result = await _bookmarkService.GetBookmarksByEmployeeAsync(id, pageNumber, pageSize);
                 if (result == null)
                 {
                     return NotFound(new ApiResponse<object>(
                         $"No Bookmark found for employee with ID {id}", 404));
                 }
 
-                return Ok(new ApiResponse<BookmarkDTOResponse>("Busy times retrieved successfully", result, 200));
+                return Ok(new ApiResponse<JobBookmarkListDTOResponse>("Busy times retrieved successfully", result, 200));
             }
             catch (Exception ex)
             {
@@ -220,8 +220,8 @@ namespace WorkVerseAPI.Controllers
         {
             try
             {
-                var result = await _bookmarkService.CreateBookmarkAsync(id, job_id);
-                return Ok(new ApiResponse<BookmarkItemDTO>("Bookmark created successfully", result, 201));
+                var result = await _bookmarkService.AddBookmarkAsync(id, job_id);
+                return Ok(new ApiResponse<JobBookmarkItemDTO>("Bookmark created successfully", result, 201));
             }
             catch (Exception ex)
             {
@@ -238,7 +238,7 @@ namespace WorkVerseAPI.Controllers
 
             try
             {
-                var result = await _bookmarkService.DeleteBookmarkAsync(id, bookmark_id);
+                var result = await _bookmarkService.RemoveBookmarkAsync(id, bookmark_id);
 
                 return Ok(new ApiResponse<object>("Bookmark deleted successfully", 200));
             }
@@ -264,14 +264,14 @@ namespace WorkVerseAPI.Controllers
                         "Employee ID must be greater than 0", 400));
                 }
 
-                var result = await _applicationService.GetByEmployeeIdAsync(id, pageNumber, pageSize);
+                var result = await _applicationService.GetApplicationsByEmployeeAsync(id, pageNumber, pageSize);
                 if (result == null)
                 {
                     return NotFound(new ApiResponse<object>(
                         $"No Application found for employee with ID {id}", 404));
                 }
 
-                return Ok(new ApiResponse<ApplicationResponseDTO>("Applications retrieved successfully", result, 200));
+                return Ok(new ApiResponse<JobApplicationListDTOResponse>("Applications retrieved successfully", result, 200));
             }
             catch (Exception ex)
             {
@@ -289,8 +289,8 @@ namespace WorkVerseAPI.Controllers
                 if (!isValid)
                     return BadRequest(new ApiResponse<object>(error, 400));
 
-                var result = await _applicationService.CreateApplicationAsync(id, request);
-                return Ok(new ApiResponse<ApplicationItemDTO>("Application created successfully", result, 201));
+                var result = await _applicationService.CreateApplyJobAsync(id, request);
+                return Ok(new ApiResponse<JobApplicationItemDTO>("Application created successfully", result, 201));
             }
             catch (KeyNotFoundException ex)
             {

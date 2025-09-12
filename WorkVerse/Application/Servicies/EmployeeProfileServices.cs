@@ -26,7 +26,7 @@ namespace Application.Servicies
             _logger = logger;
         }
 
-        public async Task<EmployeeProfileDTOResponse> CreateProfileAsync(int userId, EmployeeProfileDTORequest employeeProfile)
+        public async Task<EmployeeProfileDTOResponse> CreateEmployeeProfileAsync(int userId, EmployeeProfileDTORequest employeeProfile)
         {
             try
             {
@@ -35,11 +35,15 @@ namespace Application.Servicies
                     _logger.LogWarning("Attempted to add a null employee profile");
                     throw new ArgumentNullException(nameof(employeeProfile), "Profile cannot be null");
                 }
-
+                var existsUser= await _unitOfWork.User.GetByIdAsync(userId);
+                if (existsUser == null)
+                {
+                    throw new ArgumentNullException($"User not exists for User {userId}");
+                }
                 var existsProfile = await _unitOfWork.EmployeeProfile.GetByUserIdAsync(userId);
                 if (existsProfile != null)
                 {
-                    throw new InvalidOperationException($"Profile already exists for User {userId}");
+                    throw new ArgumentNullException($"Profile already exists for User {userId}");
                 }
 
                 // Map DTO request sang entity
@@ -60,11 +64,11 @@ namespace Application.Servicies
         }
 
 
-        public async Task<EmployeeProfileDTOResponse?> GetByIdAsync(int employeeId)
+        public async Task<EmployeeProfileDTOResponse?> GetEmployeeProfileByIdAsync(int employeeId)
         {
             try
             {
-                var entity = await _unitOfWork.EmployeeProfile.GetByIdAsync(employeeId);
+                var entity = await _unitOfWork.EmployeeProfile.GetByEmployeeIdAsync(employeeId);
                 return _mapper.Map<EmployeeProfileDTOResponse>(entity);
             }
             catch (Exception ex)
@@ -74,7 +78,7 @@ namespace Application.Servicies
             }
         }
 
-        public async Task<EmployeeProfileDTOResponse> UpdateProfileAsync(int employeeId, EmployeeProfileDTORequest employeeProfile)
+        public async Task<EmployeeProfileDTOResponse> UpdateEmployeeProfileAsync(int employeeId, EmployeeProfileDTORequest employeeProfile)
         {
             try
             {
@@ -84,7 +88,7 @@ namespace Application.Servicies
                     throw new ArgumentNullException(nameof(employeeProfile), "Profile cannot be null");
                 }
 
-                var existingProfile = await _unitOfWork.EmployeeProfile.GetByIdAsync(employeeId);
+                var existingProfile = await _unitOfWork.EmployeeProfile.GetByEmployeeIdAsync(employeeId);
                 if (existingProfile == null)
                 {
                     _logger.LogWarning("Profile with ID {Id} not found", employeeId);
@@ -106,7 +110,7 @@ namespace Application.Servicies
             }
         }
 
-        public async Task<EmployeeProfileDTOResponse?> GetByUserIdAsync(int userId)
+        public async Task<EmployeeProfileDTOResponse?> GetEmployeeProfileByUserIdAsync(int userId)
         {
             try
             {
@@ -120,11 +124,11 @@ namespace Application.Servicies
             }
         }
 
-        public async Task<CandidateDTOResponse> GetAllCandidatesAsync(int pageNumber, int pageSize)
+        public async Task<CandidateListDTOResponse> GetEmployeeListAsync(int pageNumber, int pageSize)
         {
             try
             {
-                var query = (await _unitOfWork.EmployeeProfile.GetAllCandidatesAsync())
+                var query = (await _unitOfWork.EmployeeProfile.GetAllPublicEmployeeAsync())
                             .AsQueryable();
 
                 var totalRecords = query.Count();
@@ -136,7 +140,7 @@ namespace Application.Servicies
 
                 var mapped = _mapper.Map<List<CandidateItemDTO>>(pagedData);
 
-                return new CandidateDTOResponse
+                return new CandidateListDTOResponse
                 {
                     Candidates = mapped,
                     Paging = new PaginatedResponse

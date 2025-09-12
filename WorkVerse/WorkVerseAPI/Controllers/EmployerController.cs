@@ -103,13 +103,13 @@ namespace WorkVerseAPI.Controllers
                     return BadRequest(new ApiResponse<object>("Employer ID must be greater than 0", 400));
                 }
 
-                var jobsResponse = await _jobService.GetByEmployerIdAsync(id, pageNumber, pageSize);
+                var jobsResponse = await _jobService.GetJobsByEmployerIdAsync(id, pageNumber, pageSize);
                 if (jobsResponse == null || jobsResponse.Jobs == null || jobsResponse.Jobs.Count == 0)
                 {
                     return NotFound(new ApiResponse<object>($"No jobs found for employer with ID {id}.", 404));
                 }
 
-                return Ok(new ApiResponse<JobDTOResponse>("Jobs retrieved successfully.", jobsResponse, 200));
+                return Ok(new ApiResponse<JobListDTOResponse>("Jobs retrieved successfully.", jobsResponse, 200));
             }
             catch (Exception ex)
             {
@@ -137,7 +137,7 @@ namespace WorkVerseAPI.Controllers
                 // Ensure the employerId is set in the DTO
                 jobDto.EmployerId = id;
 
-                await _jobService.AddAsyne(jobDto);
+                await _jobService.AddJobAsync(jobDto);
 
                 return Ok(new ApiResponse<object>("Job created successfully.", null, 201));
             }
@@ -171,7 +171,7 @@ namespace WorkVerseAPI.Controllers
                 // Ensure the employerId is set in the DTO
                 jobDto.EmployerId = id;
 
-                var updated = await _jobService.UpdateAsync(job_id, jobDto);
+                var updated = await _jobService.UpdateJobAsync(job_id, jobDto);
                 if (!updated)
                 {
                     return NotFound(new ApiResponse<object>($"Job with ID {job_id} for employer {id} not found.", 404));

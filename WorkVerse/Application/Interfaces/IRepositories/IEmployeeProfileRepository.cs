@@ -10,11 +10,11 @@ namespace Application.Interfaces.IRepositories
     public interface IEmployeeProfileRepository : IGenericRepository<EmployeeProfile>
     {
        
-        Task<EmployeeProfile?> GetByIdAsync(int employeeId);
+        Task<EmployeeProfile?> GetByEmployeeIdAsync(int employeeId);
         Task<EmployeeProfile?> GetByUserIdAsync(int userId);
-        Task<bool> ExistsAsync(int employeeId);
-        Task<IEnumerable<EmployeeProfile>> GetAllCandidatesAsync();
-        Task<int> CountCandidatesAsync();
+        Task<bool> ExistsByEmployeeIdAsync(int employeeId);
+        Task<IEnumerable<EmployeeProfile>> GetAllPublicEmployeeAsync();
+        Task<int> CountAllEmployeeAsync();
 
     }
 

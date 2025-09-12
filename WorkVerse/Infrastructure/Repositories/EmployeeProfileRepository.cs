@@ -12,37 +12,40 @@ namespace Infrastructure.Repositories
 {
     public class EmployeeProfileRepository : GenericRepository<EmployeeProfile>, IEmployeeProfileRepository
     {
-        private readonly WorkVerseDBContext _dbContext;
         public EmployeeProfileRepository(WorkVerseDBContext dbContext) : base(dbContext)
         {
-            _dbContext = dbContext;
         }
-    
 
-        public async Task<EmployeeProfile?> GetByIdAsync(int employeeId)
+        // Lấy profile theo EmployeeId
+        public async Task<EmployeeProfile?> GetByEmployeeIdAsync(int employeeId)
         {
-            var result = await _dbContext.EmployeeProfiles.Include(c => c.User).FirstOrDefaultAsync(u => u.EmployeeId == employeeId);
+            var result = await _dbSet.Include(c => c.User).FirstOrDefaultAsync(u => u.EmployeeId == employeeId);
             return result;
         }
+
+
+        // Lấy profile theo UserId
         public async Task<EmployeeProfile?> GetByUserIdAsync(int userId)
         {
-            var result = await _dbContext.EmployeeProfiles.Include(c => c.User).FirstOrDefaultAsync(u => u.UserId == userId);
+            var result = await _dbSet.Include(c => c.User).FirstOrDefaultAsync(u => u.UserId == userId);
             return result;
         }
-
-        public async Task<bool> ExistsAsync(int employeeId)
+        // Kiểm tra profile tồn tại  theo employeeId
+        public async Task<bool> ExistsByEmployeeIdAsync(int employeeId)
         {
-            return await _dbContext.EmployeeProfiles.AnyAsync(j => j.EmployeeId == employeeId);
+            return await _dbSet.AnyAsync(j => j.EmployeeId == employeeId);
         }
 
-        public async Task<IEnumerable<EmployeeProfile>> GetAllCandidatesAsync()
+        // Lấy tất cả Employee public
+        public async Task<IEnumerable<EmployeeProfile>> GetAllPublicEmployeeAsync()
         {
-            var result = await _dbContext.EmployeeProfiles.Where(u => u.Mode == "public").ToListAsync();
+            var result = await _dbSet.Where(u => u.Mode == "public").ToListAsync();
             return result;
         }
-        public async Task<int> CountCandidatesAsync()
+        // Đếm tất cả employee
+        public async Task<int> CountAllEmployeeAsync()
         {
-            return await _dbContext.EmployeeProfiles.CountAsync();
+            return await _dbSet.CountAsync();
         }
 
     }

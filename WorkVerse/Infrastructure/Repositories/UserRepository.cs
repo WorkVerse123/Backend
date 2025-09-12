@@ -33,5 +33,10 @@ namespace Infrastructure.Repositories
             return await _dbSet
                 .FirstOrDefaultAsync(u => u.PhoneNumber == phoneNumber);
         }
+
+        public async Task<User?> GetByIdAsync(int userId)
+        {
+            return await _dbSet.FirstOrDefaultAsync(u => u.UserId == userId);
+        }
     }
 }

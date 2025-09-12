@@ -13,7 +13,7 @@ namespace Application.Mappers
     {
         public ApplicationProfile()
         {
-            CreateMap<Domain.Entities.Application, ApplicationItemDTO>()
+            CreateMap<Domain.Entities.Application, JobApplicationItemDTO>()
             .ForMember(dest => dest.ApplicationId, opt => opt.MapFrom(src => src.ApplicationId))
             .ForMember(dest => dest.JobTitle, opt => opt.MapFrom(src => src.Job.Title))
             .ForMember(dest => dest.JobLocation, opt => opt.MapFrom(src => src.Job.Location))
@@ -24,14 +24,14 @@ namespace Application.Mappers
             ))
             .ForMember(dest => dest.ApplicationStatus, opt => opt.MapFrom(src => src.Status));
 
-            CreateMap<Domain.Entities.Application, ApplicationItemDetailDTO>()
+            CreateMap<Domain.Entities.Application, JobApplicationDetailsDTOResponse>()
             .ForMember(dest => dest.ApplicationId, opt => opt.MapFrom(src => src.ApplicationId))
             .ForMember(dest => dest.EmployeeId, opt => opt.MapFrom(src => src.EmployeeId))
             .ForMember(dest => dest.AppliedAt, opt => opt.MapFrom(src => src.AppliedAt))
             .ForMember(dest => dest.JobId, opt => opt.MapFrom(src => src.JobId))
             .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status));
 
-            CreateMap<Domain.Entities.Application, ApplicationSummaryDTO>()
+            CreateMap<Domain.Entities.Application, JobApplicationSummaryDTO>()
            .ForMember(dest => dest.ApplicationId, opt => opt.MapFrom(src => src.ApplicationId))
            .ForMember(dest => dest.EmployeeFullName, opt => opt.MapFrom(src => src.Employee.FullName))
            .ForMember(dest => dest.EmployeeGender, opt => opt.MapFrom(src => src.Employee.Gender))

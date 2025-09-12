@@ -14,7 +14,7 @@ namespace Application.Mappers
     {
         public JobProfile()
         {
-            CreateMap<Job, JobItemDTO>()
+            CreateMap<Job, JobSummaryDTO>()
             .ForMember(dest => dest.JobId, opt => opt.MapFrom(src => src.JobId))
             .ForMember(dest => dest.JobTitle, opt => opt.MapFrom(src => src.Title))
             .ForMember(dest => dest.JobCategory, opt => opt.MapFrom(
@@ -31,7 +31,7 @@ namespace Application.Mappers
             .ForMember(dest => dest.JobStatus, opt => opt.MapFrom(src => src.Status));
 
 
-            CreateMap<Job, JobItemDetailDTO>()
+            CreateMap<Job, JobDetailsDTOResponse>()
             .ForMember(dest => dest.JobId, opt => opt.MapFrom(src => src.JobId))
             .ForMember(dest => dest.JobTitle, opt => opt.MapFrom(src => src.Title))
             .ForMember(dest => dest.JobCategory, opt => opt.MapFrom(

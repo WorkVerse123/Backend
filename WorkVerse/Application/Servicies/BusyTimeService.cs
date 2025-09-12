@@ -26,7 +26,7 @@ namespace Application.Servicies
             _logger = logger;
         }
 
-        public async Task<IEnumerable<BusyTimeDTOResponse>> GetByEmployeeIdAsync(int employeeId)
+        public async Task<IEnumerable<BusyTimeItemDTO>> GetBusyTimesByEmployeeAsync(int employeeId)
         {
             try
             {
@@ -34,10 +34,10 @@ namespace Application.Servicies
 
                 if (entities == null || !entities.Any())
                 {
-                    return Enumerable.Empty<BusyTimeDTOResponse>();
+                    return Enumerable.Empty<BusyTimeItemDTO>();
                 }
 
-                return _mapper.Map<IEnumerable<BusyTimeDTOResponse>>(entities);
+                return _mapper.Map<IEnumerable<BusyTimeItemDTO>>(entities);
             }
             catch (Exception ex)
             {
@@ -46,11 +46,11 @@ namespace Application.Servicies
             }
         }
 
-        public async Task<IEnumerable<BusyTimeDTOResponse>> CreateBusyTimesAsync(int employeeId, BusyTimeDTORequest request)
+        public async Task<IEnumerable<BusyTimeItemDTO>> AddBusyTimesAsync(int employeeId, BusyTimeDTORequest request)
         {
             try
             {
-                var employee = await _unitOfWork.EmployeeProfile.ExistsAsync(employeeId);
+                var employee = await _unitOfWork.EmployeeProfile.ExistsByEmployeeIdAsync(employeeId);
                 if (!employee)
                 {
                     throw new KeyNotFoundException($"Employee with ID {employeeId} not found");
@@ -93,7 +93,7 @@ namespace Application.Servicies
                 await _unitOfWork.BusyTime.AddRangeAsync(busyTimeEntities);
                 await _unitOfWork.SaveChangesAsync();
 
-                return busyTimeEntities.Select(b => new BusyTimeDTOResponse
+                return busyTimeEntities.Select(b => new BusyTimeItemDTO
                 {
                     BusyTimeId = b.BusyTimeId,
                     DayOfWeek = Enum.GetName(typeof(DayOfWeek), b.DayOfWeek) ?? b.DayOfWeek.ToString(),
@@ -108,12 +108,12 @@ namespace Application.Servicies
             }
         }
 
-        public async Task<IEnumerable<BusyTimeDTOResponse>> UpdateBusyTimesAsync(int employeeId, BusyTimeDTORequest requests)
+        public async Task<IEnumerable<BusyTimeItemDTO>> UpdateBusyTimesByEmployeeAsync(int employeeId, BusyTimeDTORequest requests)
         {
             try
             {
                 // Check employee
-                var employee = await _unitOfWork.EmployeeProfile.ExistsAsync(employeeId);
+                var employee = await _unitOfWork.EmployeeProfile.ExistsByEmployeeIdAsync(employeeId);
                 if (!employee)
                     throw new KeyNotFoundException($"Employee with ID {employeeId} not found");
 
@@ -165,7 +165,7 @@ namespace Application.Servicies
 
                 // Trả về tất cả sau update
                 var updatedBusyTimes = await _unitOfWork.BusyTime.GetByEmployeeIdAsync(employeeId);
-                return updatedBusyTimes.Select(b => new BusyTimeDTOResponse
+                return updatedBusyTimes.Select(b => new BusyTimeItemDTO
                 {
                     BusyTimeId = b.BusyTimeId,
                     DayOfWeek = Enum.GetName(typeof(DayOfWeek), b.DayOfWeek) ?? b.DayOfWeek.ToString(),
@@ -180,12 +180,12 @@ namespace Application.Servicies
             }
         }
 
-        public async Task<bool> DeleteBusyTimesAsync(int employeeId, int busyTimeId)
+        public async Task<bool> RemoveBusyTimeAsync(int employeeId, int busyTimeId)
         {
             try
             {
             
-                var employee = await _unitOfWork.EmployeeProfile.ExistsAsync(employeeId);
+                var employee = await _unitOfWork.EmployeeProfile.ExistsByEmployeeIdAsync(employeeId);
                 if (!employee)
                     throw new KeyNotFoundException($"Employee with ID {employeeId} not found");
 

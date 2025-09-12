@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Application.DTOs.Response
 {
+    // hồ sơ cá nhân của ứng viên   
     public class EmployeeProfileDTOResponse
     {
         public int EmployeeId { get; set; }

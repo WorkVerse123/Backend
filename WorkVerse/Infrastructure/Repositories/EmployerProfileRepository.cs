@@ -12,45 +12,46 @@ namespace Infrastructure.Repositories
 {
     public class EmployerProfileRepository : GenericRepository<EmployerProfile>, IEmployerProfileRepository
     {
-        private readonly WorkVerseDBContext _dbContext;
         public EmployerProfileRepository(WorkVerseDBContext dbContext) : base(dbContext)
         {
-            _dbContext = dbContext;
         }
-
-        public async Task<bool> ExistsAsync(int employerId)
+        // Kiểm tra tồn tại theo EmployerId
+        public async Task<bool> ExistsByEmployerIdAsync(int employerId)
         {
-            return await _dbContext.EmployerProfiles.AnyAsync(j => j.EmployerId == employerId);
+            return await _dbSet.AnyAsync(j => j.EmployerId == employerId);
         }
-
-        public async Task<IEnumerable<EmployerProfile>> GetAllCompaniesAsync()
+        // Lấy tất cả employer
+        public async Task<IEnumerable<EmployerProfile>> GetAllEmployersAsync()
         {
-            var result = await _dbContext.EmployerProfiles
+            var result = await _dbSet
                  .Include(j => j.EmployerType)
                 .ToListAsync();
             return result;
         }
 
+        // Lấy chi tiết employer theo Id
         public async Task<EmployerProfile?> GetByIdAsync(int employerId)
         {
-            var result = await _dbContext.EmployerProfiles.FirstOrDefaultAsync(c => c.EmployerId == employerId);
-            return result;
+            var result = await _dbSet.FirstOrDefaultAsync(c => c.EmployerId == employerId);
+            return result;  
         }
 
+        // Lấy employer theo UserId
         public async Task<EmployerProfile?> GetByUserIdAsync(int userId)
         {
-            var result = await _dbContext.EmployerProfiles.Include(c => c.User).FirstOrDefaultAsync(u => u.UserId == userId);
+            var result = await _dbSet.Include(c => c.User).FirstOrDefaultAsync(u => u.UserId == userId);
             return result;
         }
 
-        public async Task<int> CountCompaniesAsync()
+        // Đếm tất cả employer
+        public async Task<int> CountAllEmployersAsync()
         {
-            return await _dbContext.EmployerProfiles.CountAsync();
+            return await _dbSet.CountAsync();
         }
-
-        public async Task<bool> CheckExistByUserIdAsync(int userId)
+        // Kiểm tra tồn tại employer theo UserId
+        public async Task<bool> ExistsByUserIdAsync(int userId)
         {
-            return await _dbContext.EmployerProfiles.AnyAsync(j => j.UserId == userId);
+            return await _dbSet.AnyAsync(j => j.UserId == userId);
         }
     }
 }

@@ -11,7 +11,7 @@ namespace Application.Interfaces.IServicies
 {
     public interface IEmployerProfileService
     {
-        Task<ListEmployerProfileDTOResponse> GetAllCompaniesAsync(int pageNumber, int pageSize);
+        Task<ListEmployerProfileDTOResponse> GetAllEmployersAsync(int pageNumber, int pageSize);
         Task<bool> CreateEmployerProfileAsync(EmployerProfileDTORequest request);
         Task<EmployerProfileDTOResponse> GetEmployerProfileByIdAsync(int id);
         Task<bool> UpdateEmployerProfileAsync(int id, EmployerProfileDTORequest request);

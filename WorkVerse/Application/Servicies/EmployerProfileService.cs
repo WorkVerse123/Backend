@@ -30,11 +30,15 @@ namespace Application.Servicies
         {
             try
             {
-               
-                var existingProfile = await _unitOfWork.EmployerProfile.CheckExistByUserIdAsync(request.UserId);
+                var existsUser = await _unitOfWork.User.GetByIdAsync(request.UserId);
+                if (existsUser == null)
+                {
+                    throw new ArgumentNullException($"User not exists for User {request.UserId}");
+                }
+                var existingProfile = await _unitOfWork.EmployerProfile.ExistsByUserIdAsync(request.UserId);
                 if (existingProfile)
                 {
-                    throw new InvalidOperationException($"Employer profile already exists for User {request.UserId}");
+                    throw new ArgumentNullException($"Employer profile already exists for User {request.UserId}");
                 }
 
                 var entity = _mapper.Map<EmployerProfile>(request);
@@ -52,11 +56,11 @@ namespace Application.Servicies
         }
 
 
-        public async Task<ListEmployerProfileDTOResponse> GetAllCompaniesAsync(int pageNumber, int pageSize)
+        public async Task<ListEmployerProfileDTOResponse> GetAllEmployersAsync(int pageNumber, int pageSize)
         {
             try
             {
-                var query = (await _unitOfWork.EmployerProfile.GetAllCompaniesAsync())
+                var query = (await _unitOfWork.EmployerProfile.GetAllEmployersAsync())
                             .AsQueryable();
 
                 var totalRecords = query.Count();

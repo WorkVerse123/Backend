@@ -26,11 +26,11 @@ namespace Application.Servicies
             _logger = logger;
         }
 
-        public async Task<JobDTOResponse> GetAllAsync(int pageNumber, int pageSize)
+        public async Task<JobListDTOResponse> GetJobListAsync(int pageNumber, int pageSize)
         {
             try
             {
-                var query = (await _unitOfWork.Job.GetAllAsync())
+                var query = (await _unitOfWork.Job.GetAllJobsAsync())
                             .AsQueryable();
 
                 var totalRecords = query.Count();
@@ -40,9 +40,9 @@ namespace Application.Servicies
                     .Take(pageSize)
                     .ToList();
 
-                var mapped = _mapper.Map<List<JobItemDTO>>(pagedData);
+                var mapped = _mapper.Map<List<JobSummaryDTO>>(pagedData);
 
-                return new JobDTOResponse
+                return new JobListDTOResponse
                 {
                     Jobs = mapped,
                     Paging = new PaginatedResponse
@@ -59,12 +59,12 @@ namespace Application.Servicies
                 throw;
             }
         }
-        public async Task<JobItemDetailDTO?> GetByIdAsync(int jobId)
+        public async Task<JobDetailsDTOResponse?> GetJobByIdAsync(int jobId)
         {
             try
             {
                 var entity = await _unitOfWork.Job.GetByIdAsync(jobId);
-                return _mapper.Map<JobItemDetailDTO>(entity);
+                return _mapper.Map<JobDetailsDTOResponse>(entity);
             }
             catch (Exception ex)
             {
@@ -72,19 +72,19 @@ namespace Application.Servicies
                 throw;
             }
         }
-        public async Task<JobDTOResponse> GetByEmployerIdAsync(int employerId, int pageNumber, int pageSize)
+        public async Task<JobListDTOResponse> GetJobsByEmployerIdAsync(int employerId, int pageNumber, int pageSize)
         {
             try
             {
-                var query = (await _unitOfWork.Job.GetByEmployerIdAsync(employerId))
+                var query = (await _unitOfWork.Job.GetJobsByEmployerIdAsync(employerId))
                             .AsQueryable();
                 var totalRecords = query.Count();
                 var pagedData = query
                     .Skip((pageNumber - 1) * pageSize)
                     .Take(pageSize)
                     .ToList();
-                var mapped = _mapper.Map<List<JobItemDTO>>(pagedData);
-                return new JobDTOResponse
+                var mapped = _mapper.Map<List<JobSummaryDTO>>(pagedData);
+                return new JobListDTOResponse
                 {
                     Jobs = mapped,
                     Paging = new PaginatedResponse
@@ -101,7 +101,7 @@ namespace Application.Servicies
                 throw;
             }
         }
-        public async Task AddAsyne(JobDTORequest request)
+        public async Task AddJobAsync(JobDTORequest request)
         {
             try
             {
@@ -116,11 +116,11 @@ namespace Application.Servicies
             }
         }
 
-        public async Task<bool> UpdateAsync(int jobId, JobDTORequest request)
+        public async Task<bool> UpdateJobAsync(int jobId, JobDTORequest request)
         {
             try
             {
-                var exists = await _unitOfWork.Job.ExistsAsync(jobId);
+                var exists = await _unitOfWork.Job.ExistsByJobIdAsync(jobId);
                 if (!exists)
                 {
                     return false;
@@ -137,7 +137,7 @@ namespace Application.Servicies
                 throw;
             }
         }
-        public async Task<bool> ChangeStatusAsynce(int jobId, string newStatus)
+        public async Task<bool> UpdateJobStatusAsync(int jobId, string newStatus)
         {
             try
             {

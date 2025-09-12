@@ -11,7 +11,7 @@ namespace WorkVerseAPI.Controllers
 {
 
     [ApiController]
-    [Route("applications")]
+    [Route("api/applications")]
     public class ApplicationController : ControllerBase
     {
         // This is a placeholder for the actual implementation of user service
@@ -35,8 +35,8 @@ namespace WorkVerseAPI.Controllers
         {
             try
             {
-                var result = await _applicationService.UpdateApplicationWithdrawnAsync(id);
-                return Ok(new ApiResponse<ApplicationItemDTO>("Application updated successfully", result, 200));
+                var result = await _applicationService.WithdrawApplicationAsync(id);
+                return Ok(new ApiResponse<JobApplicationItemDTO>("Application updated successfully", result, 200));
             }
             catch (KeyNotFoundException ex)
             {
@@ -59,13 +59,13 @@ namespace WorkVerseAPI.Controllers
                     return BadRequest(new ApiResponse<object>("Application ID must be greater than 0", 400));
                 }
 
-                var result = await _applicationService.GetApplicationDetailByIdAsync(id);
+                var result = await _applicationService.GetApplicationDetailsByIdAsync(id);
                 if (result == null)
                 {
                     return NotFound(new ApiResponse<object>($"No application found with ID {id}", 404));
                 }
 
-                return Ok(new ApiResponse<ApplicationItemDetailDTO>("Get applications detail successfully", result, 200));
+                return Ok(new ApiResponse<JobApplicationDetailsDTOResponse>("Get applications detail successfully", result, 200));
             }
             catch (Exception ex)
             {
@@ -74,19 +74,19 @@ namespace WorkVerseAPI.Controllers
         }
 
         // GET /employers/{id}/job/{job_id}/applications
-        [HttpGet("/employers/{id}/job/{job_id}/applications")]
+        [HttpGet("employers/{id}/job/{job_id}/applications")]
         public async Task<IActionResult> GetAllJobApplication([FromRoute] int id, [FromRoute] int job_id, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
             try
             {
-                var result = await _applicationService.GetJobApplicationsAsync(id,job_id,pageNumber, pageSize);
+                var result = await _applicationService.GetApplicationsByJobAsync(id,job_id,pageNumber, pageSize);
                 if (result == null)
                 {
                     return NotFound(new ApiResponse<object>(
                         $"No Job Applications found", 404));
                 }
 
-                return Ok(new ApiResponse<JobApplicationsResponseDTO>("Registration successful", result, 200));
+                return Ok(new ApiResponse<EmployerJobApplicationsDTOResponse>("Registration successful", result, 200));
             }
             catch (Exception ex)
             {
@@ -95,19 +95,19 @@ namespace WorkVerseAPI.Controllers
         }
 
         // GET/stats
-        [HttpGet("/stats")]
+        [HttpGet("stats")]
         public async Task<IActionResult> GetStatInformation()
         {
             try
             {
-                var result = await _applicationService.GetStatsInformationAsync();
+                var result = await _applicationService.GetPlatformStatsAsync();
                 if (result == null)
                 {
                     return NotFound(new ApiResponse<object>(
                         $"Get stats information failed", 404));
                 }
 
-                return Ok(new ApiResponse<StatsInformationDTOResponse>("Get stats information successful", result, 200));
+                return Ok(new ApiResponse<PlatformStatsResponseDTOResponse>("Get stats information successful", result, 200));
             }
             catch (Exception ex)
             {

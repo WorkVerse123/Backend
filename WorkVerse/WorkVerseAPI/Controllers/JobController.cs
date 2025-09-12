@@ -8,7 +8,7 @@ using WorkVerseAPI.Models;
 namespace WorkVerseAPI.Controllers
 {
     [ApiController]
-    [Route("jobs")]
+    [Route("api/jobs")]
     public class JobController : ControllerBase
     {
         // This is a placeholder for the actual implementation of user service
@@ -36,14 +36,14 @@ namespace WorkVerseAPI.Controllers
         {
             try
             {
-                var result = await _jobService.GetAllAsync(pageNumber, pageSize);
+                var result = await _jobService.GetJobListAsync(pageNumber, pageSize);
                 if (result == null)
                 {
                     return NotFound(new ApiResponse<object>(
                         "Something went wrong. Please try again later.", 404));
                 }
 
-                return Ok(new ApiResponse<JobDTOResponse>("Registration successful", result, 200));
+                return Ok(new ApiResponse<JobListDTOResponse>("Registration successful", result, 200));
             }
             catch (Exception ex)
             {
@@ -57,14 +57,14 @@ namespace WorkVerseAPI.Controllers
         {
             try
             {
-                var result = await _jobService.GetByIdAsync(id);
+                var result = await _jobService.GetJobByIdAsync(id);
                 if (result == null)
                 {
                     return NotFound(new ApiResponse<object>(
                         "Something went wrong. Please try again later.", 404));
                 }
 
-                return Ok(new ApiResponse<JobItemDetailDTO>("Registration successful", result, 200));
+                return Ok(new ApiResponse<JobDetailsDTOResponse>("Registration successful", result, 200));
             }
             catch (Exception ex)
             {
@@ -73,7 +73,7 @@ namespace WorkVerseAPI.Controllers
         }
 
         // GET /categories
-        [HttpGet("/categories")] // GET api/categories
+        [HttpGet("categories")] // GET api/categories
         public async Task<IActionResult> GetAllJobCategories()
         {
             try
@@ -85,7 +85,7 @@ namespace WorkVerseAPI.Controllers
                         "Something went wrong. Please try again later.", 404));
                 }
 
-                return Ok(new ApiResponse<JobCategoryDTOResponse>("Registration successful", result, 200));
+                return Ok(new ApiResponse<JobCategoryListDTOResponse>("Registration successful", result, 200));
             }
             catch (Exception ex)
             {
@@ -99,14 +99,14 @@ namespace WorkVerseAPI.Controllers
         {
             try
             {
-                var result = await _reviewService.GetByJobIdAsync(id,pageNumber, pageSize);
+                var result = await _reviewService.GetJobReviewsByJobIdAsync(id,pageNumber, pageSize);
                 if (result == null)
                 {
                     return NotFound(new ApiResponse<object>(
                         "Something went wrong. Please try again later.", 404));
                 }
 
-                return Ok(new ApiResponse<ReviewDTOResponse>("Registration successful", result, 200));
+                return Ok(new ApiResponse<JobReviewListDTOResponse>("Registration successful", result, 200));
             }
             catch (Exception ex)
             {
@@ -123,8 +123,8 @@ namespace WorkVerseAPI.Controllers
                 var (isValid, error) = ReviewValidationHelper.ValidateReviewPostRequest(request);
                 if (!isValid)
                     return BadRequest(new ApiResponse<object>(error, 400));
-                var result = await _reviewService.CreateReviewAsync(id, request);
-                return Ok(new ApiResponse<ReviewItemDTO>("Review created successfully", result, 201));
+                var result = await _reviewService.CreateJobReviewAsync(id, request);
+                return Ok(new ApiResponse<JobReviewItemDTO>("Review created successfully", result, 201));
             }
             catch (Exception ex)
             {
@@ -133,19 +133,19 @@ namespace WorkVerseAPI.Controllers
         }
 
         // GET/candidates
-        [HttpGet("/cadidates")]
+        [HttpGet("cadidates")]
         public async Task<IActionResult> GetAllCandidates([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
             try
             {
-                var result = await _employeeProfileService.GetAllCandidatesAsync(pageNumber, pageSize);
+                var result = await _employeeProfileService.GetEmployeeListAsync(pageNumber, pageSize);
                 if (result == null)
                 {
                     return NotFound(new ApiResponse<object>(
                         "Something went wrong. Please try again later.", 404));
                 }
 
-                return Ok(new ApiResponse<CandidateDTOResponse>("Get list of candidates successfully", result, 200));
+                return Ok(new ApiResponse<CandidateListDTOResponse>("Get list of candidates successfully", result, 200));
             }
             catch (Exception ex)
             {

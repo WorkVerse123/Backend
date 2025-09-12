@@ -10,12 +10,12 @@ namespace Application.Interfaces.IRepositories
     public interface IJobRepository : IGenericRepository<Job>
     {
         Task<Job> GetByIdAsync(int jobId);
-        Task<IEnumerable<Job>> GetAllAsync();
-        Task<IEnumerable<Job>> GetByEmployerIdAsync(int employerId);
+        Task<IEnumerable<Job>> GetAllJobsAsync();
+        Task<IEnumerable<Job>> GetJobsByEmployerIdAsync(int employerId);
 
-        Task<bool> ExistsAsync(int jobId);
+        Task<bool> ExistsByJobIdAsync(int jobId);
 
-        Task<int> CountJobsAsync();
+        Task<int> CountAllJobsAsync();
 
         Task<int> CountNewJobsAsync(TimeSpan range);
     }

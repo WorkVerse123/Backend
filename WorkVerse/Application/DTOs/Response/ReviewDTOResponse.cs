@@ -6,13 +6,15 @@ using System.Threading.Tasks;
 
 namespace Application.DTOs.Response
 {
-    public class ReviewDTOResponse
+    // Danh sách review cho 1 job
+    public class JobReviewListDTOResponse
     {
         public int JobId { get; set; }
         public PaginatedResponse Paging { get; set; }
-        public List<ReviewItemDTO> Reviews { get; set; } = new();
+        public List<JobReviewItemDTO> Reviews { get; set; } = new();
     }
-    public class ReviewItemDTO
+    // Thông tin 1 review cụ thể
+    public class JobReviewItemDTO
     {
         public int ReviewId { get; set; }
         public int EmployeeId { get; set; }

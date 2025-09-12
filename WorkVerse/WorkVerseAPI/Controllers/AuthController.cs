@@ -7,7 +7,7 @@ using WorkVerseAPI.Models;
 
 namespace WorkVerseAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/auth")]
     [ApiController]
     public class AuthController : ControllerBase
     {

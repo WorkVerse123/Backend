@@ -6,12 +6,13 @@ using System.Threading.Tasks;
 
 namespace Application.DTOs.Response
 {
-    public class JobDTOResponse
+    // Danh sách job 
+    public class JobListDTOResponse
     {
         public PaginatedResponse Paging { get; set; }
-        public List<JobItemDTO> Jobs { get; set; } = new();
+        public List<JobSummaryDTO> Jobs { get; set; } = new();
     }
-    public class JobItemDTO
+    public class JobSummaryDTO
     {
         public int JobId { get; set; }
         public string JobTitle { get; set; } = null!;
@@ -25,7 +26,7 @@ namespace Application.DTOs.Response
         public string JobStatus { get; set; } = null!;
     }
 
-    public class JobItemDetailDTO
+    public class JobDetailsDTOResponse
     {
         public int JobId { get; set; }
         public string JobTitle { get; set; } = null!;

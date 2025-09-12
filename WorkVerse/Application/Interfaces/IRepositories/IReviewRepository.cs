@@ -13,9 +13,9 @@ namespace Application.Interfaces.IRepositories
 
         Task<IEnumerable<Review>> GetByJobIdAsync(int jobId);
 
-        Task<Review> GetByJobIdEmployeeIdAsync(int jobId, int employeeId);
+        Task<Review> GetByJobAndCandidateAsync(int jobId, int employeeId);
 
-        Task<bool> ExistsAsync(int jobId, int employeeId);
+        Task<bool> ExistsByJobAndCandidateAsync(int jobId, int employeeId);
 
 
     }

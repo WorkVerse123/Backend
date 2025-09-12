@@ -26,25 +26,25 @@ namespace Application.Servicies
             _logger = logger;
         }
 
-        public async Task<ApplicationItemDTO> CreateApplicationAsync(int employeeId, ApplicationDTORequest request)
+        public async Task<JobApplicationItemDTO> CreateApplyJobAsync(int employeeId, ApplicationDTORequest request)
         {
             try
             {
 
-                var employee = await _unitOfWork.EmployeeProfile.ExistsAsync(employeeId);
+                var employee = await _unitOfWork.EmployeeProfile.ExistsByEmployeeIdAsync(employeeId);
                 if (!employee)
                 {
                     throw new KeyNotFoundException($"Employee with ID {employeeId} not found");
                 }
 
 
-                var job = await _unitOfWork.Job.ExistsAsync(request.JobId);
+                var job = await _unitOfWork.Job.ExistsByJobIdAsync(request.JobId);
                 if (!job)
                 {
                     throw new KeyNotFoundException($"Job with ID {request.JobId} not found");
                 }
 
-                var exists = await _unitOfWork.Application.ExistsAsync(employeeId, request.JobId);
+                var exists = await _unitOfWork.Application.FindByEmployeeAndJobAsync(employeeId, request.JobId);
                 if (exists.Status == "pending")
                 {
                     throw new InvalidOperationException($"Application already applied and pending for Employee {employeeId} and Job {request.JobId}");
@@ -63,8 +63,8 @@ namespace Application.Servicies
                 await _unitOfWork.Application.AddAsync(application);
                 await _unitOfWork.SaveChangesAsync();
 
-                exists = await _unitOfWork.Application.ExistsAsync(employeeId, request.JobId);
-                return _mapper.Map<ApplicationItemDTO>(exists);
+                exists = await _unitOfWork.Application.FindByEmployeeAndJobAsync(employeeId, request.JobId);
+                return _mapper.Map<JobApplicationItemDTO>(exists);
 
 
             }
@@ -75,11 +75,11 @@ namespace Application.Servicies
             }
         }
 
-        public async Task<ApplicationResponseDTO> GetByEmployeeIdAsync(int employeeId, int pageNumber, int pageSize)
+        public async Task<JobApplicationListDTOResponse> GetApplicationsByEmployeeAsync(int employeeId, int pageNumber, int pageSize)
         {
             try
             {
-                var employee = await _unitOfWork.EmployeeProfile.ExistsAsync(employeeId);
+                var employee = await _unitOfWork.EmployeeProfile.ExistsByEmployeeIdAsync(employeeId);
                 if (!employee)
                 {
                     throw new KeyNotFoundException($"Employee with ID {employeeId} not found");
@@ -99,15 +99,15 @@ namespace Application.Servicies
 
                 if (pagedData == null || !pagedData.Any())
                 {
-                    return new ApplicationResponseDTO
+                    return new JobApplicationListDTOResponse
                     {
-                        Applications = new List<ApplicationItemDTO>()
+                        Applications = new List<JobApplicationItemDTO>()
                     };
                 }
 
-                var mapped = _mapper.Map<List<ApplicationItemDTO>>(pagedData);
+                var mapped = _mapper.Map<List<JobApplicationItemDTO>>(pagedData);
 
-                return new ApplicationResponseDTO
+                return new JobApplicationListDTOResponse
                 {
                     Applications = mapped,
                     Paging = new PaginatedResponse
@@ -125,7 +125,7 @@ namespace Application.Servicies
             }
         }
 
-        public async Task<ApplicationItemDTO> UpdateApplicationWithdrawnAsync(int applicationId)
+        public async Task<JobApplicationItemDTO> WithdrawApplicationAsync(int applicationId)
         {
             try
             {
@@ -145,8 +145,8 @@ namespace Application.Servicies
                 _unitOfWork.Application.Update(existingApplication);
                 await _unitOfWork.SaveChangesAsync();
 
-                var applicationUpdated = await _unitOfWork.Application.ExistsAsync(existingApplication.EmployeeId, existingApplication.JobId);
-                return _mapper.Map<ApplicationItemDTO>(applicationUpdated);
+                var applicationUpdated = await _unitOfWork.Application.FindByEmployeeAndJobAsync(existingApplication.EmployeeId, existingApplication.JobId);
+                return _mapper.Map<JobApplicationItemDTO>(applicationUpdated);
             }
             catch (Exception ex)
             {
@@ -155,14 +155,14 @@ namespace Application.Servicies
             }
         }
 
-        public async Task<ApplicationItemDetailDTO> GetApplicationDetailByIdAsync(int applicationId)
+        public async Task<JobApplicationDetailsDTOResponse> GetApplicationDetailsByIdAsync(int applicationId)
         {
             try
             {
                 var exist = await _unitOfWork.Application.GetByIdAsync(applicationId);
               
 
-                return _mapper.Map<ApplicationItemDetailDTO>(exist);
+                return _mapper.Map<JobApplicationDetailsDTOResponse>(exist);
 
 
             }
@@ -173,11 +173,12 @@ namespace Application.Servicies
             }
         }
 
-        public async Task<JobApplicationsResponseDTO> GetJobApplicationsAsync(int employerId, int jobId, int pageNumber, int pageSize)
+        public async Task<EmployerJobApplicationsDTOResponse> GetApplicationsByJobAsync(int employerId, int jobId, int pageNumber, int pageSize)
+
         {
             try
             {
-                var employee = await _unitOfWork.EmployerProfile.ExistsAsync(employerId);
+                var employee = await _unitOfWork.EmployerProfile.ExistsByEmployerIdAsync(employerId);
                 if (!employee)
                 {
                     throw new KeyNotFoundException($"Employer with ID {employerId} not found");
@@ -199,9 +200,9 @@ namespace Application.Servicies
                     .Take(pageSize)
                     .ToList();
 
-                var mapped = _mapper.Map<List<ApplicationSummaryDTO>>(pagedData);
+                var mapped = _mapper.Map<List<JobApplicationSummaryDTO>>(pagedData);
 
-                return new JobApplicationsResponseDTO
+                return new EmployerJobApplicationsDTOResponse
                 {
                     EmployerId = employerId,
                     Applications = mapped,
@@ -223,21 +224,21 @@ namespace Application.Servicies
             }
         }
 
-        public async Task<StatsInformationDTOResponse> GetStatsInformationAsync()
+        public async Task<PlatformStatsResponseDTOResponse> GetPlatformStatsAsync()
         {
             try
             {
-                var jobsCount = await _unitOfWork.Job.CountJobsAsync();
+                var jobsCount = await _unitOfWork.Job.CountAllJobsAsync();
 
-                var companiesCount = await _unitOfWork.EmployerProfile.CountCompaniesAsync();
+                var companiesCount = await _unitOfWork.EmployerProfile.CountAllEmployersAsync();
 
-                var candidatesCount = await _unitOfWork.EmployeeProfile.CountCandidatesAsync();
+                var candidatesCount = await _unitOfWork.EmployeeProfile.CountAllEmployeeAsync();
 
                 var newJobsCount = await _unitOfWork.Job.CountNewJobsAsync(TimeSpan.FromDays(7));
 
-                return new StatsInformationDTOResponse
+                return new PlatformStatsResponseDTOResponse
                 {
-                    Stats = new StatItemDTO
+                    Stats = new PlatformStatsDTO
                     {
                         Jobs = jobsCount,
                         Companies = companiesCount,
