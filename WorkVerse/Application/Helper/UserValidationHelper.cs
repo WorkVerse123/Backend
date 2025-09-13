@@ -53,11 +53,11 @@ public static class UserValidationHelper
         //    return (false, "Password must be at least 6 characters.");
 
         // Status
-        var allowedStatuses = new[] { "active", "suspended", "pending" };
         if (string.IsNullOrWhiteSpace(request.Status))
             return (false, "Status is required.");
-        if (!allowedStatuses.Contains(request.Status.ToLower()))
-            return (false, $"Status must be one of: {string.Join(", ", allowedStatuses)}");
+
+        if (request.Status.ToLower() != "active")
+            return (false, "Status must be 'active'.");
 
         return (true, string.Empty);
     }
