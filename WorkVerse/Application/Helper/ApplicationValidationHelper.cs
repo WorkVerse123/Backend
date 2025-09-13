@@ -9,7 +9,7 @@ namespace Application.Helper
 {
     public static class ApplicationValidationHelper
     {
-        public static (bool IsValid, string ErrorMessage) ValidateApplicationPostRequest(ApplicationDTORequest request)
+        public static (bool IsValid, string ErrorMessage) ValidateApplicationPostRequest(SendApplicationDTORequest request)
         {
             if (request == null)
                 return (false, "Request cannot be null.");

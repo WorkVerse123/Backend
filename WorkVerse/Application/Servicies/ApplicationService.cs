@@ -26,7 +26,7 @@ namespace Application.Servicies
             _logger = logger;
         }
 
-        public async Task<JobApplicationItemDTO> CreateApplyJobAsync(int employeeId, ApplicationDTORequest request)
+        public async Task<JobApplicationItemDTO> CreateApplyJobAsync(int employeeId, SendApplicationDTORequest request)
         {
             try
             {
@@ -160,7 +160,7 @@ namespace Application.Servicies
             try
             {
                 var exist = await _unitOfWork.Application.GetByIdAsync(applicationId);
-              
+
 
                 return _mapper.Map<JobApplicationDetailsDTOResponse>(exist);
 
@@ -206,9 +206,9 @@ namespace Application.Servicies
                 {
                     EmployerId = employerId,
                     Applications = mapped,
-                    JobId=jobId,
-                    JobLocation=job.Location,
-                    JobTitle=job.Title,
+                    JobId = jobId,
+                    JobLocation = job.Location,
+                    JobTitle = job.Title,
                     Paging = new PaginatedResponse
                     {
                         Page = pageNumber,
@@ -219,7 +219,7 @@ namespace Application.Servicies
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex,$"Error retrieving Applications with JobId: {jobId}");
+                _logger.LogError(ex, $"Error retrieving Applications with JobId: {jobId}");
                 throw;
             }
         }
@@ -254,5 +254,37 @@ namespace Application.Servicies
             }
         }
 
+        public async Task<bool> UpdateApplicationStatusAsync(int applicationId, UpdateApplicationStatusDTORequest request)
+        {
+
+            try
+            {
+                if (request.Status.ToLower() != "accepted" && request.Status.ToLower() != "rejected")
+                {
+                    throw new InvalidOperationException($"Status '{request.Status}' is not valid. It must be accepted or rejected");
+                }
+                var application = await _unitOfWork.Application.GetByIdAsync(applicationId);
+                if (application == null)
+                {
+                    throw new KeyNotFoundException($"Application with ID {applicationId} not found.");
+                }
+                if (application.Status.ToLower() != "accepted" || application.Status.ToLower() != "rejected")
+                {
+                    throw new InvalidOperationException($"Application with ID {applicationId} has already updated status.");
+                }
+                application.Status = request.Status;
+               
+                _unitOfWork.Application.Update(application);
+                await _unitOfWork.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error changing status of Application with ID: {Id}", applicationId);
+                throw;
+            }
+
+
+        }
     }
 }

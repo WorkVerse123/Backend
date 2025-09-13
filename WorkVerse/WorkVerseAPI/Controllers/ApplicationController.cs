@@ -109,6 +109,34 @@ namespace WorkVerseAPI.Controllers
                 return StatusCode(500, new ApiResponse<object>(ex.Message, 500));
             }
         }
+
+        // PUT /applications/{id}/status
+        [HttpPut("{id}/status")]
+        public async Task<IActionResult> UpdateApplicationStatus([FromRoute] int id, [FromBody] UpdateApplicationStatusDTORequest request)
+        {
+            try
+            {
+                var updated = await _applicationService.UpdateApplicationStatusAsync(id, request);
+                if (!updated)
+                {
+                    return StatusCode(500, new ApiResponse<object>("Update application status failed", 500));
+                }
+
+                return Ok(new ApiResponse<object>("Application status updated successfully.", null, 200));
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return BadRequest(new ApiResponse<object>(ex.Message, 404));
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new ApiResponse<object>(ex.Message, 404));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ApiResponse<object>(ex.Message, 500));
+            }
+        }
     }
 
 }
