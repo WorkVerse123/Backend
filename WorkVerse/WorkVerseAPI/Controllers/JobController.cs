@@ -13,18 +13,12 @@ namespace WorkVerseAPI.Controllers
     {
         // This is a placeholder for the actual implementation of user service
         private readonly IEmployeeProfileServices _employeeProfileService;
-        private readonly IBusyTimeService _busyTimeService;
-        private readonly IBookmarkService _bookmarkService;
-        private readonly IApplicationService _applicationService;
         private readonly IJobService _jobService;
         private readonly IReviewService _reviewService;
         private readonly IJobCategoryService _jobCategoryService;
-        public JobController(IEmployeeProfileServices employeeProfileService, IBusyTimeService busyTimeService, IBookmarkService bookmarkService, IApplicationService applicationService, IJobService jobService, IReviewService reviewService, IJobCategoryService jobCategoryService)
+        public JobController(IEmployeeProfileServices employeeProfileService, IJobService jobService, IReviewService reviewService, IJobCategoryService jobCategoryService)
         {
             _employeeProfileService = employeeProfileService;
-            _busyTimeService = busyTimeService;
-            _bookmarkService = bookmarkService;
-            _applicationService = applicationService;
             _jobService = jobService;
             _reviewService = reviewService;
             _jobCategoryService = jobCategoryService;

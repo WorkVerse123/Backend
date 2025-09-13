@@ -45,7 +45,8 @@ namespace WorkVerseAPI.Configurations
             builder.RegisterType<EmployerProfileService>().As<IEmployerProfileService>().InstancePerLifetimeScope();
             builder.RegisterType<AuthService>().As<IAuthService>().InstancePerLifetimeScope();
             builder.RegisterType<JWTService>().As<IJWTService>().InstancePerLifetimeScope();
-
+            builder.RegisterType<ReportService>().As<IReportService>().InstancePerLifetimeScope();
+            builder.RegisterType<FeedbackService>().As<IFeedbackService>().InstancePerLifetimeScope();
         }
     }
 }

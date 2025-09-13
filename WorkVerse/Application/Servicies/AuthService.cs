@@ -50,6 +50,9 @@ namespace SchoolMedicalSystem.Application.Services
 
         public async Task<UserDTORespone?> CreatedAccountAsync(UserDTORequest userDto)
         {
+            var existsRole = await _unitOfWork.Role.ExistsByIdAsync(userDto.RoleId);
+            if (!existsRole)
+                return null;
             // Kiểm tra tồn tại email hoặc phone
             var exists = await _unitOfWork.User.ExistsAsync(userDto.Email, userDto.PhoneNumber);
             if (exists)

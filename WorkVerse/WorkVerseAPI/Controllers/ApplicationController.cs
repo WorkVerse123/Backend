@@ -14,16 +14,11 @@ namespace WorkVerseAPI.Controllers
     [Route("api/applications")]
     public class ApplicationController : ControllerBase
     {
-        // This is a placeholder for the actual implementation of user service
-        private readonly IEmployeeProfileServices _employeeProfileService;
-        private readonly IBusyTimeService _busyTimeService;
-        private readonly IBookmarkService _bookmarkService;
+        
         private readonly IApplicationService _applicationService;
-        public ApplicationController(IEmployeeProfileServices employeeProfileService, IBusyTimeService busyTimeService, IBookmarkService bookmarkService, IApplicationService applicationService)
+        public ApplicationController(IApplicationService applicationService)
         {
-            _employeeProfileService = employeeProfileService;
-            _busyTimeService = busyTimeService;
-            _bookmarkService = bookmarkService;
+           
             _applicationService = applicationService;
         }
 

@@ -709,6 +709,48 @@ namespace Infrastructure.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Domain.Entities.StaffProfile", b =>
+                {
+                    b.Property<int>("StaffId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StaffId"));
+
+                    b.Property<string>("Address")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<DateTime?>("DateOfBirth")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("FullName")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<string>("Gender")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("IdentityCard")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("StaffId");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
+                    b.ToTable("StaffProfile", (string)null);
+                });
+
             modelBuilder.Entity("Domain.Entities.SubscriptionPlan", b =>
                 {
                     b.Property<int>("PlanId")
@@ -1112,6 +1154,17 @@ namespace Infrastructure.Migrations
                     b.Navigation("Job");
                 });
 
+            modelBuilder.Entity("Domain.Entities.StaffProfile", b =>
+                {
+                    b.HasOne("Domain.Entities.User", "User")
+                        .WithOne("StaffProfile")
+                        .HasForeignKey("Domain.Entities.StaffProfile", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Domain.Entities.User", b =>
                 {
                     b.HasOne("Domain.Entities.Role", "Role")
@@ -1214,6 +1267,8 @@ namespace Infrastructure.Migrations
                     b.Navigation("Reports");
 
                     b.Navigation("SentMessages");
+
+                    b.Navigation("StaffProfile");
 
                     b.Navigation("Subscriptions");
                 });

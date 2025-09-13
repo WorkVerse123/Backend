@@ -13,5 +13,7 @@ namespace Application.Interfaces.IRepositories
         Task<User?> GetByPhoneNumberAsync(string phoneNumber);
         Task<bool> ExistsAsync(string email, string phoneNumber);
         Task<bool> ExistByIdAsync(int userId);
+
+        Task<string?> GetUserFullNameByIdAsync(int id);
     }
 }

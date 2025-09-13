@@ -1,4 +1,5 @@
 ﻿using Application.DTOs.Request;
+using Application.Helper;
 using Application.Interfaces.IServices;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity.Data;
@@ -23,6 +24,9 @@ namespace WorkVerseAPI.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] UserLoginDTORequest request)
         {
+            var (isValid, error) = UserValidationHelper.ValidateLogin(request);
+            if (!isValid)
+                return BadRequest(new ApiResponse<object>(error, 400));
             string account = request.Email ?? request.PhoneNumber;
             var user = await _authService.ValidateUserAsync(account, request.Password);
 
@@ -38,6 +42,9 @@ namespace WorkVerseAPI.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] UserDTORequest request)
         {
+            var (isValid, error) = UserValidationHelper.ValidateRegister(request);
+            if (!isValid)
+                return BadRequest(new ApiResponse<object>(error, 400));
             string account = request.Email ?? request.PhoneNumber;
             var existingUser = await _authService.ValidateUserAsync(account, request.Password);
 

@@ -18,5 +18,8 @@ namespace Application.Interfaces.IRepositories
         Task<int> CountAllJobsAsync();
 
         Task<int> CountNewJobsAsync(TimeSpan range);
+
+        Task<string?> GetJobTitleByIdAsync(int id);
+
     }
 }

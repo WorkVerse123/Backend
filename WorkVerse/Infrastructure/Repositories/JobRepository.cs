@@ -64,5 +64,14 @@ namespace Infrastructure.Repositories
                 .OrderByDescending(c => c.CreatedAt).ToListAsync();
             return result;
         }
+        // Lay title cua job bang jobId
+        public async Task<string?> GetJobTitleByIdAsync(int id)
+        {
+            return await _dbSet
+                .Where(j => j.JobId == id)
+                .Select(j => j.Title)
+                .FirstOrDefaultAsync();
+        }
+
     }
 }

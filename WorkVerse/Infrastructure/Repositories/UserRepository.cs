@@ -38,5 +38,20 @@ namespace Infrastructure.Repositories
         {
             return await _dbSet.AnyAsync(u => u.UserId == userId);
         }
+
+        public async Task<string?> GetUserFullNameByIdAsync(int id)
+        {
+            return await _dbSet
+                .Where(u => u.UserId == id)
+                .Select(u =>
+                    u.EmployeeProfile != null
+                        ? u.EmployeeProfile.FullName
+                        : (u.EmployerProfile != null
+                            ? u.EmployerProfile.CompanyName
+                            : null))
+                .FirstOrDefaultAsync();
+        }
+
+
     }
 }

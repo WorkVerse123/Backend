@@ -12,7 +12,7 @@ namespace Application.DTOs.Request
         public string PhoneNumber { get; set; } = null!;
         public string Password { get; set; } = null!;
         public int RoleId { get; set; }
-        public string Status { get; set; } = "Active";
+        public string Status { get; set; } = "active";
 
     }
     public class UserLoginDTORequest

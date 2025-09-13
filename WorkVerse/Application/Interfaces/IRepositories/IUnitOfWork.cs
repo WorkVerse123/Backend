@@ -26,5 +26,9 @@ namespace Application.Interfaces.IRepositories
         IUserRepository User { get; }
         IEmployerTypeRepository EmployerType { get; }
 
+        IReportRepository Report { get; }
+        IRoleRepository Role { get; }
+        IFeedbackRepository Feedback { get; }
+
     }
 }

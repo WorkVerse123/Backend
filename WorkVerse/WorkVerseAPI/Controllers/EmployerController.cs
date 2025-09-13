@@ -14,22 +14,13 @@ namespace WorkVerseAPI.Controllers
     {
         private readonly IEmployerProfileService _employerProfileService;
         private readonly IJobService _jobService;
-        private readonly IApplicationService _applicationService;
-        private readonly IReviewService _reviewService;
-        private readonly IJobCategoryService _jobCategoryService;
 
         public EmployerController(
             IEmployerProfileService employerProfileService,
-            IJobService jobService,
-            IApplicationService applicationService,
-            IReviewService reviewService,
-            IJobCategoryService jobCategoryService)
+            IJobService jobService)
         {
             _employerProfileService = employerProfileService;
             _jobService = jobService;
-            _applicationService = applicationService;
-            _reviewService = reviewService;
-            _jobCategoryService = jobCategoryService;
         }
 
         // GET /employers/{id}

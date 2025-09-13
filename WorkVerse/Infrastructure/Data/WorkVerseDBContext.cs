@@ -476,6 +476,36 @@ namespace Infrastructure.Data
 
                 entity.HasIndex(e => e.PageKey).IsUnique();
             });
+
+            modelBuilder.Entity<StaffProfile>(entity =>
+            {
+                entity.ToTable("StaffProfile");
+
+                entity.HasKey(e => e.StaffId);
+
+                entity.Property(e => e.FullName)
+                      .IsRequired()
+                      .HasMaxLength(255);
+
+                entity.Property(e => e.Gender)
+                      .HasMaxLength(20);
+
+                entity.Property(e => e.Address)
+                      .HasMaxLength(255);
+
+                entity.Property(e => e.IdentityCard)
+                      .HasMaxLength(20);
+
+                entity.Property(e => e.StartDate)
+                      .IsRequired();
+
+                // Quan hệ 1-1: StaffProfile <-> User
+                entity.HasOne(e => e.User)
+                      .WithOne(u => u.StaffProfile)   // trong User class phải có navigation
+                      .HasForeignKey<StaffProfile>(e => e.UserId)
+                      .OnDelete(DeleteBehavior.Cascade);
+            });
+
         }
     }
 }

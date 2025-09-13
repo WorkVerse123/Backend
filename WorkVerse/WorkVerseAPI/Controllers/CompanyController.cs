@@ -11,17 +11,10 @@ namespace WorkVerseAPI.Controllers
     [Route("api/companies")]
     public class CompanyController : ControllerBase
     {
-        private readonly IEmployeeProfileServices _employeeProfileService;
-        private readonly IBusyTimeService _busyTimeService;
-        private readonly IBookmarkService _bookmarkService;
-        private readonly IApplicationService _applicationService;
+        
         private readonly IEmployerProfileService _employerProfileService;
-        public CompanyController(IEmployeeProfileServices employeeProfileService, IBusyTimeService busyTimeService, IBookmarkService bookmarkService, IApplicationService applicationService, IEmployerProfileService employerProfileService)
+        public CompanyController(IEmployerProfileService employerProfileService)
         {
-            _employeeProfileService = employeeProfileService;
-            _busyTimeService = busyTimeService;
-            _bookmarkService = bookmarkService;
-            _applicationService = applicationService;
             _employerProfileService = employerProfileService;
         }
 
