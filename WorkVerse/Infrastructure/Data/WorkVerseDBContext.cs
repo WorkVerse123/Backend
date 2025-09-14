@@ -163,7 +163,8 @@ namespace Infrastructure.Data
                 entity.Property(j => j.SalaryMax).HasColumnType("decimal(18,2)");
                 entity.Property(j => j.CreatedAt).HasDefaultValueSql("GETDATE()");
                 entity.Property(j => j.Status).HasMaxLength(20);
-
+                // default job thường (không ưu tiên)
+                entity.Property(j => j.IsPriority).HasDefaultValue(false);
                 entity.HasOne(j => j.Employer)
                       .WithMany(e => e.Jobs)
                       .HasForeignKey(j => j.EmployerId);

@@ -21,7 +21,7 @@ namespace Domain.Entities
         public DateTime ExpiredAt { get; set; }
         public string Status { get; set; } = null!;
         public string? SearchName { get; set; }
-
+        public bool IsPriority { get; set; } = false;
         public virtual EmployerProfile Employer { get; set; } = null!;
         public virtual ICollection<Shift> Shifts { get; set; } = new List<Shift>();
         public virtual ICollection<JobCategoryMapping> JobCategoryMappings { get; set; } = new List<JobCategoryMapping>();
