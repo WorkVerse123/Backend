@@ -30,5 +30,8 @@ namespace Application.Interfaces.IRepositories
         IRoleRepository Role { get; }
         IFeedbackRepository Feedback { get; }
 
+        IBlogRepository Blog { get; }   
+        INotificationRepository Notification { get; }
+
     }
 }

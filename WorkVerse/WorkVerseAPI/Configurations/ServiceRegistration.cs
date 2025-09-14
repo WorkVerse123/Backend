@@ -47,6 +47,7 @@ namespace WorkVerseAPI.Configurations
             builder.RegisterType<JWTService>().As<IJWTService>().InstancePerLifetimeScope();
             builder.RegisterType<ReportService>().As<IReportService>().InstancePerLifetimeScope();
             builder.RegisterType<FeedbackService>().As<IFeedbackService>().InstancePerLifetimeScope();
+            builder.RegisterType<BlogService>().As<IBlogService>().InstancePerLifetimeScope();
         }
     }
 }

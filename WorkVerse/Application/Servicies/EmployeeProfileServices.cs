@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Application.Servicies
 {
@@ -35,7 +36,7 @@ namespace Application.Servicies
                     _logger.LogWarning("Attempted to add a null employee profile");
                     throw new ArgumentNullException(nameof(employeeProfile), "Profile cannot be null");
                 }
-                var existsUser= await _unitOfWork.User.ExistByIdAsync(userId);
+                var existsUser = await _unitOfWork.User.ExistByIdAsync(userId);
                 if (!existsUser)
                 {
                     throw new InvalidOperationException($"User not exists for User {userId}");
@@ -43,7 +44,7 @@ namespace Application.Servicies
                 var existsProfile = await _unitOfWork.EmployeeProfile.GetByUserIdAsync(userId);
                 if (existsProfile != null)
                 {
-                    throw new InvalidOperationException ($"Profile already exists for User {userId}");
+                    throw new InvalidOperationException($"Profile already exists for User {userId}");
                 }
 
                 // Map DTO request sang entity
@@ -157,5 +158,61 @@ namespace Application.Servicies
                 throw;
             }
         }
+
+        public async Task<EmployeeDashboardDTOResponse> GetEmployeeDashBoardAsync(int employeeId, int pageNumber, int pageSize)
+        {
+            try
+            {
+                var existingProfile = await _unitOfWork.EmployeeProfile.GetByEmployeeIdAsync(employeeId);
+                if (existingProfile == null)
+                {
+                    throw new KeyNotFoundException($"Profile with ID {employeeId} not found");
+                }
+                // Lấy thống kê
+                var totalApplications = await _unitOfWork.Application.CountApplicationsByEmployeeIdAsync(employeeId);
+                var totalFavorites = await _unitOfWork.Bookmark.CountBookmarkJobsByEmployeeIdAsync(employeeId);
+                var totalNotifications = await _unitOfWork.Notification.CountNotificationsByEmployeeIdAsync(employeeId);
+
+                // Lấy danh sách ứng tuyển 
+                var query = (await _unitOfWork.Application.GetAppliEmployerByEmployeeIdAsync(employeeId))
+                            .AsQueryable();
+
+                var totalRecords = query.Count();
+
+                var pagedData = query
+                    .Skip((pageNumber - 1) * pageSize)
+                    .Take(pageSize)
+                    .ToList();
+
+
+                // Map sang DTO
+                var applicationDtos = _mapper.Map<List<EmployeeApplicationDTO>>(pagedData);
+
+                // Trả về response
+                return new EmployeeDashboardDTOResponse
+                {
+
+                    Stats = new List<DashboardStat>
+                    {
+                    new() { Label = "Công việc đã ứng tuyển", Value = totalApplications },
+                    new() { Label = "Công việc yêu thích", Value = totalFavorites },
+                    new() { Label = "Thông báo", Value = totalNotifications }
+                    },
+                    Applications = applicationDtos,
+                    Paging = new PaginatedResponse
+                    {
+                        Page = pageNumber,
+                        PageSize = pageSize,
+                        TotalPages = (int)Math.Ceiling(totalRecords / (double)pageSize)
+                    }
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error when getting dashboard for employee {EmployeeId}", employeeId);
+                throw;
+            }
+        }
+
     }
 }

@@ -45,7 +45,7 @@ namespace Application.Servicies
                 }
 
                 var exists = await _unitOfWork.Application.FindByEmployeeAndJobAsync(employeeId, request.JobId);
-                if (exists.Status == "pending")
+                if (exists!= null && exists.Status == "pending")
                 {
                     throw new InvalidOperationException($"Application already applied and pending for Employee {employeeId} and Job {request.JobId}");
                 }
@@ -87,7 +87,7 @@ namespace Application.Servicies
 
 
 
-                var query = (await _unitOfWork.Application.GetByEmployeeIdAsync(employeeId))
+                var query = (await _unitOfWork.Application.GetAppliJobByEmployeeIdAsync(employeeId))
                             .AsQueryable();
 
                 var totalRecords = query.Count();

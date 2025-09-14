@@ -15,5 +15,7 @@ namespace Application.Interfaces.IRepositories
 
         Task<Bookmark> GetByIdAsync(int bookmarkId);
 
+        Task<int> CountBookmarkJobsByEmployeeIdAsync(int employeeId);
+
     }
 }

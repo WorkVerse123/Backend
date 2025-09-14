@@ -16,11 +16,11 @@ namespace Infrastructure.Repositories
         {
         }
 
-        // lấy danh sách ứng tuyển theo employeeId
-        public async Task<IEnumerable<Domain.Entities.Application>> GetByEmployeeIdAsync(int employeeId)
+        // lấy danh sách ứng tuyển gom cac chi tiet cong viec theo employeeId
+        public async Task<IEnumerable<Domain.Entities.Application>> GetAppliJobByEmployeeIdAsync(int employeeId)
         {
             var result = await _dbSet
-                 .Include(b => b.Job)
+                 .Include(b => b.Job)       
                  .ThenInclude(j => j.JobCategoryMappings)
                  .ThenInclude(m => m.Category)
                  .Where(b => b.EmployeeId == employeeId)
@@ -67,7 +67,22 @@ namespace Infrastructure.Repositories
 
             return result;
         }
+        // lấy danh sách ứng tuyển gom cac chi tiet nguoi tuyen dung theo employeeId
+        public async Task<IEnumerable<Domain.Entities.Application>> GetAppliEmployerByEmployeeIdAsync(int employeeId)
+        {
+            var result = await _dbSet
+                 .Include(b => b.Job)       
+                 .ThenInclude(j => j.Employer)
+                 .Where(b => b.EmployeeId == employeeId)
+                 .OrderByDescending(b => b.AppliedAt)
+                 .ToListAsync();
 
-
+            return result;
+        }
+        // Đếm số lượng ứng tuyển theo employeeId
+        public async Task<int> CountApplicationsByEmployeeIdAsync(int employeeId)
+        {
+            return await _dbSet.Where(c => c.EmployeeId == employeeId).CountAsync();
+        }
     }
 }

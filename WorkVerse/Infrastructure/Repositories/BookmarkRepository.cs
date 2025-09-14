@@ -47,5 +47,10 @@ namespace Infrastructure.Repositories
             return result;
         }
 
+        // Đếm số lượng ứng tuyển theo employeeId
+        public async Task<int> CountBookmarkJobsByEmployeeIdAsync(int employeeId)
+        {
+            return await _dbSet.Where(c=> c.EmployeeId == employeeId).CountAsync();
+        }
     }
 }

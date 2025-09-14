@@ -33,6 +33,7 @@ namespace WorkVerseAPI
             builder.Services.AddAutoMapper(typeof(EmployerProfileMapper));
             builder.Services.AddAutoMapper(typeof(ReportProfile));
             builder.Services.AddAutoMapper(typeof(FeedbackProfile));
+            builder.Services.AddAutoMapper(typeof(BlogProfile));
 
 
             // Add Authentication

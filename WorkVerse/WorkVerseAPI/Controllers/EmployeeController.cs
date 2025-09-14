@@ -305,6 +305,31 @@ namespace WorkVerseAPI.Controllers
                 return StatusCode(500, new ApiResponse<object>(ex.Message, 500));
             }
         }
+
+        // GET/employee-dashboard/{id}
+        [HttpGet("/employee-dashboard/{id}")]
+        public async Task<IActionResult> GetEmployeeDashBoardById([FromRoute] int id, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
+        {
+            try
+            {
+
+                var result = await _employeeProfileService.GetEmployeeDashBoardAsync(id,pageNumber,pageSize);
+                
+                return Ok(new ApiResponse<EmployeeDashboardDTOResponse>("Employee dashboard data (mock)", result, 200));
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new ApiResponse<object>(ex.Message, 400));
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new ApiResponse<object>(ex.Message, 404));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ApiResponse<object>(ex.Message, 500));
+            }
+        }
     }
 
 }

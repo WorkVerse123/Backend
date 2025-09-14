@@ -36,6 +36,11 @@ namespace Application.Mappers
            .ForMember(dest => dest.EmployeeFullName, opt => opt.MapFrom(src => src.Employee.FullName))
            .ForMember(dest => dest.EmployeeGender, opt => opt.MapFrom(src => src.Employee.Gender))
            .ForMember(dest => dest.AppliedAt, opt => opt.MapFrom(src => src.AppliedAt));
+
+            CreateMap<Domain.Entities.Application, EmployeeApplicationDTO>()
+    .ForMember(dest => dest.Job, opt => opt.MapFrom(src => src.Job))
+    .ForMember(dest => dest.Employer, opt => opt.MapFrom(src => src.Job.Employer));
+
         }
     }
 }

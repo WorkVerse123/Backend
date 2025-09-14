@@ -50,6 +50,10 @@ namespace Application.Mappers
             .ForMember(dest => dest.JobStatus, opt => opt.MapFrom(src => src.Status));
 
             CreateMap<JobDTORequest, Job>();
+
+            CreateMap<Job, JobDTO>()
+                .ForMember(dest => dest.JobSalaryMin, opt => opt.MapFrom(src => src.SalaryMin))
+                .ForMember(dest => dest.JobSalaryMax, opt => opt.MapFrom(src => src.SalaryMax));
         }
     }
 }

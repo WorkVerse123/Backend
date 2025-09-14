@@ -21,4 +21,43 @@ namespace Application.DTOs.Response
         public string? WorkExperience { get; set; }
         public string? Mode { get; set; }
     }
+
+    public class EmployeeDashboardDTOResponse
+    {
+        public List<DashboardStat> Stats { get; set; } = new();
+        public PaginatedResponse Paging { get; set; }
+        public List<EmployeeApplicationDTO> Applications { get; set; } = new();
+    }
+
+    public class DashboardStat
+    {
+        public string Label { get; set; } = null!;
+        public int Value { get; set; }
+    }
+
+    public class EmployeeApplicationDTO
+    {
+        public int ApplicationId { get; set; }
+        public JobDTO Job { get; set; } = null!;
+        public EmployerInformationDTO Employer { get; set; } = null!;
+        public int EmployeeId { get; set; }
+        public string Status { get; set; } = null!;
+        public DateTime AppliedAt { get; set; }
+    }
+
+    public class JobDTO
+    {
+        public int JobId { get; set; }
+        public string Title { get; set; } = null!;
+        public string Location { get; set; } = null!;
+        public decimal JobSalaryMin { get; set; }
+        public decimal JobSalaryMax { get; set; }
+        public string JobTime { get; set; } = null!;
+    }
+
+    public class EmployerInformationDTO
+    {
+        public int EmployerId { get; set; }
+        public string CompanyName { get; set; } = null!;
+    }
 }
