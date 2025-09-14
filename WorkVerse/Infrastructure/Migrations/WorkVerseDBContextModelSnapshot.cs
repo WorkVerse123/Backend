@@ -387,6 +387,11 @@ namespace Infrastructure.Migrations
                     b.Property<DateTime>("ExpiredAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<bool>("IsPriority")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
                     b.Property<string>("JobTime")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");

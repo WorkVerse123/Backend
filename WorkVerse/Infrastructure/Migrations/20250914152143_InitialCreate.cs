@@ -458,7 +458,8 @@ namespace Infrastructure.Migrations
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETDATE()"),
                     ExpiredAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Status = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
-                    SearchName = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    SearchName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsPriority = table.Column<bool>(type: "bit", nullable: false, defaultValue: false)
                 },
                 constraints: table =>
                 {

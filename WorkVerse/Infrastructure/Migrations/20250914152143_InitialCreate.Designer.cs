@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(WorkVerseDBContext))]
-    [Migration("20250913122719_InitialCreate")]
+    [Migration("20250914152143_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -389,6 +389,11 @@ namespace Infrastructure.Migrations
 
                     b.Property<DateTime>("ExpiredAt")
                         .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsPriority")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
 
                     b.Property<string>("JobTime")
                         .IsRequired()
