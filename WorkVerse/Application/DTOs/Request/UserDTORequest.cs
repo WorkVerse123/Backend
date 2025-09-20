@@ -8,8 +8,8 @@ namespace Application.DTOs.Request
 {
     public class UserDTORequest
     {
-        public string Email { get; set; } = null!;
-        public string PhoneNumber { get; set; } = null!;
+        public string Email { get; set; }
+        public string PhoneNumber { get; set; }
         public string Password { get; set; } = null!;
         public int RoleId { get; set; }
         public string Status { get; set; } = "active";

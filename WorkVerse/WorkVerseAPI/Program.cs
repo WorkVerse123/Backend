@@ -6,6 +6,9 @@ using Application.Mappers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
+using Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace WorkVerseAPI
 {
@@ -21,6 +24,9 @@ namespace WorkVerseAPI
             {
                 containerBuilder.RegisterModule(new ServiceRegistration(builder.Configuration));
             });
+
+            builder.Services.AddDbContext<WorkVerseDBContext>(options =>
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 
             //Add mapper as the DI (It will seek all asembly have in mapper)

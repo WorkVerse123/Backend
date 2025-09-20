@@ -54,9 +54,7 @@ namespace SchoolMedicalSystem.Application.Services
             if (!existsRole)
                 return null;
             // Kiểm tra tồn tại email hoặc phone
-            var exists = await _unitOfWork.User.ExistsAsync(userDto.Email, userDto.PhoneNumber);
-            if (exists)
-                return null;
+
 
             var userEntity = _mapper.Map<User>(userDto);
             userEntity.PasswordHash = EncryptPassword(userDto.Password);
@@ -76,5 +74,14 @@ namespace SchoolMedicalSystem.Application.Services
         {
             return BCrypt.Net.BCrypt.Verify(password, hashPassword);
         }
+
+        public async Task<bool> ExsitedUser(string? email, string? phoneNumber)
+        {
+            var exists = await _unitOfWork.User.ExistsAsync(email, phoneNumber);
+            if (exists)
+                return false;
+            else
+                return true;
+        }
     }
-    }
+}

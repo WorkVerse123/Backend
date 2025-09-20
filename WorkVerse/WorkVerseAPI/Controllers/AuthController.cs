@@ -46,11 +46,11 @@ namespace WorkVerseAPI.Controllers
             if (!isValid)
                 return BadRequest(new ApiResponse<object>(error, 400));
             string account = request.Email ?? request.PhoneNumber;
-            var existingUser = await _authService.ValidateUserAsync(account, request.Password);
 
-            if (existingUser != null)
+            var exists = await _authService.ExsitedUser(request.Email, request.PhoneNumber);
+            if (!exists)
             {
-                return Conflict(new ApiResponse<object>("Account already exists.", 409));
+                return Conflict(new ApiResponse<object>("Email or Phone number already exists.", 409));
             }
 
             var newUser = await _authService.CreatedAccountAsync(request);
