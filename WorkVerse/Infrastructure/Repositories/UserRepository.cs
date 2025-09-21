@@ -16,10 +16,10 @@ namespace Infrastructure.Repositories
         {
         }
 
-        public async Task<bool> ExistsAsync(string email, string phoneNumber)
+        public async Task<bool> ExistsAsync(string email)
         {
             return await _dbSet.AnyAsync(u =>
-                u.Email == email || u.PhoneNumber == phoneNumber);
+                u.Email == email);
         }
 
         public async Task<User?> GetByEmailAsync(string email)
