@@ -24,6 +24,24 @@ namespace Application.Servicies
             _mapper = mapper;
             _logger = logger;
         }
+
+        public async Task<StaffProfileDTOResponse> Create(StaffProfileDTORequest request)
+        {
+            try
+            {
+             var entity = _mapper.Map<StaffProfile>(request);
+                await _unitOfWork.StaffProfile.AddAsync(entity);
+                await _unitOfWork.SaveChangesAsync();
+                var dto = _mapper.Map<StaffProfileDTOResponse>(entity);
+                return dto;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error creating StaffProfile");
+                throw;
+            }
+        }
+
         public async Task<StaffProfileDTOResponse> Get(int id)
         {
             try

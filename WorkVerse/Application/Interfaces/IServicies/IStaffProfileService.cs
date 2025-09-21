@@ -11,6 +11,7 @@ namespace Application.Interfaces.IServicies
     public interface IStaffProfileService
     {
         Task<StaffProfileDTOResponse> Get(int id);
+        Task<StaffProfileDTOResponse> Create(StaffProfileDTORequest request);
         Task<StaffProfileDTOResponse> Update(StaffProfileDTORequest staffProfile);
     }
 }
