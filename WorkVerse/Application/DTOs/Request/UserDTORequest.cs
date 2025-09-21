@@ -23,6 +23,7 @@ namespace Application.DTOs.Request
     public class UserChangePasswordDTORequest
     {
         public int UserId { get; set; }
+        public string Email { get; set; }
         public string CurrentPassword { get; set; } = null!;
         public string NewPassword { get; set; } = null!;
     }

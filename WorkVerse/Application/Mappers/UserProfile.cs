@@ -30,7 +30,6 @@ namespace Application.Mappers
             // UserChangePasswordDTORequest -> User (only map password)
             CreateMap<UserChangePasswordDTORequest, User>()
                 .ForMember(dest => dest.PasswordHash, opt => opt.Ignore())
-                .ForMember(dest => dest.Email, opt => opt.Ignore())
                 .ForMember(dest => dest.PhoneNumber, opt => opt.Ignore())
                 .ForMember(dest => dest.RoleId, opt => opt.Ignore())
                 .ForMember(dest => dest.CreatedAt, opt => opt.Ignore())

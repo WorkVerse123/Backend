@@ -70,7 +70,7 @@ namespace WorkVerseAPI.Controllers
         public async Task<IActionResult> ChangePassword([FromBody] UserChangePasswordDTORequest request)
         {
             var (isValid, error) = UserValidationHelper.ValidateChangePassword(request);
-            var user = await _authService.ValidateUserAsync(request.UserId.ToString(), request.CurrentPassword);
+            var user = await _authService.ValidateUserAsync(request.Email, request.CurrentPassword);
             if (user == null)
             {
                 return Unauthorized(new ApiResponse<object>("Old password is incorrect.", 401));
