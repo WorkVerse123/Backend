@@ -40,6 +40,7 @@ namespace Application.Mappers
                     .Select(m => m.Category.CategoryName)
                     .ToList()
             ))
+            .ForMember(dest => dest.EmployerId, opt => opt.MapFrom(src => src.EmployerId))
             .ForMember(dest => dest.JobDescription, opt => opt.MapFrom(src => src.Description))
             .ForMember(dest => dest.JobRequirements, opt => opt.MapFrom(src => src.Requirements))
             .ForMember(dest => dest.JobLocation, opt => opt.MapFrom(src => src.Location))

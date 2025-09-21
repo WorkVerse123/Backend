@@ -196,58 +196,38 @@ namespace WorkVerseAPI.Controllers
             }
         }
 
-        //// PUT /employers/{id}/jobs/{job_id}/status
-        //[HttpPut("{id}/jobs/{job_id}/status")]
-        //public async Task<IActionResult> UpdateJobStatus(int id, int job_id, [FromBody] string statusDto)
-        //{
-        //    try
-        //    {
-        //        if (id <= 0 || job_id <= 0)
-        //        {
-        //            return BadRequest(new ApiResponse<object>("Employer ID and Job ID must be greater than 0", 400));
-        //        }
+        // PUT /employers/{id}/jobs/{job_id}/status
+        [HttpPut("{id}/jobs/{job_id}/status")]
+        public async Task<IActionResult> UpdateJobStatus(int id, int job_id, [FromBody] string statusDto)
+        {
+            try
+            {
+                if (id <= 0 || job_id <= 0)
+                {
+                    return BadRequest(new ApiResponse<object>("Employer ID and Job ID must be greater than 0", 400));
+                }
 
-        //        if (string.IsNullOrWhiteSpace(statusDto))
-        //        {
-        //            return BadRequest(new ApiResponse<object>("Status is required.", 400));
-        //        }
+                if (string.IsNullOrWhiteSpace(statusDto))
+                {
+                    return BadRequest(new ApiResponse<object>("Status is required.", 400));
+                }
 
-        //        var allowedStatus = new[] { "Open", "Closed", "Draft" };
-        //        if (!allowedStatus.Contains(statusDto))
-        //        {
-        //            return BadRequest(new ApiResponse<object>($"Status must be one of: {string.Join(", ", allowedStatus)}.", 400));
-        //        }
-
-        //        var job = await _jobService.GetByIdAsync(job_id);
-        //        if (job == null || job.JobId != job_id || job.EmployerId != id)
-        //        {
-        //            return NotFound(new ApiResponse<object>($"Job with ID {job_id} for employer {id} not found.", 404));
-        //        }
-
-        //        var updated = await _jobService.ChangeStatusAsynce(job_id, statusDto);
-        //        if (!updated)
-        //        {
-        //            return StatusCode(500, new ApiResponse<object>("Failed to update job status.", 500));
-        //        }
-
-        //        return Ok(new ApiResponse<object>("Job status updated successfully.", null, 200));
-        //    }
-        //    catch (KeyNotFoundException ex)
-        //    {
-        //        return NotFound(new ApiResponse<object>(ex.Message, 404));
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return StatusCode(500, new ApiResponse<object>(ex.Message, 500));
-        //    }
-        //}
-
-        //// PUT /applications/{id}/status
-        //[HttpPut("/applications/{id}/status")]
-        //public IActionResult UpdateApplicationStatus(int id, [FromBody] object statusDto)
-        //{
-        //    // TODO: Update application status by id
-        //    return NoContent();
-        //}
+                var job = await _jobService.GetJobByIdAsync(job_id);
+                if (job == null || job.EmployerId != id)
+                {
+                    return NotFound(new ApiResponse<object>($"Job with ID {job_id} for employer {id} not found.", 404));
+                }
+                var updated = await _jobService.UpdateJobStatusAsync(job_id, statusDto);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new ApiResponse<object>(ex.Message, 404));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ApiResponse<object>(ex.Message, 500));
+            }
+            return Ok(new ApiResponse<object>("Job status updated successfully.", null, 200));
+        }
     }
 }
