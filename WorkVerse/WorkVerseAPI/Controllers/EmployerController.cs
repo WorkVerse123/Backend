@@ -1,7 +1,9 @@
 ﻿using Application.DTOs.Request;
 using Application.DTOs.Response;
 using Application.Helper;
+using Application.Interfaces.IServices;
 using Application.Interfaces.IServicies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WorkVerseAPI.Models;
@@ -13,14 +15,17 @@ namespace WorkVerseAPI.Controllers
     public class EmployerController : ControllerBase
     {
         private readonly IEmployerProfileService _employerProfileService;
+        private readonly IAuthService _authService;
         private readonly IJobService _jobService;
 
         public EmployerController(
             IEmployerProfileService employerProfileService,
-            IJobService jobService)
+            IJobService jobService,
+            IAuthService authService)
         {
             _employerProfileService = employerProfileService;
             _jobService = jobService;
+            _authService = authService;
         }
 
         // GET /employers/{id}
@@ -110,6 +115,7 @@ namespace WorkVerseAPI.Controllers
 
         // POST /employers/{id}/jobs
         [HttpPost("{id}/jobs")]
+        [Authorize]
         public async Task<IActionResult> CreateJobForEmployer(int id, [FromBody] JobDTORequest jobDto)
         {
             try
@@ -124,9 +130,19 @@ namespace WorkVerseAPI.Controllers
                 {
                     return BadRequest(new ApiResponse<object>(error, 400));
                 }
+                // Lay user Id
+                var userIdClaim = User.FindFirst("UserId")?.Value;
+                if (string.IsNullOrEmpty(userIdClaim))
+                {
+                    return Unauthorized(new ApiResponse<object>("UserId not found in token", 401));
+                }
+
+                var userId = int.Parse(userIdClaim);
+                var isPremium = await _authService.IsPremiumAsync(userId);
 
                 // Ensure the employerId is set in the DTO
                 jobDto.EmployerId = id;
+                jobDto.IsPriority = isPremium;
 
                 await _jobService.AddJobAsync(jobDto);
 

@@ -21,6 +21,7 @@ namespace Application.DTOs.Response
         public decimal JobSalaryMin { get; set; }
         public decimal JobSalaryMax { get; set; }
         public string JobTime { get; set; } = null!;
+        public bool IsPriority { get; set; } = false;
         public DateTime JobCreatedAt { get; set; }
         public DateTime JobExpiredAt { get; set; }
         public string JobStatus { get; set; } = null!;
@@ -37,6 +38,8 @@ namespace Application.DTOs.Response
         public decimal JobSalaryMin { get; set; }
         public decimal JobSalaryMax { get; set; }
         public string JobTime { get; set; } = null!;
+        public bool IsPriority { get; set; } = false;
+
         public DateTime JobCreatedAt { get; set; }
         public DateTime JobExpiredAt { get; set; }
         public string JobStatus { get; set; } = null!;

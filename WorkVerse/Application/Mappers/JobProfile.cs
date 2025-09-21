@@ -26,6 +26,7 @@ namespace Application.Mappers
             .ForMember(dest => dest.JobSalaryMin, opt => opt.MapFrom(src => src.SalaryMin))
             .ForMember(dest => dest.JobSalaryMax, opt => opt.MapFrom(src => src.SalaryMax))
             .ForMember(dest => dest.JobTime, opt => opt.MapFrom(src => src.JobTime))
+            .ForMember(dest => dest.IsPriority, opt => opt.MapFrom(src => src.IsPriority))
             .ForMember(dest => dest.JobCreatedAt, opt => opt.MapFrom(src => src.CreatedAt))
             .ForMember(dest => dest.JobExpiredAt, opt => opt.MapFrom(src => src.ExpiredAt))
             .ForMember(dest => dest.JobStatus, opt => opt.MapFrom(src => src.Status));
@@ -47,6 +48,7 @@ namespace Application.Mappers
             .ForMember(dest => dest.JobTime, opt => opt.MapFrom(src => src.JobTime))
             .ForMember(dest => dest.JobCreatedAt, opt => opt.MapFrom(src => src.CreatedAt))
             .ForMember(dest => dest.JobExpiredAt, opt => opt.MapFrom(src => src.ExpiredAt))
+            .ForMember(dest => dest.IsPriority, opt => opt.MapFrom(src => src.IsPriority))
             .ForMember(dest => dest.JobStatus, opt => opt.MapFrom(src => src.Status));
 
             CreateMap<JobDTORequest, Job>();

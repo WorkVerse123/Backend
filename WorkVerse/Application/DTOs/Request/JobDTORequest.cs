@@ -17,6 +17,7 @@ namespace Application.DTOs.Request
         public decimal SalaryMin { get; set; }
         public decimal SalaryMax { get; set; }
         public string JobTime { get; set; } = null!;
+        public bool IsPriority { get; set; } = false;
         public DateTime CreatedAt { get; set; }
         public DateTime ExpiredAt { get; set; }
         public string Status { get; set; } = null!;
