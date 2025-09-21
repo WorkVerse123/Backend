@@ -37,4 +37,9 @@ namespace Application.DTOs.Request
     {
         public int UserId { get; set; }
     }
+    public class UserUpdateStatusDTORequest
+    {
+        public int UserId { get; set; }
+        public string NewStatus { get; set; } = null!;
+    }
 }

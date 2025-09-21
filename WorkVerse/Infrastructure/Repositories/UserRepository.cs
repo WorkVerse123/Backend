@@ -63,5 +63,16 @@ namespace Infrastructure.Repositories
                 .AnyAsync(us => us.UserId == userId && us.IsActive);
         }
 
+        public Task<bool> UpdateStatusAsync(int userId, string newStatus)
+        {
+            return Task.Run(async () =>
+            {
+                var user = await _dbSet.FindAsync(userId);
+                if (user == null)
+                    return false;
+                user.Status = newStatus;
+                return true;
+            });
+        }
     }
 }

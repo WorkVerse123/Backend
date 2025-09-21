@@ -49,6 +49,7 @@ namespace WorkVerseAPI.Configurations
             builder.RegisterType<FeedbackService>().As<IFeedbackService>().InstancePerLifetimeScope();
             builder.RegisterType<BlogService>().As<IBlogService>().InstancePerLifetimeScope();
             builder.RegisterType<StaffProfileService>().As<IStaffProfileService>().InstancePerLifetimeScope();
+            builder.RegisterType<UserService>().As<IUserService>().InstancePerLifetimeScope();
         }
     }
 }
