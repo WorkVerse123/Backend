@@ -32,6 +32,7 @@ namespace Application.Interfaces.IRepositories
 
         IBlogRepository Blog { get; }   
         INotificationRepository Notification { get; }
+        IStaffProfileRepository StaffProfile { get; }
 
     }
 }

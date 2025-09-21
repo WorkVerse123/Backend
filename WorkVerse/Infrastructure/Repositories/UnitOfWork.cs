@@ -37,6 +37,7 @@ namespace Infrastructure.Repositories
             Feedback = new FeedbackRepository(_dbContext);
             Blog = new BlogRepository(_dbContext);
             Notification = new NotificationRepository(_dbContext);
+            StaffProfile = new StaffProfileRepository(_dbContext);
         }
 
         public async Task BeginTransactionAsync()
@@ -160,5 +161,6 @@ namespace Infrastructure.Repositories
 
         public IBlogRepository Blog { get; private set; }
         public INotificationRepository Notification { get; private set; }
+        public IStaffProfileRepository StaffProfile { get; private set; }
     }
 }
