@@ -52,6 +52,22 @@ namespace SchoolMedicalSystem.Application.Services
             return _mapper.Map<UserDTORespone>(userEntity);
         }
 
+        public async Task<bool> UpdatePasswordAsync(UserChangePasswordDTORequest user)
+        {
+            var newPasswordHash = EncryptPassword(user.NewPassword);
+            var flag =  await _unitOfWork.User.UpdatePasswordAsynce(user.UserId, newPasswordHash);
+            if (flag)
+            {
+                await _unitOfWork.SaveChangesAsync();
+                return true;
+            }
+            return false;
+        }
+
+        public Task<bool> IsPremiumAsync(int userId)
+        {
+            return _unitOfWork.User.IsPremiumAsync(userId);
+        }
         public string EncryptPassword(string password)
         {
             return BCrypt.Net.BCrypt.HashPassword(password);
@@ -78,5 +94,6 @@ namespace SchoolMedicalSystem.Application.Services
             else
                 return false;
         }
+
     }
 }

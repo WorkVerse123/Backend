@@ -53,4 +53,22 @@ public static class UserValidationHelper
 
         return (true, string.Empty);
     }
+    public static (bool IsValid, string ErrorMessage) ValidateChangePassword(UserChangePasswordDTORequest request)
+    {
+        if (request == null)
+            return (false, "Request is null.");
+        // Current Password
+        if (string.IsNullOrWhiteSpace(request.CurrentPassword))
+            return (false, "Current password is required.");
+        //if (request.CurrentPassword.Length < 6)
+        //    return (false, "Current password must be at least 6 characters.");
+        // New Password
+        if (string.IsNullOrWhiteSpace(request.NewPassword))
+            return (false, "New password is required.");
+        //if (request.NewPassword.Length < 6)
+        //    return (false, "New password must be at least 6 characters.");
+        if (request.NewPassword == request.CurrentPassword)
+            return (false, "New password must be different from current password.");
+        return (true, string.Empty);
+    }
 }

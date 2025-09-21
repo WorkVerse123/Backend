@@ -13,5 +13,7 @@ namespace Application.Interfaces.IRepositories
         Task<bool> ExistsAsync(string email);
         Task<bool> ExistByIdAsync(int userId);
         Task<string?> GetUserFullNameByIdAsync(int id);
+        Task<bool> UpdatePasswordAsynce(int userId, string newPasswordHash);
+        Task<bool> IsPremiumAsync(int userId);
     }
 }

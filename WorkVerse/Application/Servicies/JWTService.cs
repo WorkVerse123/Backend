@@ -26,10 +26,10 @@ namespace Application.Services
 
             var claims = new List<Claim>
         {
-            //new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()),
-            //new Claim(ClaimTypes.Name, user.LastName ?? ""),
-            //new Claim(ClaimTypes.Role, user.RoleName ?? "User"),
-            new Claim("RoleId", user.RoleId.ToString() ?? "5")
+            new Claim("UserId", user.UserId.ToString() ?? ""),
+            new Claim("Email", user.Email ?? ""),
+            new Claim("RoleId", user.RoleId.ToString() ?? "5"),
+            new Claim("IsPremium", user.IsPremium.ToString() ?? "false")
         };
 
             var tokenDescriptor = new SecurityTokenDescriptor

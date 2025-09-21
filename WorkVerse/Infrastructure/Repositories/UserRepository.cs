@@ -44,5 +44,24 @@ namespace Infrastructure.Repositories
                             : null))
                 .FirstOrDefaultAsync();
         }
+
+        public Task<bool> UpdatePasswordAsynce(int userId, string newPasswordHash)
+        {
+            return Task.Run(async () =>
+            {
+                var user = await _dbSet.FindAsync(userId);
+                if (user == null)
+                    return false;
+                user.PasswordHash = newPasswordHash;
+                return true;
+            });
+        }
+
+        public Task<bool> IsPremiumAsync(int userId)
+        {
+            return _context.UserSubscriptions
+                .AnyAsync(us => us.UserId == userId && us.IsActive);
+        }
+
     }
 }

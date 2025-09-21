@@ -15,7 +15,8 @@ namespace Application.Interfaces.IServices
         Task<UserDTORespone?> CreatedAccountAsync(UserDTORequest user);
         Task<bool> ExsitedUser(string? email, string? phoneNumber);
         Task<bool> ExsitedRole(int roleId);
-
+        Task<bool> UpdatePasswordAsync(UserChangePasswordDTORequest user);
+        Task<bool> IsPremiumAsync(int userId);
         bool VerifyPassword (string password, string hashPassword);
         string EncryptPassword(string password);
     }

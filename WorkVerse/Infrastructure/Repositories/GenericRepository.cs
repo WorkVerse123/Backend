@@ -1,4 +1,5 @@
 ﻿using Application.Interfaces.IRepositories;
+using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -11,10 +12,10 @@ namespace Infrastructure.Repositories
 {
     public class GenericRepository<T> : IGenericRepository<T> where T : class
     {
-        protected readonly DbContext _context;
+        protected readonly WorkVerseDBContext _context;
         protected readonly DbSet<T> _dbSet;
 
-        public GenericRepository(DbContext context)
+        public GenericRepository(WorkVerseDBContext context)
         {
             _context = context;
             _dbSet = _context.Set<T>();
