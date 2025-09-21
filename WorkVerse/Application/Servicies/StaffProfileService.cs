@@ -63,12 +63,13 @@ namespace Application.Servicies
                     var entity = _mapper.Map<StaffProfile>(staffProfile);
 
 
-                _unitOfWork.StaffProfile.Update(entity);
+                    _unitOfWork.StaffProfile.Update(entity);
 
-                await _unitOfWork.SaveChangesAsync();
+                    await _unitOfWork.SaveChangesAsync();
 
-                var dto = _mapper.Map<StaffProfileDTOResponse>(entity);
-                return dto;
+                    var dto = _mapper.Map<StaffProfileDTOResponse>(entity);
+                    return dto;
+                }
             }
             catch (Exception ex)
             {
