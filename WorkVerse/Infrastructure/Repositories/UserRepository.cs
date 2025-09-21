@@ -27,13 +27,6 @@ namespace Infrastructure.Repositories
             return await _dbSet
                 .FirstOrDefaultAsync(u => u.Email == email);
         }
-
-        public async Task<User?> GetByPhoneNumberAsync(string phoneNumber)
-        {
-            return await _dbSet
-                .FirstOrDefaultAsync(u => u.PhoneNumber == phoneNumber);
-        }
-
         public async Task<bool> ExistByIdAsync(int userId)
         {
             return await _dbSet.AnyAsync(u => u.UserId == userId);
@@ -51,7 +44,5 @@ namespace Infrastructure.Repositories
                             : null))
                 .FirstOrDefaultAsync();
         }
-
-
     }
 }

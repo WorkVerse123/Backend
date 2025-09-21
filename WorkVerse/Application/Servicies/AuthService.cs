@@ -28,16 +28,9 @@ namespace SchoolMedicalSystem.Application.Services
 
         public async Task<UserDTORespone?> ValidateUserAsync(string account, string password)
         {
-            // account có thể là email hoặc phone number
             User? user = null;
-            if (account.Contains('@'))
-            {
-                user = await _unitOfWork.User.GetByEmailAsync(account);
-            }
-            else
-            {
-                user = await _unitOfWork.User.GetByPhoneNumberAsync(account);
-            }
+
+            user = await _unitOfWork.User.GetByEmailAsync(account);
 
             if (user == null)
                 return null;
@@ -50,12 +43,6 @@ namespace SchoolMedicalSystem.Application.Services
 
         public async Task<UserDTORespone?> CreatedAccountAsync(UserDTORequest userDto)
         {
-            var existsRole = await _unitOfWork.Role.ExistsByIdAsync(userDto.RoleId);
-            if (!existsRole)
-                return null;
-            // Kiểm tra tồn tại email hoặc phone
-
-
             var userEntity = _mapper.Map<User>(userDto);
             userEntity.PasswordHash = EncryptPassword(userDto.Password);
 
@@ -77,11 +64,19 @@ namespace SchoolMedicalSystem.Application.Services
 
         public async Task<bool> ExsitedUser(string? email, string? phoneNumber)
         {
-            var exists = await _unitOfWork.User.ExistsAsync(email, phoneNumber);
+            var exists = await _unitOfWork.User.ExistsAsync(email);
             if (exists)
-                return false;
-            else
                 return true;
+            else
+                return false;
+        }
+        public async Task<bool> ExsitedRole(int roleId)
+        {
+            var exists = await _unitOfWork.Role.ExistsByIdAsync(roleId);
+            if (exists)
+                return true;
+            else
+                return false;
         }
     }
 }

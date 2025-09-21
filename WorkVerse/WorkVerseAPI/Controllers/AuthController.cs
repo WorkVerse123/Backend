@@ -27,7 +27,7 @@ namespace WorkVerseAPI.Controllers
             var (isValid, error) = UserValidationHelper.ValidateLogin(request);
             if (!isValid)
                 return BadRequest(new ApiResponse<object>(error, 400));
-            string account = request.Email ?? request.PhoneNumber;
+            string account = request.Email;
             var user = await _authService.ValidateUserAsync(account, request.Password);
 
             if (user == null)
@@ -47,10 +47,15 @@ namespace WorkVerseAPI.Controllers
                 return BadRequest(new ApiResponse<object>(error, 400));
             string account = request.Email ?? request.PhoneNumber;
 
-            var exists = await _authService.ExsitedUser(request.Email, request.PhoneNumber);
-            if (!exists)
+            var existsUser = await _authService.ExsitedUser(request.Email, request.PhoneNumber);
+            if (existsUser)
             {
-                return Conflict(new ApiResponse<object>("Email or Phone number already exists.", 409));
+                return Conflict(new ApiResponse<object>("Email already exists.", 409));
+            }
+            var existsRole = await _authService.ExsitedRole(request.RoleId);
+            if (existsRole)
+            {
+                return BadRequest(new ApiResponse<object>("RoleId not found.", 400));
             }
 
             var newUser = await _authService.CreatedAccountAsync(request);

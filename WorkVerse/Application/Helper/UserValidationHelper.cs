@@ -9,19 +9,11 @@ public static class UserValidationHelper
     {
         if (request == null)
             return (false, "Request is null.");
-        if (string.IsNullOrWhiteSpace(request.Email) && string.IsNullOrWhiteSpace(request.PhoneNumber))
-            return (false, "Either Email or Phone number is required.");
+        if (string.IsNullOrWhiteSpace(request.Email))
+            return (false, "Email is required.");
 
         if (!string.IsNullOrWhiteSpace(request.Email) && !request.Email.Contains("@"))
             return (false, "Email is not valid.");
-
-        if (!string.IsNullOrWhiteSpace(request.PhoneNumber))
-        {
-            if (request.PhoneNumber.Length != 10)
-                return (false, "Phone number must be 10 digits.");
-            if (!request.PhoneNumber.All(char.IsDigit))
-                return (false, "Phone number must contain only digits.");
-        }
         //if (request.Password.Length < 6)
         //    return (false, "Password must be at least 6 characters.");
         return (true, string.Empty);

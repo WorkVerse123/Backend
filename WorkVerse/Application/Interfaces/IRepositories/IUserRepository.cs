@@ -10,10 +10,8 @@ namespace Application.Interfaces.IRepositories
     public interface IUserRepository : IGenericRepository<User>
     {
         Task<User?> GetByEmailAsync(string email);
-        Task<User?> GetByPhoneNumberAsync(string phoneNumber);
-        Task<bool> ExistsAsync(string email, string phoneNumber);
+        Task<bool> ExistsAsync(string email);
         Task<bool> ExistByIdAsync(int userId);
-
         Task<string?> GetUserFullNameByIdAsync(int id);
     }
 }
