@@ -13,7 +13,8 @@
 	  <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="10.0.0" />
 	  <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.16" />
 	  <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.16" />
-
+	  <None Include="Prompts\EmployeePrompt.txt" CopyToOutputDirectory="Always" />
+	  <None Include="Prompts\EmployerPrompt.txt" CopyToOutputDirectory="Always" />
   </ItemGroup>
 
   <ItemGroup>

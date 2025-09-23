@@ -1,4 +1,5 @@
-﻿using Domain.Entities;
+﻿using Application.DTOs.Request;
+using Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,5 +22,8 @@ namespace Application.Interfaces.IRepositories
 
         Task<string?> GetJobTitleByIdAsync(int id);
 
+        Task<IEnumerable<Job>> SearchJobByAIResult(JobQuery jobQuery);
+
+        Task<IEnumerable<Job>> SearchJobByEmployerAIResult(JobQuery jobQuery, EmployerQuery employerQuery);
     }
 }

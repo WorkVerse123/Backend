@@ -214,5 +214,19 @@ namespace Application.Servicies
             }
         }
 
+        public async Task<IEnumerable<EmployeeAIDTOResponse>> SearchEmployeeByAIResult(EmployeeQuery employeeQuery)
+        {
+            try
+            {
+                var employees = await _unitOfWork.EmployeeProfile.SearchEmployeeByAIResult(employeeQuery) ?? Enumerable.Empty<EmployeeProfile>();
+                return _mapper.Map<IEnumerable<EmployeeAIDTOResponse>>(employees);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error searching employers by AI result");
+                throw;
+            }
+        }
+
     }
 }

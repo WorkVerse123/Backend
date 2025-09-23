@@ -1,4 +1,5 @@
-﻿using Domain.Entities;
+﻿using Application.DTOs.Request;
+using Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +17,8 @@ namespace Application.Interfaces.IRepositories
         Task<IEnumerable<EmployerProfile>> GetAllEmployersAsync();
         Task<int> CountAllEmployersAsync();
         Task<bool> ExistsByUserIdAsync(int userId);
+        Task<IEnumerable<EmployerProfile>> SearchEmployerByAIResult(EmployerQuery jobQuery);
+
 
     }
 }

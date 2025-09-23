@@ -11,6 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace Application.Servicies
 {
     public class JobService : IJobService
@@ -154,6 +155,34 @@ namespace Application.Servicies
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error changing status of Job with ID: {Id}", jobId);
+                throw;
+            }
+        }
+
+        public async Task<IEnumerable<JobAIDTOResponse>> SearchJobByAIResult(JobQuery jobQuery)
+        {
+            try
+            {
+                var jobs = await _unitOfWork.Job.SearchJobByAIResult(jobQuery) ?? Enumerable.Empty<Job>();
+                return _mapper.Map<IEnumerable<JobAIDTOResponse>>(jobs);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error searching jobs by AI result");
+                throw;
+            }
+        }
+
+        public async Task<IEnumerable<JobWithEmployerAIDTOResponse>> SearchJobByEmployerAIResult(JobQuery jobQuery, EmployerQuery employerQuery)
+        {
+            try
+            {
+                var jobs = await _unitOfWork.Job.SearchJobByEmployerAIResult(jobQuery, employerQuery) ?? Enumerable.Empty<Job>(); ;
+                return _mapper.Map<IEnumerable<JobWithEmployerAIDTOResponse>>(jobs);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error searching jobs with employer by AI result");
                 throw;
             }
         }
