@@ -1,4 +1,4 @@
-
+﻿
 using Autofac.Extensions.DependencyInjection;
 using Autofac;
 using WorkVerseAPI.Configurations;
@@ -9,6 +9,7 @@ using Microsoft.IdentityModel.Tokens;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Application.Servicies;
 
 namespace WorkVerseAPI
 {
@@ -66,6 +67,11 @@ namespace WorkVerseAPI
             // Add services to the container.
             builder.Services.AddControllers();
 
+            // API key from appsettings
+            var apiKey = builder.Configuration["Google:GeminiApiKey"];
+
+            // Đăng ký KeywordService như 1 singleton
+            builder.Services.AddSingleton<AIService>(sp => new AIService(apiKey));
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();

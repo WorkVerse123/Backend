@@ -19,5 +19,6 @@ namespace Application.Interfaces.IServicies
         Task<CandidateListDTOResponse> GetEmployeeListAsync(int pageNumber, int pageSize);
         Task<EmployeeDashboardDTOResponse> GetEmployeeDashBoardAsync(int employeeId ,int pageNumber, int pageSize);
         Task<int?> GetEmployeeIdByUserIdAsync(int userId);
+        Task<IEnumerable<EmployeeAIDTOResponse>> SearchEmployeeByAIResult(EmployeeQuery employeeQuery);
     }
 }

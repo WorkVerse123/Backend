@@ -1,4 +1,5 @@
-﻿using Domain.Entities;
+﻿using Application.DTOs.Request;
+using Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +17,7 @@ namespace Application.Interfaces.IRepositories
         Task<IEnumerable<EmployeeProfile>> GetAllPublicEmployeeAsync();
         Task<int> CountAllEmployeeAsync();
 
+        Task<IEnumerable<EmployeeProfile>> SearchEmployeeByAIResult(EmployeeQuery employeeQuery);
     }
 
 }

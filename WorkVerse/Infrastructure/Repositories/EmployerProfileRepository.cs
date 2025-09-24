@@ -1,4 +1,5 @@
-﻿using Application.Interfaces.IRepositories;
+﻿using Application.DTOs.Request;
+using Application.Interfaces.IRepositories;
 using Domain.Entities;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
@@ -53,5 +54,51 @@ namespace Infrastructure.Repositories
         {
             return await _dbSet.AnyAsync(j => j.UserId == userId);
         }
+
+        // Tìm các công ty theo kết quả AI (ưu tiên filter cứng trước, mềm sau)
+        public async Task<IEnumerable<EmployerProfile>> SearchEmployerByAIResult(EmployerQuery employerQuery)
+        {
+            var employers = _dbSet
+                .Include(e => e.EmployerType)
+                .AsQueryable();
+
+            // ========================
+            // 1. Hard filter (chỉ filter những cái "must have")
+            // ========================
+            if (employerQuery.EmployerTypes != null && employerQuery.EmployerTypes.Any())
+            {
+                employers = employers.Where(e =>
+                    e.EmployerType != null &&
+                    employerQuery.EmployerTypes.Contains(e.EmployerType.EmployerTypeName));
+
+
+            }
+            if (employerQuery.Address != null && employerQuery.Address.Any())
+            {
+                var addressesNormalized = employerQuery.Address.Where(a => !string.IsNullOrWhiteSpace(a)).Select(a => a.Trim().ToLower()).ToList();
+                employers = employers.Where(e => e.Address != null && addressesNormalized.Any(addr => e.Address.ToLower().Contains(addr)));
+            }
+            // Load ra memory (không hard filter Address/CompanyName để không mất dữ liệu)
+            var employerList = await employers.ToListAsync();
+
+            // ========================
+            // 2. Soft ranking (match mờ)
+            // ========================
+            var ranked = employerList.Select(e => new
+            {
+                Employer = e,
+                Score =
+                    (employerQuery.CompanyNames != null &&
+                     GenericMatchAI.MatchAnyField(e.CompanyName, employerQuery.CompanyNames) ? 1 : 0) +
+
+                    (employerQuery.Address != null &&
+                     GenericMatchAI.MatchAnyField(e.Address, employerQuery.Address) ? 1 : 0)
+            })
+            .OrderByDescending(x => x.Score)
+            .Select(x => x.Employer);
+
+            return ranked;
+        }
+
     }
 }

@@ -17,5 +17,7 @@ namespace Application.Interfaces.IServicies
         Task<bool> UpdateEmployerProfileAsync(int id, EmployerProfileDTORequest request);
         Task<int?> GetEmployerIdByUserIdAsync(int userId);
 
+        Task<IEnumerable<EmployerAIDTOResponse>> SearchEmployerByAIResult(EmployerQuery employerQuery);
+
     }
 }
