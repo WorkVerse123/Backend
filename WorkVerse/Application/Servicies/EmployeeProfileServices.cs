@@ -214,6 +214,13 @@ namespace Application.Servicies
             }
         }
 
+
+        public async Task<int?> GetEmployeeIdByUserIdAsync(int userId)
+        {
+            var user = await  _unitOfWork.EmployeeProfile.GetByUserIdAsync(userId);
+            return user?.EmployeeId;
+        }
+
         public async Task<IEnumerable<EmployeeAIDTOResponse>> SearchEmployeeByAIResult(EmployeeQuery employeeQuery)
         {
             try

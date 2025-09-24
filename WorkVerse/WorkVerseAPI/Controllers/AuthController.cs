@@ -1,6 +1,8 @@
 ﻿using Application.DTOs.Request;
 using Application.Helper;
+using Application.Interfaces.IRepositories;
 using Application.Interfaces.IServices;
+using Application.Interfaces.IServicies;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
@@ -13,12 +15,16 @@ namespace WorkVerseAPI.Controllers
     public class AuthController : ControllerBase
     {
         private readonly IAuthService _authService;
+        private readonly IEmployeeProfileServices _employeeProfileServices;
+        private readonly IEmployerProfileService _employerProfileServices;
         private readonly IJWTService _jwtService;
 
-        public AuthController(IAuthService authService, IJWTService jwtService)
+        public AuthController(IAuthService authService, IJWTService jwtService, IEmployeeProfileServices employeeProfileServices, IEmployerProfileService employerProfileServices)
         {
             _authService = authService;
             _jwtService = jwtService;
+            _employeeProfileServices = employeeProfileServices;
+            _employerProfileServices = employerProfileServices;
         }
 
         [HttpPost("login")]
@@ -33,6 +39,24 @@ namespace WorkVerseAPI.Controllers
             if (user == null)
             {
                 return Unauthorized(new ApiResponse<object>("Invalid account or password.", 401));
+            }
+            if (user.RoleId == 3) // Employer
+            {
+                var employerId = await _employerProfileServices.GetEmployerIdByUserIdAsync(user.UserId);
+                if (employerId == null)
+                {
+                    return NotFound(new ApiResponse<object>("Employer profile not found.", 404));
+                }
+                user.EmployerId = (int)employerId;
+            }
+            else if (user.RoleId == 4) // Employee
+            {
+                var employeeId = await _employeeProfileServices.GetEmployeeIdByUserIdAsync(user.UserId);
+                if (employeeId == null)
+                {
+                    return NotFound(new ApiResponse<object>("Employee profile not found.", 404));
+                }
+                user.EmployeeId = (int)employeeId;
             }
             user.IsPremium = await _authService.IsPremiumAsync(user.UserId);
             var token = _jwtService.GenerateJwtToken(user);

@@ -110,6 +110,12 @@ namespace Application.Servicies
             }
         }
 
+        public  async Task<int?> GetEmployerIdByUserIdAsync(int userId)
+        {
+            var user = await _unitOfWork.EmployerProfile.GetByUserIdAsync(userId);
+            return user?.EmployerId;
+        }
+
         public async Task<bool> UpdateEmployerProfileAsync(int id, EmployerProfileDTORequest request)
         {
             try
