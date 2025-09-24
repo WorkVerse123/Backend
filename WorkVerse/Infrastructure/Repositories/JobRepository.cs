@@ -30,7 +30,9 @@ namespace Infrastructure.Repositories
             var result = await _dbSet
                 .Include(j => j.JobCategoryMappings)
                 .ThenInclude(m => m.Category)
-                .OrderByDescending(c => c.CreatedAt).ToListAsync();
+                .OrderByDescending(u => u.IsPriority)
+                .ThenByDescending(c => c.CreatedAt).ToListAsync();
+
             return result;
         }
         // Kiểm tra tồn tại job theo Id
