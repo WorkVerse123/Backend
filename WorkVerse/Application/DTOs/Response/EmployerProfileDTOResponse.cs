@@ -26,15 +26,15 @@ namespace Application.DTOs.Response
     // hồ sơ chi tiết của 1 nhà tuyển dụng 
     public class EmployerProfileDTOResponse
     {
-        public int EmployerId { get; set; }
-        public int UserId { get; set; }
-        public string CompanyName { get; set; } = null!;
-        public int EmployerTypeId { get; set; }
-        public string Address { get; set; } = null!;
-        public string? WebsiteUrl { get; set; }
-        public string? LogoUrl { get; set; }
-        public DateTime? DateEstablish { get; set; }
-        public string Description { get; set; } = null!;
-        public string? SearchName { get; set; }
+        public int EmployerId { get; set; } //
+        public string CompanyName { get; set; } = null!; //
+        public string EmployerTypeName { get; set; } = null!;
+        public string Address { get; set; } = null!; //
+        public string? WebsiteUrl { get; set; } //
+        public string? LogoUrl { get; set; } // 
+        public DateTime? DateEstablish { get; set; } //
+        public string Description { get; set; } = null!; // 
+        public string ContactEmail { get; set; } = null!; //
+        public string ContactPhone { get; set; } = null!; //
     }
 }

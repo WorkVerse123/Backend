@@ -33,8 +33,11 @@ namespace Infrastructure.Repositories
         // Lấy chi tiết employer theo Id
         public async Task<EmployerProfile?> GetByIdAsync(int employerId)
         {
-            var result = await _dbSet.FirstOrDefaultAsync(c => c.EmployerId == employerId);
-            return result;  
+            var result = await _context.EmployerProfiles
+                                .Include(e => e.User)
+                                .Include(e => e.EmployerType)
+                                .FirstOrDefaultAsync(c => c.EmployerId == employerId);
+            return result;
         }
 
         // Lấy employer theo UserId
