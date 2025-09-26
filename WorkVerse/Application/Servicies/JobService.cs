@@ -85,8 +85,13 @@ namespace Application.Servicies
                     .Take(pageSize)
                     .ToList();
                 var mapped = _mapper.Map<List<JobSummaryDTO>>(pagedData);
+                foreach (var job in mapped)
+                {
+                    job.EmployeeApplyCount = await _unitOfWork.Job.CountJobApply(job.JobId);
+                }
                 return new JobListDTOResponse
                 {
+                    EmployerId = employerId,
                     Jobs = mapped,
                     Paging = new PaginatedResponse
                     {

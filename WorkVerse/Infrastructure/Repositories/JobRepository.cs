@@ -291,5 +291,11 @@ namespace Infrastructure.Repositories
             return ranked;
         }
 
+        public Task<int> CountJobApply(int jobId)
+        {
+            return _context.Applications
+                .Where(ja => ja.JobId == jobId)
+                .CountAsync();
+        }
     }
 }
