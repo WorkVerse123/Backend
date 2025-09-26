@@ -1,5 +1,6 @@
 ﻿using Application.DTOs.Request;
 using Application.DTOs.Response;
+using Application.Helper;
 using Application.Interfaces.IRepositories;
 using Application.Interfaces.IServicies;
 using AutoMapper;
@@ -197,5 +198,71 @@ namespace Application.Servicies
                 throw;
             }
         }
-    }
+
+		public async Task<JobListDTOResponse> GetJobsFilter(JobFilterRequest filter, int pageNumber, int pageSize)
+		{
+			var query = (await _unitOfWork.Job.GetAllJobsAsync())
+							.AsQueryable();
+
+			// Search chung
+			if (!string.IsNullOrWhiteSpace(filter.Search))
+			{
+				string search = filter.Search.Trim().ToLower();
+				query = query.Where(j =>
+					(!string.IsNullOrEmpty(j.Title) && j.Title.ToLower().Contains(search)) ||
+					(!string.IsNullOrEmpty(j.Description) && j.Description.ToLower().Contains(search)) ||
+					(!string.IsNullOrEmpty(j.Requirements) && j.Requirements.ToLower().Contains(search)) ||
+					(!string.IsNullOrEmpty(j.Location) && j.Location.ToLower().Contains(search))
+				);
+			}
+
+
+			if (filter.CategoryId != null && filter.CategoryId.Any())
+			{
+				query = query.Where(j => j.JobCategoryMappings.Any(jc => filter.CategoryId.Contains(jc.CategoryId)));
+			}
+
+
+			// Salary
+			if (filter.SalaryMin.HasValue)
+				query = query.Where(j => j.SalaryMax >= filter.SalaryMin.Value);
+			if (filter.SalaryMax.HasValue)
+				query = query.Where(j => j.SalaryMin <= filter.SalaryMax.Value);
+
+			if (filter.JobTime.HasValue)
+			{
+				string jobTimeStr = JobValidationHelper.GetDescription(filter.JobTime.Value);
+				query = query.Where(j => j.JobTime == jobTimeStr);
+			}
+
+
+			// Luôn ưu tiên job IsPriority = true trước
+			query = query.OrderByDescending(j => j.IsPriority).ThenByDescending(j => j.CreatedAt);
+
+			// Tính tổng số record sau filter
+			var totalRecords =  query.Count();
+
+			// Phân trang
+			var pagedData = query
+				.Skip((pageNumber - 1) * pageSize)
+				.Take(pageSize)
+				.ToList();
+
+			// Map sang DTO nếu cần
+			var mapped = _mapper.Map<List<JobSummaryDTO>>(pagedData);
+
+
+			return new JobListDTOResponse
+			{
+				Jobs = mapped,
+				Paging = new PaginatedResponse
+				{
+					Page = pageNumber,
+					PageSize = pageSize,
+					TotalPages = (int)Math.Ceiling(totalRecords / (double)pageSize),
+				}
+			};
+		}
+
+	}
 }

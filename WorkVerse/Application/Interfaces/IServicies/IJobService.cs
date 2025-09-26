@@ -19,6 +19,7 @@ namespace Application.Interfaces.IServicies
         Task<bool> UpdateJobAsync(int jobId, JobDTORequest job);
         Task<bool> UpdateJobStatusAsync(int jobId, string newStatus);
 
+        Task<JobListDTOResponse> GetJobsFilter(JobFilterRequest filter, int pageNumber, int pageSize);
         Task<IEnumerable<JobAIDTOResponse>> SearchJobByAIResult(JobQuery jobQuery);
         Task<IEnumerable<JobWithEmployerAIDTOResponse>> SearchJobByEmployerAIResult(JobQuery jobQuery, EmployerQuery employerQuery);
 
