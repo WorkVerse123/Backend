@@ -30,7 +30,7 @@ namespace WorkVerseAPI.Controllers
         {
             try
             {
-                var result = await _jobService.GetJobListAsync(pageNumber, pageSize);
+                var result = await _jobService.GetJobListAsync(pageNumber, pageSize);   
                 if (result == null)
                 {
                     return NotFound(new ApiResponse<object>(
