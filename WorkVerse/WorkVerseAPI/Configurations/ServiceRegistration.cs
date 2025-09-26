@@ -51,6 +51,7 @@ namespace WorkVerseAPI.Configurations
             builder.RegisterType<StaffProfileService>().As<IStaffProfileService>().InstancePerLifetimeScope();
             builder.RegisterType<UserService>().As<IUserService>().InstancePerLifetimeScope();
             builder.RegisterType<AIService>().As<IAIService>().InstancePerLifetimeScope();
+            builder.RegisterType<EmployerTypeService>().As<IEmployerTypeSevice>().InstancePerLifetimeScope();
 
 
         }
