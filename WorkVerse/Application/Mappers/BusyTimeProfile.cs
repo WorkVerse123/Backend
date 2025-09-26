@@ -13,7 +13,7 @@ namespace Application.Mappers
     {
         public BusyTimeProfile()
         {
-            CreateMap<BusyTime, BusyTimeDTOResponse>()
+            CreateMap<BusyTime, BusyTimeItemDTO>()
                 .ForMember(dest => dest.DayOfWeek,
                            opt => opt.MapFrom(src =>
                                Enum.GetName(typeof(DayOfWeek), src.DayOfWeek)

@@ -30,8 +30,12 @@ namespace Application.Servicies
         {
             try
             {
-               
-                var existingProfile = await _unitOfWork.EmployerProfile.CheckExistByUserIdAsync(request.UserId);
+                var existsUser = await _unitOfWork.User.ExistByIdAsync(request.UserId);
+                if (!existsUser)
+                {
+                    throw new InvalidOperationException($"User not exists for User {request.UserId}");
+                }
+                var existingProfile = await _unitOfWork.EmployerProfile.ExistsByUserIdAsync(request.UserId);
                 if (existingProfile)
                 {
                     throw new InvalidOperationException($"Employer profile already exists for User {request.UserId}");
@@ -52,11 +56,11 @@ namespace Application.Servicies
         }
 
 
-        public async Task<ListEmployerProfileDTOResponse> GetAllCompaniesAsync(int pageNumber, int pageSize)
+        public async Task<ListEmployerProfileDTOResponse> GetAllEmployersAsync(int pageNumber, int pageSize)
         {
             try
             {
-                var query = (await _unitOfWork.EmployerProfile.GetAllCompaniesAsync())
+                var query = (await _unitOfWork.EmployerProfile.GetAllEmployersAsync())
                             .AsQueryable();
 
                 var totalRecords = query.Count();
@@ -106,6 +110,12 @@ namespace Application.Servicies
             }
         }
 
+        public  async Task<int?> GetEmployerIdByUserIdAsync(int userId)
+        {
+            var user = await _unitOfWork.EmployerProfile.GetByUserIdAsync(userId);
+            return user?.EmployerId;
+        }
+
         public async Task<bool> UpdateEmployerProfileAsync(int id, EmployerProfileDTORequest request)
         {
             try
@@ -143,6 +153,20 @@ namespace Application.Servicies
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error updating employer profile with ID: {Id}", id);
+                throw;
+            }
+        }
+
+        public async Task<IEnumerable<EmployerAIDTOResponse>> SearchEmployerByAIResult(EmployerQuery employerQuery)
+        {
+            try
+            {
+                var employers = await _unitOfWork.EmployerProfile.SearchEmployerByAIResult(employerQuery) ?? Enumerable.Empty<EmployerProfile>();
+                return _mapper.Map<IEnumerable<EmployerAIDTOResponse>>(employers);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error searching employers by AI result");
                 throw;
             }
         }

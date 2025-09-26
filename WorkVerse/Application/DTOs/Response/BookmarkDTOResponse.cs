@@ -6,13 +6,14 @@ using System.Threading.Tasks;
 
 namespace Application.DTOs.Response
 {
-    public class BookmarkDTOResponse
+    // danh sách bookmark job của employee
+    public class JobBookmarkListDTOResponse
     {
         public int EmployeeId { get; set; }
         public PaginatedResponse Paging { get; set; }
-        public List<BookmarkItemDTO> Bookmarks { get; set; } = new();
+        public List<JobBookmarkItemDTO> Bookmarks { get; set; } = new();
     }
-    public class BookmarkItemDTO
+    public class JobBookmarkItemDTO
     {
         public int BookmarkId { get; set; }
         public string JobTitle { get; set; } = null!;

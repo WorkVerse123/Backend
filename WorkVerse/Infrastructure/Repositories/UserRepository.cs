@@ -16,10 +16,10 @@ namespace Infrastructure.Repositories
         {
         }
 
-        public async Task<bool> ExistsAsync(string email, string phoneNumber)
+        public async Task<bool> ExistsAsync(string email)
         {
             return await _dbSet.AnyAsync(u =>
-                u.Email == email || u.PhoneNumber == phoneNumber);
+                u.Email == email);
         }
 
         public async Task<User?> GetByEmailAsync(string email)
@@ -27,11 +27,52 @@ namespace Infrastructure.Repositories
             return await _dbSet
                 .FirstOrDefaultAsync(u => u.Email == email);
         }
+        public async Task<bool> ExistByIdAsync(int userId)
+        {
+            return await _dbSet.AnyAsync(u => u.UserId == userId);
+        }
 
-        public async Task<User?> GetByPhoneNumberAsync(string phoneNumber)
+        public async Task<string?> GetUserFullNameByIdAsync(int id)
         {
             return await _dbSet
-                .FirstOrDefaultAsync(u => u.PhoneNumber == phoneNumber);
+                .Where(u => u.UserId == id)
+                .Select(u =>
+                    u.EmployeeProfile != null
+                        ? u.EmployeeProfile.FullName
+                        : (u.EmployerProfile != null
+                            ? u.EmployerProfile.CompanyName
+                            : null))
+                .FirstOrDefaultAsync();
+        }
+
+        public Task<bool> UpdatePasswordAsynce(int userId, string newPasswordHash)
+        {
+            return Task.Run(async () =>
+            {
+                var user = await _dbSet.FindAsync(userId);
+                if (user == null)
+                    return false;
+                user.PasswordHash = newPasswordHash;
+                return true;
+            });
+        }
+
+        public Task<bool> IsPremiumAsync(int userId)
+        {
+            return _context.UserSubscriptions
+                .AnyAsync(us => us.UserId == userId && us.IsActive);
+        }
+
+        public Task<bool> UpdateStatusAsync(int userId, string newStatus)
+        {
+            return Task.Run(async () =>
+            {
+                var user = await _dbSet.FindAsync(userId);
+                if (user == null)
+                    return false;
+                user.Status = newStatus;
+                return true;
+            });
         }
     }
 }

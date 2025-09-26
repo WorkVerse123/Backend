@@ -35,7 +35,7 @@ namespace Application.Helper
                 return (false, "Description is required.");
 
             // DateEstablished
-            if (request.DateEstablished.HasValue && request.DateEstablished.Value > DateTime.UtcNow)
+            if (request.DateEstablished.HasValue && request.DateEstablished.Value > DateTime.Now)
                 return (false, "DateEstablished cannot be in the future.");
 
             // WebsiteUrl

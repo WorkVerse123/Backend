@@ -11,13 +11,16 @@ namespace Application.Interfaces.IServicies
 {
     public interface IJobService
     {
-        Task<JobDTOResponse> GetAllAsync(int pageNumber, int pageSize);
-        Task<JobItemDetailDTO> GetByIdAsync(int jobId);
+        Task<JobListDTOResponse> GetJobListAsync(int pageNumber, int pageSize);
+        Task<JobDetailsDTOResponse> GetJobByIdAsync(int jobId);
         //Task<JobDTOResponse> GetByIdAsynce(int jobId);
-        Task<JobDTOResponse> GetByEmployerIdAsync(int employerId, int pageNumber, int pageSize);
-        Task AddAsyne(JobDTORequest job);
-        Task<bool> UpdateAsync(int jobId, JobDTORequest job);
-        Task<bool> ChangeStatusAsynce(int jobId, string newStatus);
+        Task<JobListDTOResponse> GetJobsByEmployerIdAsync(int employerId, int pageNumber, int pageSize);
+        Task AddJobAsync(JobDTORequest job);
+        Task<bool> UpdateJobAsync(int jobId, JobDTORequest job);
+        Task<bool> UpdateJobStatusAsync(int jobId, string newStatus);
+
+        Task<IEnumerable<JobAIDTOResponse>> SearchJobByAIResult(JobQuery jobQuery);
+        Task<IEnumerable<JobWithEmployerAIDTOResponse>> SearchJobByEmployerAIResult(JobQuery jobQuery, EmployerQuery employerQuery);
 
     }
 }

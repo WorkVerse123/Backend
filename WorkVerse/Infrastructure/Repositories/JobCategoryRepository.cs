@@ -12,15 +12,14 @@ namespace Infrastructure.Repositories
 {
     public class JobCategoryRepository : GenericRepository<JobCategory>, IJobCategoryRepository
     {
-        private readonly WorkVerseDBContext _dbContext;
         public JobCategoryRepository(WorkVerseDBContext dbContext) : base(dbContext)
         {
-            _dbContext = dbContext;
         }
 
-        public async Task<IEnumerable<JobCategory>> GetAllAsync()
+        // lấy tất cả thể loại ngành nghề
+        public async Task<IEnumerable<JobCategory>> GetAllJobCategoriesAsync()
         {
-            var result = await _dbContext.JobCategories.ToListAsync();
+            var result = await _dbSet.ToListAsync();
             return result;
         }
     }

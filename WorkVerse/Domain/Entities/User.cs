@@ -30,5 +30,7 @@ namespace Domain.Entities
         public virtual ICollection<Notification> Notifications { get; set; } = new List<Notification>();
         public virtual ICollection<AuditLog> AuditLogs { get; set; } = new List<AuditLog>();
         public virtual ICollection<Blog> Blogs { get; set; } = new List<Blog>();
+        public virtual StaffProfile? StaffProfile { get; set; }
+
     }
 }

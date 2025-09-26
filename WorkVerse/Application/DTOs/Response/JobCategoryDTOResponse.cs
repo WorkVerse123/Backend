@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace Application.DTOs.Response
 {
-    public class JobCategoryDTOResponse
+    // danh mục ngành nghề
+    public class JobCategoryListDTOResponse
     {
         public List<JobCategoryItemDTO> JobCategories { get; set; } = new();
     }

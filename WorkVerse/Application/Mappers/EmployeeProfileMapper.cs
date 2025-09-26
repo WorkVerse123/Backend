@@ -26,6 +26,7 @@ namespace Application.Mappers
             .ForMember(dest => dest.EmployeeEducation,
                 opt => opt.MapFrom(src => src.Education));
 
+
         }
     }
 }

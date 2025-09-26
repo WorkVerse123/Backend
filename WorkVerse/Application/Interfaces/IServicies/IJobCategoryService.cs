@@ -9,6 +9,6 @@ namespace Application.Interfaces.IServicies
 {
     public interface IJobCategoryService
     {
-        Task<JobCategoryDTOResponse> GetAllJobCategoriesAsync();
+        Task<JobCategoryListDTOResponse> GetAllJobCategoriesAsync();
     }
 }

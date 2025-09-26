@@ -11,10 +11,10 @@ namespace Application.Interfaces.IServicies
 {
     public interface IBookmarkService
     {
-        Task<BookmarkDTOResponse> GetByEmployeeIdAsync(int employeeId, int pageNumber, int pageSize);
+        Task<JobBookmarkListDTOResponse> GetBookmarksByEmployeeAsync(int employeeId, int pageNumber, int pageSize);
 
-        Task<BookmarkItemDTO> CreateBookmarkAsync(int employeeId, int jobId);
-        Task<bool> DeleteBookmarkAsync(int employeeId, int bookmarkId);
+        Task<JobBookmarkItemDTO> AddBookmarkAsync(int employeeId, int jobId);
+        Task<bool> RemoveBookmarkAsync(int employeeId, int bookmarkId);
 
     }
 }

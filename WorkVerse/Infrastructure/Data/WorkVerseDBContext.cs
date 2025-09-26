@@ -163,7 +163,8 @@ namespace Infrastructure.Data
                 entity.Property(j => j.SalaryMax).HasColumnType("decimal(18,2)");
                 entity.Property(j => j.CreatedAt).HasDefaultValueSql("GETDATE()");
                 entity.Property(j => j.Status).HasMaxLength(20);
-
+                // default job thường (không ưu tiên)
+                entity.Property(j => j.IsPriority).HasDefaultValue(false);
                 entity.HasOne(j => j.Employer)
                       .WithMany(e => e.Jobs)
                       .HasForeignKey(j => j.EmployerId);
@@ -476,6 +477,36 @@ namespace Infrastructure.Data
 
                 entity.HasIndex(e => e.PageKey).IsUnique();
             });
+
+            modelBuilder.Entity<StaffProfile>(entity =>
+            {
+                entity.ToTable("StaffProfile");
+
+                entity.HasKey(e => e.StaffId);
+
+                entity.Property(e => e.FullName)
+                      .IsRequired()
+                      .HasMaxLength(255);
+
+                entity.Property(e => e.Gender)
+                      .HasMaxLength(20);
+
+                entity.Property(e => e.Address)
+                      .HasMaxLength(255);
+
+                entity.Property(e => e.IdentityCard)
+                      .HasMaxLength(20);
+
+                entity.Property(e => e.StartDate)
+                      .IsRequired();
+
+                // Quan hệ 1-1: StaffProfile <-> User
+                entity.HasOne(e => e.User)
+                      .WithOne(u => u.StaffProfile)   // trong User class phải có navigation
+                      .HasForeignKey<StaffProfile>(e => e.UserId)
+                      .OnDelete(DeleteBehavior.Cascade);
+            });
+
         }
     }
 }

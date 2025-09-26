@@ -32,6 +32,12 @@ namespace Infrastructure.Repositories
             EmployerProfile = new EmployerProfileRepository(_dbContext);
             User = new UserRepository(_dbContext);
             EmployerType = new EmployerTypeRepository(_dbContext);
+            Report = new ReportRepository(_dbContext);
+            Role = new RoleRepository(_dbContext);
+            Feedback = new FeedbackRepository(_dbContext);
+            Blog = new BlogRepository(_dbContext);
+            Notification = new NotificationRepository(_dbContext);
+            StaffProfile = new StaffProfileRepository(_dbContext);
         }
 
         public async Task BeginTransactionAsync()
@@ -148,5 +154,13 @@ namespace Infrastructure.Repositories
         public IEmployerProfileRepository EmployerProfile { get; private set; }
         public IUserRepository User { get; private set; }
         public IEmployerTypeRepository EmployerType { get; private set; }
+
+        public IReportRepository Report { get; private set; }
+        public IRoleRepository Role { get; private set; }
+        public IFeedbackRepository Feedback { get; private set; }
+
+        public IBlogRepository Blog { get; private set; }
+        public INotificationRepository Notification { get; private set; }
+        public IStaffProfileRepository StaffProfile { get; private set; }
     }
 }

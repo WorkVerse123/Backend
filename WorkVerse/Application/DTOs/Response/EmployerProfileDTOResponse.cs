@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Application.DTOs.Response
 {
+    // danh sách các nhà tuyển dụng 
     public class ListEmployerProfileDTOResponse
     {
         public PaginatedResponse Paging { get; set; }
@@ -21,6 +22,8 @@ namespace Application.DTOs.Response
         public string? Website { get; set; }
         public string? Logo { get; set; }
     }
+
+    // hồ sơ chi tiết của 1 nhà tuyển dụng 
     public class EmployerProfileDTOResponse
     {
         public int EmployerId { get; set; }

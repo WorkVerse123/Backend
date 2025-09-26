@@ -26,31 +26,31 @@ namespace Application.Servicies
             _logger = logger;
         }
 
-        public async Task<ReviewItemDTO> CreateReviewAsync(int jobId, ReviewDTORequest request)
+        public async Task<JobReviewItemDTO> CreateJobReviewAsync(int jobId, ReviewDTORequest request)
         {
             try
             {
 
-                var employee = await _unitOfWork.EmployeeProfile.ExistsAsync(request.EmployeeId);
+                var employee = await _unitOfWork.EmployeeProfile.ExistsByEmployeeIdAsync(request.EmployeeId);
                 if (!employee)
                 {
                     throw new KeyNotFoundException($"Employee with ID {request.EmployeeId} not found");
                 }
 
 
-                var job = await _unitOfWork.Job.ExistsAsync(jobId);
+                var job = await _unitOfWork.Job.ExistsByJobIdAsync(jobId);
                 if (!job)
                 {
                     throw new KeyNotFoundException($"Job with ID {jobId} not found");
                 }
 
-                var isWorked = await _unitOfWork.Application.ExistsAsync(request.EmployeeId, jobId);
+                var isWorked = await _unitOfWork.Application.FindByEmployeeAndJobAsync(request.EmployeeId, jobId);
                 if (isWorked == null || isWorked.Status != "accepted")
                 {
                     throw new InvalidOperationException($"Employee {request.EmployeeId} has never worked on job {jobId}, so evaluation is not allowed.");
                 }
 
-                var exists = await _unitOfWork.Review.ExistsAsync(jobId, request.EmployeeId);
+                var exists = await _unitOfWork.Review.ExistsByJobAndCandidateAsync(jobId, request.EmployeeId);
 
                 if (exists)
                 {
@@ -68,9 +68,9 @@ namespace Application.Servicies
                 await _unitOfWork.Review.AddAsync(review);
                 await _unitOfWork.SaveChangesAsync();
 
-                var reviewAdd = await _unitOfWork.Review.GetByJobIdEmployeeIdAsync(jobId, request.EmployeeId);
+                var reviewAdd = await _unitOfWork.Review.GetByJobAndCandidateAsync(jobId, request.EmployeeId);
 
-                return _mapper.Map<ReviewItemDTO>(reviewAdd);
+                return _mapper.Map<JobReviewItemDTO>(reviewAdd);
 
 
             }
@@ -81,11 +81,11 @@ namespace Application.Servicies
             }
         }
 
-        public async Task<ReviewDTOResponse> GetByJobIdAsync(int jobId, int pageNumber, int pageSize)
+        public async Task<JobReviewListDTOResponse> GetJobReviewsByJobIdAsync(int jobId, int pageNumber, int pageSize)
         {
             try
             {
-                var job = await _unitOfWork.Job.ExistsAsync(jobId);
+                var job = await _unitOfWork.Job.ExistsByJobIdAsync(jobId);
                 if (!job)
                 {
                     throw new KeyNotFoundException($"Job with ID {jobId} not found");
@@ -101,9 +101,9 @@ namespace Application.Servicies
                     .Take(pageSize)
                     .ToList();
 
-                var mapped = _mapper.Map<List<ReviewItemDTO>>(pagedData);
+                var mapped = _mapper.Map<List<JobReviewItemDTO>>(pagedData);
 
-                return new ReviewDTOResponse
+                return new JobReviewListDTOResponse
                 {
                     JobId = jobId,
                     Reviews = mapped,

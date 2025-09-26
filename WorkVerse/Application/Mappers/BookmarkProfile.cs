@@ -13,7 +13,7 @@ namespace Application.Mappers
     {
         public BookmarkProfile()
         {
-            CreateMap<Bookmark, BookmarkItemDTO>()
+            CreateMap<Bookmark, JobBookmarkItemDTO>()
             .ForMember(dest => dest.JobTitle, opt => opt.MapFrom(src => src.Job.Title))
             .ForMember(dest => dest.JobLocation, opt => opt.MapFrom(src => src.Job.Location))
             .ForMember(dest => dest.JobCategory, opt => opt.MapFrom(

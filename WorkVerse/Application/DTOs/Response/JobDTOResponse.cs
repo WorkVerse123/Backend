@@ -6,12 +6,13 @@ using System.Threading.Tasks;
 
 namespace Application.DTOs.Response
 {
-    public class JobDTOResponse
+    // Danh sách job 
+    public class JobListDTOResponse
     {
         public PaginatedResponse Paging { get; set; }
-        public List<JobItemDTO> Jobs { get; set; } = new();
+        public List<JobSummaryDTO> Jobs { get; set; } = new();
     }
-    public class JobItemDTO
+    public class JobSummaryDTO
     {
         public int JobId { get; set; }
         public string JobTitle { get; set; } = null!;
@@ -20,15 +21,17 @@ namespace Application.DTOs.Response
         public decimal JobSalaryMin { get; set; }
         public decimal JobSalaryMax { get; set; }
         public string JobTime { get; set; } = null!;
+        public bool IsPriority { get; set; } = false;
         public DateTime JobCreatedAt { get; set; }
         public DateTime JobExpiredAt { get; set; }
         public string JobStatus { get; set; } = null!;
     }
 
-    public class JobItemDetailDTO
+    public class JobDetailsDTOResponse
     {
         public int JobId { get; set; }
         public string JobTitle { get; set; } = null!;
+        public int EmployerId { get; set; }
         public List<string> JobCategory { get; set; } = new();
         public string JobDescription { get; set; } = null!;
         public string? JobRequirements { get; set; }
@@ -36,6 +39,7 @@ namespace Application.DTOs.Response
         public decimal JobSalaryMin { get; set; }
         public decimal JobSalaryMax { get; set; }
         public string JobTime { get; set; } = null!;
+        public bool IsPriority { get; set; } = false;
         public DateTime JobCreatedAt { get; set; }
         public DateTime JobExpiredAt { get; set; }
         public string JobStatus { get; set; } = null!;

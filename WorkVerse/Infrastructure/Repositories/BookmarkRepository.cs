@@ -13,14 +13,13 @@ namespace Infrastructure.Repositories
 {
     public class BookmarkRepository : GenericRepository<Bookmark>, IBookmarkRepository
     {
-        private readonly WorkVerseDBContext _dbContext;
         public BookmarkRepository(WorkVerseDBContext dbContext) : base(dbContext)
         {
-            _dbContext = dbContext;
         }
+        // Lấy danh sách bookmark của 1 employee
         public async Task<IEnumerable<Bookmark>> GetByEmployeeIdAsync(int employeeId)
         {
-            var result = await _dbContext.Bookmarks
+            var result = await _dbSet
                 .Include(b => b.Job)
                 .ThenInclude(j => j.JobCategoryMappings)
                 .ThenInclude(m => m.Category)
@@ -31,20 +30,27 @@ namespace Infrastructure.Repositories
             return result;
         }
 
-        public async Task<Bookmark?> ExistsAsync(int employeeId, int jobId)
+        // Tìm bookmark theo CandidateId + JobId (nếu đã lưu)
+        public async Task<Bookmark?> FindByEmployeeAndJobAsync(int employeeId, int jobId)
         {
-            var result = await _dbContext.Bookmarks.Include(b => b.Job)
+            var result = await _dbSet.Include(b => b.Job)
                 .ThenInclude(j => j.JobCategoryMappings)
                 .ThenInclude(m => m.Category)
                 .FirstOrDefaultAsync(b => b.EmployeeId == employeeId && b.JobId == jobId);
             return result;
         }
 
+        // Lấy chi tiết 1 bookmark theo Id
         public async Task<Bookmark> GetByIdAsync(int bookmarkId)
         {
-            var result = await _dbContext.Bookmarks.FirstOrDefaultAsync(u => u.BookmarkId == bookmarkId);
+            var result = await _dbSet.FirstOrDefaultAsync(u => u.BookmarkId == bookmarkId);
             return result;
         }
 
+        // Đếm số lượng ứng tuyển theo employeeId
+        public async Task<int> CountBookmarkJobsByEmployeeIdAsync(int employeeId)
+        {
+            return await _dbSet.Where(c=> c.EmployeeId == employeeId).CountAsync();
+        }
     }
 }

@@ -28,16 +28,9 @@ namespace SchoolMedicalSystem.Application.Services
 
         public async Task<UserDTORespone?> ValidateUserAsync(string account, string password)
         {
-            // account có thể là email hoặc phone number
             User? user = null;
-            if (account.Contains('@'))
-            {
-                user = await _unitOfWork.User.GetByEmailAsync(account);
-            }
-            else
-            {
-                user = await _unitOfWork.User.GetByPhoneNumberAsync(account);
-            }
+
+            user = await _unitOfWork.User.GetByEmailAsync(account);
 
             if (user == null)
                 return null;
@@ -50,11 +43,6 @@ namespace SchoolMedicalSystem.Application.Services
 
         public async Task<UserDTORespone?> CreatedAccountAsync(UserDTORequest userDto)
         {
-            // Kiểm tra tồn tại email hoặc phone
-            var exists = await _unitOfWork.User.ExistsAsync(userDto.Email, userDto.PhoneNumber);
-            if (exists)
-                return null;
-
             var userEntity = _mapper.Map<User>(userDto);
             userEntity.PasswordHash = EncryptPassword(userDto.Password);
 
@@ -64,6 +52,22 @@ namespace SchoolMedicalSystem.Application.Services
             return _mapper.Map<UserDTORespone>(userEntity);
         }
 
+        public async Task<bool> UpdatePasswordAsync(UserChangePasswordDTORequest user)
+        {
+            var newPasswordHash = EncryptPassword(user.NewPassword);
+            var flag =  await _unitOfWork.User.UpdatePasswordAsynce(user.UserId, newPasswordHash);
+            if (flag)
+            {
+                await _unitOfWork.SaveChangesAsync();
+                return true;
+            }
+            return false;
+        }
+
+        public Task<bool> IsPremiumAsync(int userId)
+        {
+            return _unitOfWork.User.IsPremiumAsync(userId);
+        }
         public string EncryptPassword(string password)
         {
             return BCrypt.Net.BCrypt.HashPassword(password);
@@ -73,5 +77,23 @@ namespace SchoolMedicalSystem.Application.Services
         {
             return BCrypt.Net.BCrypt.Verify(password, hashPassword);
         }
+
+        public async Task<bool> ExsitedUser(string? email, string? phoneNumber)
+        {
+            var exists = await _unitOfWork.User.ExistsAsync(email);
+            if (exists)
+                return true;
+            else
+                return false;
+        }
+        public async Task<bool> ExsitedRole(int roleId)
+        {
+            var exists = await _unitOfWork.Role.ExistsByIdAsync(roleId);
+            if (exists)
+                return true;
+            else
+                return false;
+        }
+
     }
-    }
+}

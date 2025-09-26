@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Application.DTOs.Response
 {
-    public class BusyTimeDTOResponse
+    public class BusyTimeItemDTO
     {
         public int BusyTimeId { get; set; }
         public string DayOfWeek { get; set; }

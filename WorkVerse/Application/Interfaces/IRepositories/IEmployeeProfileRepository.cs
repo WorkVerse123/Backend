@@ -1,4 +1,5 @@
-﻿using Domain.Entities;
+﻿using Application.DTOs.Request;
+using Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,12 +11,13 @@ namespace Application.Interfaces.IRepositories
     public interface IEmployeeProfileRepository : IGenericRepository<EmployeeProfile>
     {
        
-        Task<EmployeeProfile?> GetByIdAsync(int employeeId);
+        Task<EmployeeProfile?> GetByEmployeeIdAsync(int employeeId);
         Task<EmployeeProfile?> GetByUserIdAsync(int userId);
-        Task<bool> ExistsAsync(int employeeId);
-        Task<IEnumerable<EmployeeProfile>> GetAllCandidatesAsync();
-        Task<int> CountCandidatesAsync();
+        Task<bool> ExistsByEmployeeIdAsync(int employeeId);
+        Task<IEnumerable<EmployeeProfile>> GetAllPublicEmployeeAsync();
+        Task<int> CountAllEmployeeAsync();
 
+        Task<IEnumerable<EmployeeProfile>> SearchEmployeeByAIResult(EmployeeQuery employeeQuery);
     }
 
 }

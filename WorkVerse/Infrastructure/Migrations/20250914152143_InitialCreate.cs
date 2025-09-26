@@ -364,6 +364,31 @@ namespace Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "StaffProfile",
+                columns: table => new
+                {
+                    StaffId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    FullName = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    Gender = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
+                    DateOfBirth = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Address = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
+                    IdentityCard = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
+                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_StaffProfile", x => x.StaffId);
+                    table.ForeignKey(
+                        name: "FK_StaffProfile_User_UserId",
+                        column: x => x.UserId,
+                        principalTable: "User",
+                        principalColumn: "UserId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "UserSubscription",
                 columns: table => new
                 {
@@ -433,7 +458,8 @@ namespace Infrastructure.Migrations
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETDATE()"),
                     ExpiredAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Status = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
-                    SearchName = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    SearchName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsPriority = table.Column<bool>(type: "bit", nullable: false, defaultValue: false)
                 },
                 constraints: table =>
                 {
@@ -716,6 +742,12 @@ namespace Infrastructure.Migrations
                 column: "JobId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_StaffProfile_UserId",
+                table: "StaffProfile",
+                column: "UserId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_SystemInformation_PageKey",
                 table: "SystemInformation",
                 column: "PageKey",
@@ -790,6 +822,9 @@ namespace Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "Shift");
+
+            migrationBuilder.DropTable(
+                name: "StaffProfile");
 
             migrationBuilder.DropTable(
                 name: "SystemInformation");

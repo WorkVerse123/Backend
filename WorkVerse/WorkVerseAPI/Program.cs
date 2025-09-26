@@ -1,4 +1,4 @@
-
+﻿
 using Autofac.Extensions.DependencyInjection;
 using Autofac;
 using WorkVerseAPI.Configurations;
@@ -6,6 +6,10 @@ using Application.Mappers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
+using Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Application.Servicies;
 
 namespace WorkVerseAPI
 {
@@ -22,6 +26,9 @@ namespace WorkVerseAPI
                 containerBuilder.RegisterModule(new ServiceRegistration(builder.Configuration));
             });
 
+            builder.Services.AddDbContext<WorkVerseDBContext>(options =>
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
 
             //Add mapper as the DI (It will seek all asembly have in mapper)
             builder.Services.AddAutoMapper(typeof(EmployeeProfileMapper));
@@ -31,6 +38,9 @@ namespace WorkVerseAPI
             builder.Services.AddAutoMapper(typeof(JobProfile));
             builder.Services.AddAutoMapper(typeof(JobCategoryProfile));
             builder.Services.AddAutoMapper(typeof(EmployerProfileMapper));
+            builder.Services.AddAutoMapper(typeof(ReportProfile));
+            builder.Services.AddAutoMapper(typeof(FeedbackProfile));
+            builder.Services.AddAutoMapper(typeof(BlogProfile));
 
 
             // Add Authentication
@@ -57,6 +67,11 @@ namespace WorkVerseAPI
             // Add services to the container.
             builder.Services.AddControllers();
 
+            // API key from appsettings
+            var apiKey = builder.Configuration["Google:GeminiApiKey"];
+
+            // Đăng ký KeywordService như 1 singleton
+            builder.Services.AddSingleton<AIService>(sp => new AIService(apiKey));
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();

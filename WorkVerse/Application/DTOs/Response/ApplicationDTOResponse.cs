@@ -6,13 +6,15 @@ using System.Threading.Tasks;
 
 namespace Application.DTOs.Response
 {
-    public class ApplicationResponseDTO
+
+    // ứng viên xem danh sách hồ sơ ứng tuyển của chính mình
+    public class JobApplicationListDTOResponse
     {
         public PaginatedResponse Paging { get; set; }
-        public List<ApplicationItemDTO> Applications { get; set; } = new();
+        public List<JobApplicationItemDTO> Applications { get; set; } = new();
     }
 
-    public class ApplicationItemDTO
+    public class JobApplicationItemDTO
     {
         public int ApplicationId { get; set; }
         public string JobTitle { get; set; } = null!;
@@ -20,8 +22,8 @@ namespace Application.DTOs.Response
         public List<string> JobCategory { get; set; } = new();
         public string ApplicationStatus { get; set; } = null!;
     }
-
-    public class ApplicationItemDetailDTO
+    // chi tiết 1 hồ sơ ứng tuyển
+    public class JobApplicationDetailsDTOResponse   
     {
         public int ApplicationId { get; set; }
         public DateTime AppliedAt { get; set; }
@@ -30,17 +32,19 @@ namespace Application.DTOs.Response
         public string Status { get; set; } = null!;
     }
 
-    public class JobApplicationsResponseDTO
+    // nhà tuyển dụng xem danh sách ứng viên cho 1 job
+
+    public class EmployerJobApplicationsDTOResponse
     {
         public int EmployerId { get; set; }
         public int JobId { get; set; }
         public string JobTitle { get; set; } = null!;
         public string JobLocation { get; set; } = null!;
         public PaginatedResponse Paging { get; set; } = new();
-        public List<ApplicationSummaryDTO> Applications { get; set; } = new();
+        public List<JobApplicationSummaryDTO> Applications { get; set; } = new();
     }
 
-    public class ApplicationSummaryDTO
+    public class JobApplicationSummaryDTO
     {
         public int ApplicationId { get; set; }
         public DateTime AppliedAt { get; set; }
@@ -48,11 +52,12 @@ namespace Application.DTOs.Response
         public string EmployeeGender { get; set; } = null!;
     }
 
-    public class StatsInformationDTOResponse
+    // thống kê chung của hệ thống 
+    public class PlatformStatsResponseDTOResponse
     {
-        public StatItemDTO Stats { get; set; } = new();
+        public PlatformStatsDTO Stats { get; set; } = new();
     }
-    public class StatItemDTO
+    public class PlatformStatsDTO
     {
         public int Jobs { get; set; }
         public int Companies { get; set; }

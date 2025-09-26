@@ -1,4 +1,5 @@
-﻿using Domain.Entities;
+﻿using Application.DTOs.Request;
+using Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,11 +13,12 @@ namespace Application.Interfaces.IRepositories
 
         Task<EmployerProfile?> GetByIdAsync(int employerId);
         Task<EmployerProfile?> GetByUserIdAsync(int userId);
-        Task<bool> ExistsAsync(int employerId);
-        Task<IEnumerable<EmployerProfile>> GetAllCompaniesAsync();
-        Task<int> CountCompaniesAsync();
+        Task<bool> ExistsByEmployerIdAsync(int employerId);
+        Task<IEnumerable<EmployerProfile>> GetAllEmployersAsync();
+        Task<int> CountAllEmployersAsync();
+        Task<bool> ExistsByUserIdAsync(int userId);
+        Task<IEnumerable<EmployerProfile>> SearchEmployerByAIResult(EmployerQuery jobQuery);
 
-        Task<bool> CheckExistByUserIdAsync(int userId);
 
     }
 }
