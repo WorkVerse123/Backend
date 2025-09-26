@@ -16,6 +16,7 @@ namespace Application.Interfaces.IRepositories
         Task<bool> UpdatePasswordAsynce(int userId, string newPasswordHash);
         Task<bool> IsPremiumAsync(int userId);
         Task<bool> UpdateStatusAsync(int userId, string newStatus);
+        Task<bool> UpdateUserByEmployerId(int employerId, string newPhone, string newEmail);
     }
 }
     

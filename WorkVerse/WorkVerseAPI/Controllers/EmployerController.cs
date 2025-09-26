@@ -71,6 +71,7 @@ namespace WorkVerseAPI.Controllers
                 }
 
                 var result = await _employerProfileService.UpdateEmployerProfileAsync(id, employerDto);
+                var resultUpdateUser = await _employerProfileService.UpdateUserByEmployerId(id, employerDto.ContactNumber, employerDto.ContactEmail);
                 if (!result)
                 {
                     return NotFound(new ApiResponse<object>($"Employer with ID {id} not found.", 404));
