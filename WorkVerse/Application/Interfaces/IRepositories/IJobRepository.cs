@@ -25,5 +25,8 @@ namespace Application.Interfaces.IRepositories
         Task<IEnumerable<Job>> SearchJobByAIResult(JobQuery jobQuery);
 
         Task<IEnumerable<Job>> SearchJobByEmployerAIResult(JobQuery jobQuery, EmployerQuery employerQuery);
+        Task<int> CountJobApply(int jobId);
+        Task<bool> AddJobCategory(int jobId, List<int> categoryIds);
+        Task<bool> RemoveJobCategory(int jobId);
     }
 }

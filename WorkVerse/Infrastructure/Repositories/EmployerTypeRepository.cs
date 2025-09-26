@@ -14,5 +14,10 @@ namespace Infrastructure.Repositories
         public EmployerTypeRepository(WorkVerseDBContext context) : base(context)
         {
         }
+
+        public Task<List<EmployerType>> GetAllEmployerTypesAsync()
+        {
+            return Task.FromResult(_dbSet.ToList());
+        }
     }
 }

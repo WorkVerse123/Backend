@@ -74,5 +74,20 @@ namespace Infrastructure.Repositories
                 return true;
             });
         }
+
+        public Task<bool> UpdateUserByEmployerId(int employerId, string newPhone, string newEmail)
+        {
+            return Task.Run(async () =>
+            {
+                var user = await _dbSet
+                    .Include(u => u.EmployerProfile)
+                    .FirstOrDefaultAsync(u => u.EmployerProfile != null && u.EmployerProfile.EmployerId == employerId);
+                if (user == null)
+                    return false;
+                user.PhoneNumber = newPhone;
+                user.Email = newEmail;
+                return true;
+            });
+        }
     }
 }

@@ -291,5 +291,31 @@ namespace Infrastructure.Repositories
             return ranked;
         }
 
+        public Task<int> CountJobApply(int jobId)
+        {
+            return _context.Applications
+                .Where(ja => ja.JobId == jobId)
+                .CountAsync();
+        }
+
+        public Task<bool> AddJobCategory(int jobId, List<int> categoryIds)
+        {
+            var mappings = categoryIds.Select(catId => new JobCategoryMapping
+            {
+                JobId = jobId,
+                CategoryId = catId
+            }).ToList();
+            return _context.JobCategoryMappings
+                .AddRangeAsync(mappings)
+                .ContinueWith(t => t.IsCompletedSuccessfully);
+        }
+
+        public async Task<bool> RemoveJobCategory(int jobId)
+        {
+            return await _context.JobCategoryMappings
+                .Where(m => m.JobId == jobId)
+                .ExecuteDeleteAsync()
+                .ContinueWith(t => t.Result > 0);
+        }
     }
 }
