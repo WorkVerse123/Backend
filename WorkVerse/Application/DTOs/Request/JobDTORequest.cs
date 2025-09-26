@@ -30,7 +30,7 @@ namespace Application.DTOs.Request
 		[MaxLength(200)]
 		public string? Search { get; set; }  // tìm trong Title, Description, Requirements, Location
 
-		public List<int?> CategoryId { get; set; } // chọn từ bảng JobCategory
+		public List<int>? CategoryId { get; set; } = new List<int>();
 
 		[Range(0, double.MaxValue)]
 		public decimal? SalaryMin { get; set; }

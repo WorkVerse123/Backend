@@ -29,8 +29,6 @@ namespace Application.DTOs.Response
 
         public bool IsPriority { get; set; } = false;
         public DateTime JobCreatedAt { get; set; }
-        public DateTime JobExpiredAt { get; set; }
-        public string JobStatus { get; set; } = null!;
 
     }
 

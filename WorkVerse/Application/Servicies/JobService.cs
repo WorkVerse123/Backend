@@ -250,7 +250,10 @@ namespace Application.Servicies
 
 			// Map sang DTO nếu cần
 			var mapped = _mapper.Map<List<JobSummaryDTO>>(pagedData);
-
+			foreach (var jobDto in mapped)
+			{
+				jobDto.EmployeeApplyCount = await _unitOfWork.Job.CountJobApply(jobDto.JobId);
+			}
 
 			return new JobListDTOResponse
 			{
