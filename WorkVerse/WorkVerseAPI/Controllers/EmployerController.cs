@@ -115,7 +115,7 @@ namespace WorkVerseAPI.Controllers
 
         // POST /employers/{id}/jobs
         [HttpPost("{id}/jobs")]
-        [Authorize]
+        //[Authorize]
         public async Task<IActionResult> CreateJobForEmployer(int id, [FromBody] JobDTORequest jobDto)
         {
             try
@@ -196,13 +196,13 @@ namespace WorkVerseAPI.Controllers
             }
         }
 
-        // PUT /employers/{id}/jobs/{job_id}/status
+        // PUT /employers/{id}/jobs/{job_id}/status1
         [HttpPut("{id}/jobs/{job_id}/status")]
-        public async Task<IActionResult> UpdateJobStatus(int id, int jobId, [FromBody] string statusDto)
+        public async Task<IActionResult> UpdateJobStatus(int id, int job_id, [FromBody] string statusDto)
         {
             try
             {
-                if (id <= 0 || jobId <= 0)
+                if (id <= 0 || job_id <= 0)
                 {
                     return BadRequest(new ApiResponse<object>("Employer ID and Job ID must be greater than 0", 400));
                 }
@@ -212,12 +212,12 @@ namespace WorkVerseAPI.Controllers
                     return BadRequest(new ApiResponse<object>("Status is required.", 400));
                 }
 
-                var job = await _jobService.GetJobByIdAsync(jobId);
+                var job = await _jobService.GetJobByIdAsync(job_id);
                 if (job == null || job.EmployerId != id)
                 {
-                    return NotFound(new ApiResponse<object>($"Job with ID {jobId} for employer {id} not found.", 404));
+                    return NotFound(new ApiResponse<object>($"Job with ID {job_id} for employer {id} not found.", 404));
                 }
-                var updated = await _jobService.UpdateJobStatusAsync(jobId, statusDto);
+                var updated = await _jobService.UpdateJobStatusAsync(job_id, statusDto);
             }
             catch (KeyNotFoundException ex)
             {
