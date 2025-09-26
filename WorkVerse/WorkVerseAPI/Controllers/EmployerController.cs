@@ -115,7 +115,7 @@ namespace WorkVerseAPI.Controllers
 
         // POST /employers/{id}/jobs
         [HttpPost("{id}/jobs")]
-        [Authorize]
+        //[Authorize]
         public async Task<IActionResult> CreateJobForEmployer(int id, [FromBody] JobDTORequest jobDto)
         {
             try
@@ -196,7 +196,7 @@ namespace WorkVerseAPI.Controllers
             }
         }
 
-        // PUT /employers/{id}/jobs/{job_id}/status
+        // PUT /employers/{id}/jobs/{job_id}/status1
         [HttpPut("{id}/jobs/{job_id}/status")]
         public async Task<IActionResult> UpdateJobStatus(int id, int job_id, [FromBody] string statusDto)
         {

@@ -52,7 +52,10 @@ namespace Application.Mappers
             .ForMember(dest => dest.IsPriority, opt => opt.MapFrom(src => src.IsPriority))
             .ForMember(dest => dest.JobStatus, opt => opt.MapFrom(src => src.Status));
 
-            CreateMap<JobDTORequest, Job>();
+            CreateMap<JobDTORequest, Job>()
+                .ForMember(dest => dest.JobId, opt => opt.Ignore());
+
+
 
             CreateMap<Job, JobDTO>()
                 .ForMember(dest => dest.JobSalaryMin, opt => opt.MapFrom(src => src.SalaryMin))

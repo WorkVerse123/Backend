@@ -32,7 +32,8 @@ namespace Application.Mappers
            .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
            .ForMember(dest => dest.EmployerType, opt => opt.Ignore());
 
-            CreateMap<EmployerProfile, EmployerProfileDTOResponse>();
+            CreateMap<EmployerProfile, EmployerProfileDTOResponse>()
+            .ForMember(dest => dest.EmployerTypeName, opt => opt.MapFrom(src => src.EmployerType.EmployerTypeName));
 
             CreateMap<EmployerProfile, EmployerInformationDTO>();
 

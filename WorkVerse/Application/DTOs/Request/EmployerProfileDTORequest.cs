@@ -8,13 +8,17 @@ namespace Application.DTOs.Request
 {
     public class EmployerProfileDTORequest
     {
+        public int EmployerId { get; set; } // 
         public int UserId { get; set; }
-        public string CompanyName { get; set; } = null!;
+        public string CompanyName { get; set; } = null!; //
         public int EmployerType { get; set; }
-        public string Address { get; set; } = null!;
-        public string? WebsiteUrl { get; set; }
-        public string? LogoUrl { get; set; }
-        public DateTime? DateEstablished { get; set; }
-        public string Description { get; set; } = null!;
+        public string Address { get; set; } = null!; //
+        public string? WebsiteUrl { get; set; } //
+        public string? LogoUrl { get; set; } //
+        public DateTime? DateEstablished { get; set; } //
+        public string Description { get; set; } = null!; //
+        public string ContactPhone { get; set; } //
+        public string ContactEmail { get; set; } //
+
     }
 }

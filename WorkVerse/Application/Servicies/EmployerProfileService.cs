@@ -170,5 +170,12 @@ namespace Application.Servicies
                 throw;
             }
         }
+
+        public async Task<bool> UpdateUserByEmployerId(int employerId, string newPhone, string newEmail)
+        {
+            await _unitOfWork.User.UpdateUserByEmployerId(employerId, newPhone, newEmail);
+            await _unitOfWork.SaveChangesAsync();
+            return true;
+        }
     }
 }
