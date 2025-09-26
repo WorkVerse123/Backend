@@ -25,6 +25,7 @@ namespace Application.DTOs.Response
         public DateTime JobCreatedAt { get; set; }
         public DateTime JobExpiredAt { get; set; }
         public string JobStatus { get; set; } = null!;
+
     }
 
     public class JobDetailsDTOResponse

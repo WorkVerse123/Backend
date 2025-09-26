@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,4 +24,32 @@ namespace Application.DTOs.Request
         public DateTime ExpiredAt { get; set; }
         public string Status { get; set; } = null!;
     }
+	public class JobFilterRequest
+	{
+		[MaxLength(200)]
+		public string? Search { get; set; }  // tìm trong Title, Description, Requirements, Location
+
+		public List<int?> CategoryId { get; set; } // chọn từ bảng JobCategory
+
+		[Range(0, double.MaxValue)]
+		public decimal? SalaryMin { get; set; }
+
+		[Range(0, double.MaxValue)]
+		public decimal? SalaryMax { get; set; }
+
+		public JobTimeType? JobTime { get; set; }
+
+
+	}
+
+public enum JobTimeType
+	{
+		[Description("Full-time")]
+		FullTime,
+		[Description("Part-time")]
+		PartTime
+	}
+
+
+
 }

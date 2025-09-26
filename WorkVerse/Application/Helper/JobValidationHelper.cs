@@ -1,6 +1,7 @@
 ﻿using Application.DTOs.Request;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -60,5 +61,15 @@ namespace Application.Helper
 
             return (true, string.Empty);
         }
-    }
+
+
+		public static string GetDescription<T>(T enumValue) where T : Enum
+		{
+			var fi = enumValue.GetType().GetField(enumValue.ToString());
+			var attr = fi.GetCustomAttributes(typeof(DescriptionAttribute), false)
+						 .FirstOrDefault() as DescriptionAttribute;
+			return attr?.Description ?? enumValue.ToString();
+		}
+
+	}
 }

@@ -10,6 +10,7 @@ using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Application.Servicies;
+using Application.DTOs.Email;
 
 namespace WorkVerseAPI
 {
@@ -42,6 +43,10 @@ namespace WorkVerseAPI
             builder.Services.AddAutoMapper(typeof(FeedbackProfile));
             builder.Services.AddAutoMapper(typeof(BlogProfile));
 
+            // Add Email SMTP
+
+            builder.Services.Configure<EmailSettings>(
+    builder.Configuration.GetSection("EmailSettings"));
 
             // Add Authentication
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

@@ -17,7 +17,8 @@ namespace Application.DTOs.Response
     public class JobApplicationItemDTO
     {
         public int ApplicationId { get; set; }
-        public string JobTitle { get; set; } = null!;
+		public int JobId { get; set; }
+		public string JobTitle { get; set; } = null!;
         public string JobLocation { get; set; } = null!;
         public List<string> JobCategory { get; set; } = new();
         public string ApplicationStatus { get; set; } = null!;
