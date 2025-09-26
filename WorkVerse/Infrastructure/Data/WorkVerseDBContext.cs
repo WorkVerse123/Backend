@@ -136,10 +136,14 @@ namespace Infrastructure.Data
                 entity.HasKey(e => e.EmployerId);
 
                 entity.HasIndex(e => e.UserId).IsUnique();
+                entity.HasIndex(e => e.ContactEmail).IsUnique();
+                entity.HasIndex(e => e.ContactPhone).IsUnique();
 
                 entity.Property(e => e.CompanyName).IsRequired().HasMaxLength(255);
                 entity.Property(e => e.Address).IsRequired().HasMaxLength(255);
                 entity.Property(e => e.Description).IsRequired();
+                entity.Property(e => e.ContactEmail).IsRequired().HasMaxLength(255);
+                entity.Property(e => e.ContactPhone).IsRequired().HasMaxLength(20);
 
                 entity.HasOne(e => e.User)
                       .WithOne(u => u.EmployerProfile)

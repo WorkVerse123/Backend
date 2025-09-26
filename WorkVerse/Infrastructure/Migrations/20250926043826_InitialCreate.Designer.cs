@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(WorkVerseDBContext))]
-    [Migration("20250914152143_InitialCreate")]
+    [Migration("20250926043826_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -283,6 +283,16 @@ namespace Infrastructure.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
+                    b.Property<string>("ContactEmail")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<string>("ContactPhone")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
                     b.Property<DateTime?>("DateEstablish")
                         .HasColumnType("datetime2");
 
@@ -306,6 +316,12 @@ namespace Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("EmployerId");
+
+                    b.HasIndex("ContactEmail")
+                        .IsUnique();
+
+                    b.HasIndex("ContactPhone")
+                        .IsUnique();
 
                     b.HasIndex("EmployerTypeId");
 

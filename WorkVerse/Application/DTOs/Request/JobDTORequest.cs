@@ -11,6 +11,7 @@ namespace Application.DTOs.Request
         public int JobId { get; set; } //
         public int EmployerId { get; set; } //
         public string Title { get; set; } = null!; //
+        public List<int> CategoryIds { get; set; } = new(); //
         public string Description { get; set; } = null!; //
         public string? Requirements { get; set; } //
         public string Location { get; set; } = null!; //

@@ -209,7 +209,9 @@ namespace Infrastructure.Migrations
                     LogoUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DateEstablish = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    SearchName = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    SearchName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ContactEmail = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    ContactPhone = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -651,6 +653,18 @@ namespace Infrastructure.Migrations
                 name: "IX_EmployeeProfile_UserId",
                 table: "EmployeeProfile",
                 column: "UserId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EmployerProfile_ContactEmail",
+                table: "EmployerProfile",
+                column: "ContactEmail",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EmployerProfile_ContactPhone",
+                table: "EmployerProfile",
+                column: "ContactPhone",
                 unique: true);
 
             migrationBuilder.CreateIndex(

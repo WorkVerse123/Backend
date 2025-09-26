@@ -280,6 +280,16 @@ namespace Infrastructure.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
+                    b.Property<string>("ContactEmail")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<string>("ContactPhone")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
                     b.Property<DateTime?>("DateEstablish")
                         .HasColumnType("datetime2");
 
@@ -303,6 +313,12 @@ namespace Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("EmployerId");
+
+                    b.HasIndex("ContactEmail")
+                        .IsUnique();
+
+                    b.HasIndex("ContactPhone")
+                        .IsUnique();
 
                     b.HasIndex("EmployerTypeId");
 
