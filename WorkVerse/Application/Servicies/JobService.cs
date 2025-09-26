@@ -113,6 +113,7 @@ namespace Application.Servicies
             {
                 var job = _mapper.Map<Job>(request);
                 await _unitOfWork.Job.AddAsync(job);
+                await _unitOfWork.Job.AddJobCategory(job.JobId, request.CategoryIds);
                 await _unitOfWork.SaveChangesAsync();
             }
             catch (Exception ex)
@@ -134,6 +135,8 @@ namespace Application.Servicies
                 var job = _mapper.Map<Job>(request);
                 job.JobId = jobId;
                 _unitOfWork.Job.Update(job);
+                await _unitOfWork.Job.RemoveJobCategory(jobId);
+                await _unitOfWork.Job.AddJobCategory(jobId, request.CategoryIds);
                 await _unitOfWork.SaveChangesAsync();
                 return true;
             }
