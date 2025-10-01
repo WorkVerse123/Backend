@@ -14,10 +14,15 @@ namespace Application.Mappers
         public BusyTimeProfile()
         {
             CreateMap<BusyTime, BusyTimeItemDTO>()
-                .ForMember(dest => dest.DayOfWeek,
-                           opt => opt.MapFrom(src =>
-                               Enum.GetName(typeof(DayOfWeek), src.DayOfWeek)
-                               ?? src.DayOfWeek.ToString()));
+    .ForMember(dest => dest.DayOfWeek,
+        opt => opt.MapFrom(src =>
+            Enum.GetName(typeof(DayOfWeek), src.DayOfWeek)
+            ?? src.DayOfWeek.ToString()))
+    .ForMember(dest => dest.Date,
+        opt => opt.MapFrom(src => src.Date.ToString("yyyy-MM-dd")));
+
+
+
         }
     }
 }

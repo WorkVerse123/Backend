@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(WorkVerseDBContext))]
-    [Migration("20250926043826_InitialCreate")]
+    [Migration("20251001150748_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -179,6 +179,9 @@ namespace Infrastructure.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BusyTimeId"));
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("date");
 
                     b.Property<byte>("DayOfWeek")
                         .HasColumnType("tinyint");

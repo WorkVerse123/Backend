@@ -11,7 +11,13 @@ namespace Application.Interfaces.IRepositories
     {
         Task<IEnumerable<BusyTime>> GetByEmployeeIdAsync(int employeeId);
 
-        Task<bool> ExistsOverlapAsync(int employeeId, byte dayOfWeek, TimeSpan start, TimeSpan end, int? excludeBusyTimeId);
+        Task<bool> ExistsOverlapAsync(
+      int employeeId,
+      byte? dayOfWeek,
+      TimeSpan start,
+      TimeSpan end,
+      int? excludeBusyTimeId = null,
+      DateTime? date = null);
 
         Task<BusyTime> GetByIdAsync(int busyTimeId);
     }

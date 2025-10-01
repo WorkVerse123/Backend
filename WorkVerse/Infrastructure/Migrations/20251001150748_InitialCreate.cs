@@ -428,7 +428,8 @@ namespace Infrastructure.Migrations
                     EmployeeId = table.Column<int>(type: "int", nullable: false),
                     DayOfWeek = table.Column<byte>(type: "tinyint", nullable: false),
                     StartTime = table.Column<TimeSpan>(type: "time", nullable: false),
-                    EndTime = table.Column<TimeSpan>(type: "time", nullable: false)
+                    EndTime = table.Column<TimeSpan>(type: "time", nullable: false),
+                    Date = table.Column<DateTime>(type: "date", nullable: false)
                 },
                 constraints: table =>
                 {

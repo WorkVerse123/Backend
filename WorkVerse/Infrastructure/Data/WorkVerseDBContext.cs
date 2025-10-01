@@ -117,6 +117,10 @@ namespace Infrastructure.Data
                 entity.Property(e => e.EndTime)
                       .IsRequired();
 
+                entity.Property(e => e.Date)
+                      .HasColumnType("date")
+                      .IsRequired();
+
                 entity.HasOne(e => e.Employee)
                       .WithMany(ep => ep.BusyTimes)   
                       .HasForeignKey(e => e.EmployeeId)

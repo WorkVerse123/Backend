@@ -13,6 +13,7 @@ namespace Domain.Entities
         public byte DayOfWeek { get; set; }
         public TimeSpan StartTime { get; set; }
         public TimeSpan EndTime { get; set; }
+        public DateTime Date { get; set; }
 
         public virtual EmployeeProfile Employee { get; set; } = null!;
     }

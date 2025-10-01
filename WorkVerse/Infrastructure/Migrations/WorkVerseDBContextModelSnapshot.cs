@@ -177,6 +177,9 @@ namespace Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BusyTimeId"));
 
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("date");
+
                     b.Property<byte>("DayOfWeek")
                         .HasColumnType("tinyint");
 

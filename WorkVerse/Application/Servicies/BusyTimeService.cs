@@ -73,12 +73,14 @@ namespace Application.Servicies
                         _ => throw new ArgumentException($"Invalid dayOfWeek: {bt.DayOfWeek}")
                     };
 
-                    var isOverlap = await _unitOfWork.BusyTime.ExistsOverlapAsync(employeeId, (byte)dayNumber, bt.StartTime, bt.EndTime,null);
-
+                    var isOverlap = await _unitOfWork.BusyTime.ExistsOverlapAsync(employeeId, (byte)dayNumber, bt.StartTime, bt.EndTime,null, bt.Date);
                     if (isOverlap)
                     {
                         throw new InvalidOperationException(
-                            $"Busy time overlaps with existing schedule on {bt.DayOfWeek} ({bt.StartTime}-{bt.EndTime})");
+                            bt.Date != null
+                                ? $"Busy time overlaps on {bt.Date:yyyy-MM-dd} ({bt.StartTime}-{bt.EndTime})"
+                                : $"Busy time overlaps on {bt.DayOfWeek} ({bt.StartTime}-{bt.EndTime})"
+                        );
                     }
 
                     busyTimeEntities.Add(new BusyTime
@@ -86,7 +88,8 @@ namespace Application.Servicies
                         EmployeeId = employeeId,
                         DayOfWeek = (byte)dayNumber,
                         StartTime = bt.StartTime,
-                        EndTime = bt.EndTime
+                        EndTime = bt.EndTime,
+                        Date = bt.Date,
                     });
                 }
 
@@ -98,7 +101,8 @@ namespace Application.Servicies
                     BusyTimeId = b.BusyTimeId,
                     DayOfWeek = Enum.GetName(typeof(DayOfWeek), b.DayOfWeek) ?? b.DayOfWeek.ToString(),
                     StartTime = b.StartTime,
-                    EndTime = b.EndTime
+                    EndTime = b.EndTime,
+                    Date = b.Date.ToString("yyyy-MM-dd"),
                 }).ToList();
             }
             catch (Exception ex)
@@ -146,17 +150,21 @@ namespace Application.Servicies
 
                     // Kiểm tra overlap với những busyTime khác (ngoại trừ chính nó)
                     var isOverlap = await _unitOfWork.BusyTime.ExistsOverlapAsync(
-                        employeeId, (byte)dayNumber, request.StartTime, request.EndTime, excludeBusyTimeId: request.BusyTimeId.Value);
+                        employeeId, (byte)dayNumber, request.StartTime, request.EndTime, excludeBusyTimeId: request.BusyTimeId.Value,request.Date);
 
                     if (isOverlap)
+                    {
                         throw new InvalidOperationException(
-                            $"Busy time overlaps with existing schedule on {request.DayOfWeek} ({request.StartTime}-{request.EndTime})");
-
+                            request.Date != null
+                                ? $"Busy time overlaps on {request.Date:yyyy-MM-dd} ({request.StartTime}-{request.EndTime})"
+                                : $"Busy time overlaps on {request.DayOfWeek} ({request.StartTime}-{request.EndTime})"
+                        );
+                    }
                     // Update entity
                     busyTime.DayOfWeek = (byte)dayNumber;
                     busyTime.StartTime = request.StartTime;
                     busyTime.EndTime = request.EndTime;
-
+                    busyTime.Date = request.Date;
                     _unitOfWork.BusyTime.Update(busyTime);
                 }
 
@@ -170,7 +178,8 @@ namespace Application.Servicies
                     BusyTimeId = b.BusyTimeId,
                     DayOfWeek = Enum.GetName(typeof(DayOfWeek), b.DayOfWeek) ?? b.DayOfWeek.ToString(),
                     StartTime = b.StartTime,
-                    EndTime = b.EndTime
+                    EndTime = b.EndTime,
+                    Date = b.Date.ToString("yyyy-MM-dd"),
                 }).ToList();
             }
             catch (Exception ex)
