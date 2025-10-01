@@ -40,7 +40,7 @@ namespace Infrastructure.Repositories
         // Lấy tất cả Employee public
         public async Task<IEnumerable<EmployeeProfile>> GetAllPublicEmployeeAsync()
         {
-            var result = await _dbSet.Where(u => u.Mode == "public").ToListAsync();
+            var result = await _dbSet.ToListAsync();
             return result;
         }
         // Đếm tất cả employee
