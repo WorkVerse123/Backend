@@ -16,6 +16,7 @@ namespace Application.DTOs.Response
     public class JobBookmarkItemDTO
     {
         public int BookmarkId { get; set; }
+        public int JobId { get; set; }
         public string JobTitle { get; set; } = null!;
         public string JobLocation { get; set; } = null!;
         public List<string> JobCategory { get; set; } = new();
