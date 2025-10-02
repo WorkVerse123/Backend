@@ -51,6 +51,8 @@ namespace Application.DTOs.Response
         public DateTime AppliedAt { get; set; }
         public string EmployeeFullName { get; set; } = null!;
         public string EmployeeGender { get; set; } = null!;
+        public string Status { get; set; } = null!;
+
     }
 
     // thống kê chung của hệ thống 

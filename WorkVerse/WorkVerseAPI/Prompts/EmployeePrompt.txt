@@ -23,16 +23,8 @@ Rules:
 - SalaryMin and SalaryMax must be numbers.
 - Other fields can be free text, don’t invent values.
 - For EmployerType, always choose one of the following or null if not mentioned:
-[""F&B - Nhà hàng, quán ăn, cafe"",
- ""Bán lẻ - Siêu thị, cửa hàng tiện lợi"",
- ""Giáo dục - Gia sư, trung tâm ngoại ngữ"",
- ""Sự kiện - PG, PB, hỗ trợ tổ chức"",
- ""Marketing & Truyền thông"",
- ""Dịch vụ giao hàng - Shipper, Driver"",
- ""Chăm sóc khách hàng - Call center"",
- ""Lễ tân - Hành chính văn phòng"",
- ""Kinh doanh - Bán hàng"",
- ""Công nghệ - IT support, tester part-time""]. 
+[""Cá nhân"",
+ ""Công ty""]. 
 - For Job.Category, always choose one of the following or null if not specified:
 ["F&B - Phục vụ, Pha chế", "Retail - Bán hàng, Thu ngân", "Education - Gia sư, Trợ giảng", "Events - PG, PB, hỗ trợ sự kiện", "Delivery - Shipper, Tài xế công nghệ", "Customer Service - Tổng đài, CSKH", "Marketing - Phát tờ rơi, Online Marketing", "Office Support - Hành chính, Lễ tân", "Cleaning - Tạp vụ, Giúp việc", "Freelance - Viết lách, Thiết kế, IT support"].
 - For Job.DaysOfWeek, extract the days the user mentions. Return as a list of numbers 0=Sunday, 1=Monday, etc. 

@@ -68,26 +68,7 @@ namespace WorkVerseAPI.Controllers
             }
         }
 
-        // GET /employers/{id}/job/{job_id}/applications
-        [HttpGet("employers/{id}/job/{job_id}/applications")]
-        public async Task<IActionResult> GetAllJobApplication([FromRoute] int id, [FromRoute] int job_id, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
-        {
-            try
-            {
-                var result = await _applicationService.GetApplicationsByJobAsync(id,job_id,pageNumber, pageSize);
-                if (result == null)
-                {
-                    return NotFound(new ApiResponse<object>(
-                        $"No Job Applications found", 404));
-                }
-
-                return Ok(new ApiResponse<EmployerJobApplicationsDTOResponse>("Registration successful", result, 200));
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new ApiResponse<object>(ex.Message, 500));
-            }
-        }
+        
 
         // GET/stats
         [HttpGet("stats")]
