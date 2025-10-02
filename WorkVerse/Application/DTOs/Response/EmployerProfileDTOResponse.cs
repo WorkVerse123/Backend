@@ -27,7 +27,8 @@ namespace Application.DTOs.Response
     public class EmployerProfileDTOResponse
     {
         public int EmployerId { get; set; } //
-        public string CompanyName { get; set; } = null!; //
+		public int EmployerTypeId { get; set; }
+		public string CompanyName { get; set; } = null!; //
         public string EmployerTypeName { get; set; } = null!;
         public string Address { get; set; } = null!; //
         public string? WebsiteUrl { get; set; } //
