@@ -254,5 +254,26 @@ namespace WorkVerseAPI.Controllers
                 return StatusCode(500, new ApiResponse<object>(ex.Message, 500));
             }
         }
+
+        // GET /employers-filter
+        [HttpGet("/employers-filter")]
+        public async Task<IActionResult> GetEmployersFilters([FromQuery] EmployerFilterRequest request, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
+        {
+            try
+            {
+                var result = await _employerProfileService.GetEmployersFilter(request, pageNumber, pageSize);
+                if (result == null)
+                {
+                    return NotFound(new ApiResponse<object>(
+                        "Something went wrong. Please try again later.", 404));
+                }
+
+                return Ok(new ApiResponse<ListEmployerProfileFilterDTOResponse>("Registration successful", result, 200));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ApiResponse<object>(ex.Message, 500));
+            }
+        }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Application.DTOs.Request;
 using Application.DTOs.Response;
+using Application.Helper;
 using Application.Interfaces.IRepositories;
 using Application.Interfaces.IServicies;
 using AutoMapper;
@@ -177,5 +178,67 @@ namespace Application.Servicies
             await _unitOfWork.SaveChangesAsync();
             return true;
         }
+
+        public async Task<ListEmployerProfileFilterDTOResponse> GetEmployersFilter(EmployerFilterRequest filter, int pageNumber, int pageSize)
+        {
+            var query = (await _unitOfWork.EmployerProfile.GetAllEmployersAsync())
+                            .AsQueryable();
+
+            // Search chung
+            if (!string.IsNullOrWhiteSpace(filter.Search))
+            {
+                string search = filter.Search.Trim().ToLower();
+                query = query.Where(e =>
+                    (!string.IsNullOrEmpty(e.CompanyName) && e.CompanyName.ToLower().Contains(search)) ||
+                    (!string.IsNullOrEmpty(e.Description) && e.Description.ToLower().Contains(search)) ||
+                    (!string.IsNullOrEmpty(e.ContactEmail) && e.ContactEmail.ToLower().Contains(search)) ||
+                    (!string.IsNullOrEmpty(e.ContactPhone) && e.ContactPhone.ToLower().Contains(search))
+                );
+            }
+
+            // Loại hình (công ty / cá nhân)
+            if (filter.EmployerTypeId != null && filter.EmployerTypeId.Any())
+            {
+                query = query.Where(e => filter.EmployerTypeId.Contains(e.EmployerTypeId));
+            }
+
+            // Khu vực (34 tỉnh/thành)
+            if (filter.Locations != null && filter.Locations.Any())
+            {
+                var provinceNames = filter.Locations
+                    .Select(p => JobValidationHelper.GetDescription((EmployerFilterType)p).ToLower()) // description lowercase
+                    .ToList();
+
+                query = query.Where(e =>
+                    !string.IsNullOrEmpty(e.Address) &&
+                    provinceNames.Any(prov => e.Address.ToLower().Contains(prov)) // address lowercase
+                );
+            }
+
+
+            // Tổng số record
+            var totalRecords = query.Count();
+
+            // Phân trang
+            var pagedData = query
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+
+            // Map sang DTO
+            var mapped = _mapper.Map<List<EmployerProfileDTOResponse>>(pagedData);
+
+            return new ListEmployerProfileFilterDTOResponse
+            {
+                Employers = mapped,
+                Paging = new PaginatedResponse
+                {
+                    Page = pageNumber,
+                    PageSize = pageSize,
+                    TotalPages = (int)Math.Ceiling(totalRecords / (double)pageSize),
+                }
+            };
+        }
+
     }
 }

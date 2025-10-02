@@ -127,7 +127,7 @@ namespace WorkVerseAPI.Controllers
         }
 
         // GET/candidates
-        [HttpGet("cadidates")]
+        [HttpGet("candidates")]
         public async Task<IActionResult> GetAllCandidates([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
             try

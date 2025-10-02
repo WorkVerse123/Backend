@@ -18,6 +18,6 @@ namespace Application.Interfaces.IServicies
         Task<int?> GetEmployerIdByUserIdAsync(int userId);
         Task<IEnumerable<EmployerAIDTOResponse>> SearchEmployerByAIResult(EmployerQuery employerQuery);
         Task<bool> UpdateUserByEmployerId(int employerId, string newPhone, string newEmail);
-
+        Task<ListEmployerProfileFilterDTOResponse> GetEmployersFilter(EmployerFilterRequest filter, int pageNumber, int pageSize);
     }
 }

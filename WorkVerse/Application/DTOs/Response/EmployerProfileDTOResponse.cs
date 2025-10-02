@@ -38,4 +38,11 @@ namespace Application.DTOs.Response
         public string ContactEmail { get; set; } = null!; //
         public string ContactPhone { get; set; } = null!; //
     }
+
+    public class ListEmployerProfileFilterDTOResponse
+    {
+        public PaginatedResponse Paging { get; set; }
+
+        public List<EmployerProfileDTOResponse> Employers { get; set; } = new();
+    }
 }
