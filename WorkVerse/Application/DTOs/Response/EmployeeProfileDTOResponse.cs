@@ -20,6 +20,8 @@ namespace Application.DTOs.Response
         public string? Education { get; set; }
         public string? WorkExperience { get; set; }
         public string? Mode { get; set; }
+        public string? Email { get; set; } = null!;
+        public string? PhoneNumber { get; set; }
     }
 
     public class EmployeeDashboardDTOResponse

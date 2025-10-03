@@ -18,7 +18,11 @@ namespace Application.Mappers
             CreateMap<EmployeeProfileDTORequest, EmployeeProfile>();
 
             // Response
-            CreateMap<EmployeeProfile, EmployeeProfileDTOResponse>();
+            CreateMap<EmployeeProfile, EmployeeProfileDTOResponse>()
+                 .ForMember(dest => dest.PhoneNumber,
+                opt => opt.MapFrom(src => src.User.PhoneNumber))
+                  .ForMember(dest => dest.Email,
+                opt => opt.MapFrom(src => src.User.Email));
 
             CreateMap<EmployeeProfile, CandidateItemDTO>()
             .ForMember(dest => dest.EmployeeLocation,
