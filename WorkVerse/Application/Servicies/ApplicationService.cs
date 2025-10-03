@@ -268,7 +268,7 @@ namespace Application.Servicies
                 {
                     throw new KeyNotFoundException($"Application with ID {applicationId} not found.");
                 }
-                if (application.Status.ToLower() != "accepted" || application.Status.ToLower() != "rejected")
+                if (application.Status.ToLower() == "accepted" || application.Status.ToLower() == "rejected")
                 {
                     throw new InvalidOperationException($"Application with ID {applicationId} has already updated status.");
                 }
