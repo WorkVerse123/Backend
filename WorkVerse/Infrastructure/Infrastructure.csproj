@@ -8,7 +8,6 @@
 
   <ItemGroup>
     <Folder Include="Migrations\" />
-    <Folder Include="Servicies\" />
   </ItemGroup>
 
 	<ItemGroup>
@@ -26,6 +25,7 @@
 		<PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="8.0.1" />
 		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.1" />
+		<PackageReference Include="payOS" Version="1.0.9" />
 	</ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Application\Application.csproj" />

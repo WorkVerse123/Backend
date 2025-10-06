@@ -13,20 +13,22 @@ namespace Application.Servicies
 {
     public class SubscriptionService : ISubscriptionService
     {
-        private readonly ISubscriptionRepository _subscriptionRepository;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly ILogger<SubscriptionService> _logger;
-        public SubscriptionService(ISubscriptionRepository subscriptionRepository, IMapper mapper, ILogger<SubscriptionService> logger)
+
+        public SubscriptionService(IUnitOfWork unitOfWork, IMapper mapper, ILogger<SubscriptionService> logger)
         {
-            _subscriptionRepository = subscriptionRepository;
+            _unitOfWork = unitOfWork;
             _mapper = mapper;
             _logger = logger;
         }
+
         public async Task<IEnumerable<SubscriptionPlanDTOResponse>> GetAll()
         {
             try
             {
-                var plans = await _subscriptionRepository.GetAll();
+                var plans = await _unitOfWork.Subscription.GetAll();
                 var result = _mapper.Map<IEnumerable<SubscriptionPlanDTOResponse>>(plans);
                 return result;
             }
@@ -41,7 +43,7 @@ namespace Application.Servicies
         {
             try
             {
-                var plan = await _subscriptionRepository.GetByUser(id);
+                var plan = await _unitOfWork.Subscription.GetByUser(id);
                 if (plan == null)
                     return null;
 
@@ -59,7 +61,11 @@ namespace Application.Servicies
         {
             try
             {
-                var result = await _subscriptionRepository.RegisterSubsciption(userId, planId);
+                var result = await _unitOfWork.Subscription.RegisterSubsciption(userId, planId);
+                if (result)
+                {
+                    await _unitOfWork.SaveChangesAsync();
+                }
                 return result;
             }
             catch (Exception ex)

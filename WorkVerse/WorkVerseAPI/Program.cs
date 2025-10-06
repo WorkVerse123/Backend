@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Application.Servicies;
 using Application.DTOs.Email;
+using Infrastructure.Models;
 
 namespace WorkVerseAPI
 {
@@ -46,7 +47,11 @@ namespace WorkVerseAPI
             // Add Email SMTP
 
             builder.Services.Configure<EmailSettings>(
-    builder.Configuration.GetSection("EmailSettings"));
+            builder.Configuration.GetSection("EmailSettings"));
+
+            builder.Services.Configure<PayOSSettings>(
+            builder.Configuration.GetSection("PayOS")); 
+
 
             // Add Authentication
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
