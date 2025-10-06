@@ -9,12 +9,13 @@ using System.Threading.Tasks;
 
 namespace Application.Mappers
 {
-    public class SubscriptionPlanProfile : Profile
+    public class PaymentProfile : Profile
     {
-        public SubscriptionPlanProfile()
+        public PaymentProfile()
         {
-            CreateMap<SubscriptionPlan, SubscriptionPlanDTOResponse>();
-            CreateMap<SubscriptionPlan, PlanPaymentDTORespone>();
+            CreateMap<Payment, PaymentDTOResponse>();
+
+
         }
     }
 }

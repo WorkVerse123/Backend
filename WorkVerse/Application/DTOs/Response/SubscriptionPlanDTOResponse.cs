@@ -16,4 +16,11 @@ namespace Application.DTOs.Response
         public int DurationDays { get; set; }
         public string? Features { get; set; }
     }
+    public class PlanPaymentDTORespone
+    {
+        public int PlanId { get; set; }
+        public string PlanName { get; set; } = null!;
+        public decimal Price { get; set; }
+        public int DurationDays { get; set; }
+    }
 }

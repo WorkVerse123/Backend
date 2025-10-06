@@ -1,4 +1,6 @@
 ﻿using Application.DTOs.Request;
+using Application.Interfaces.IServicies;
+using Application.Servicies;
 using Infrastructure.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -8,16 +10,17 @@ using WorkVerseAPI.Models;
 namespace WorkVerseAPI.Controllers
 {
     [ApiController]
-    [Route("api/payments")]
+    [Route("api/payment")]
     public class PaymentController : ControllerBase
     {
-        private readonly PayOSService _payService;
+        private readonly IThirdPaymentService _payService;
+        private readonly IPaymentService _payment;
 
-        public PaymentController(PayOSService payService)
+        public PaymentController(IThirdPaymentService payService, IPaymentService payment)
         {
             _payService = payService;
+            _payment = payment;
         }
-
         // POST /payments
         [HttpPost]
         public async Task<IActionResult> CreatePayment([FromBody] SubscriptionPlanDTORequest plan)
@@ -41,19 +44,26 @@ namespace WorkVerseAPI.Controllers
 
         // POST /payments/webhook
         [HttpPost("webhook")]
-        public IActionResult Webhook([FromBody] dynamic payload)
+        public async Task<IActionResult> Webhook()
         {
+            using var reader = new StreamReader(Request.Body);
+            var body = await reader.ReadToEndAsync(); 
+
             try
             {
-                // TODO: Validate signature and update DB as needed
-                Console.WriteLine("Webhook data: " + payload?.ToString());
-                return Ok(new ApiResponse<object>("Webhook received successfully.", null, 200));
+                //var data = _payService.VerifyWebhookData(body); 
+
+                // hoặc data.desc
+                // TODO: update DB theo trạng thái
+
+                return Ok(new ApiResponse<object>("Webhook verified successfully.", null, 200));
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new ApiResponse<object>(ex.Message, 500));
+                return BadRequest(new ApiResponse<object>(ex.Message, 400));
             }
         }
+
 
         // GET /payments/success
         [HttpGet("success")]
@@ -82,6 +92,22 @@ namespace WorkVerseAPI.Controllers
             try
             {
                 return Ok(new ApiResponse<object>("Payment was cancelled.", null, 200));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ApiResponse<object>(ex.Message, 500));
+            }
+        }
+
+        [HttpGet("{id}")]
+        public IActionResult GetPayment(int id)
+        {
+            try
+            {
+                var payment = _payment.GetById(id).Result;
+                if (payment == null)
+                    return NotFound(new ApiResponse<object>($"Payment with id {id} not found.", 404));
+                return Ok(new ApiResponse<object>("Payment retrieved successfully.", payment, 200));
             }
             catch (Exception ex)
             {

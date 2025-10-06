@@ -33,6 +33,7 @@ namespace Application.Interfaces.IRepositories
         INotificationRepository Notification { get; }
         IStaffProfileRepository StaffProfile { get; }
         ISubscriptionRepository Subscription { get; }
+        IPaymentRepository Payment { get; }
 
     }
 }
