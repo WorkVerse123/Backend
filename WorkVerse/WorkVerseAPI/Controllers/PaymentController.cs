@@ -15,11 +15,13 @@ namespace WorkVerseAPI.Controllers
     {
         private readonly IThirdPaymentService _payService;
         private readonly IPaymentService _payment;
+        private readonly IUserSubscriptionService _userSubscripitionService;
 
-        public PaymentController(IThirdPaymentService payService, IPaymentService payment)
+        public PaymentController(IThirdPaymentService payService, IPaymentService payment, IUserSubscriptionService userSubscripitionService)
         {
             _payService = payService;
             _payment = payment;
+            _userSubscripitionService = userSubscripitionService;
         }
         // POST /payments
         [HttpPost]
@@ -54,6 +56,7 @@ namespace WorkVerseAPI.Controllers
             {
                 var payment = await _payService.VerifyWebhookDataAsync(body);
                 var updatePayment = await _payment.UpdateAsync(payment);
+                var userSubscription = await _userSubscripitionService.AddAsync(payment);
 
                 return Ok(new ApiResponse<object>("Webhook verified successfully.", updatePayment, 200));
             }

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Application.DTOs.Request;
+using Application.DTOs.Response;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,5 +10,8 @@ namespace Application.Interfaces.IServicies
 {
     public interface IUserSubscriptionService
     {
+        Task<UserSubsctiptionDTOResponse> AddAsync(PaymentDTORequest request);
+        Task<UserSubsctiptionDTOResponse> UpdateAsynce(UserSubscriptionDTORequest request);
+        Task<bool> UpdateStatusAsync(int userId, bool status);
     }
 }

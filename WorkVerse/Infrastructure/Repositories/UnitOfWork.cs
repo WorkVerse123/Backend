@@ -40,6 +40,7 @@ namespace Infrastructure.Repositories
             StaffProfile = new StaffProfileRepository(_dbContext);
             Subscription = new SubscriptionRepository(_dbContext);
             Payment = new PaymentRepository(_dbContext);
+            UserSubscription = new UserSubscriptionRepository(_dbContext);
         }
 
         public async Task BeginTransactionAsync()
@@ -164,9 +165,7 @@ namespace Infrastructure.Repositories
         public INotificationRepository Notification { get; private set; }
         public IStaffProfileRepository StaffProfile { get; private set; }
         public ISubscriptionRepository Subscription { get; private set; }
-        public IPaymentRepository Payment
-        {
-            get; private set;
-        }
+        public IPaymentRepository Payment { get; private set; }
+        public IUserSubscriptionRepository UserSubscription { get; private set; }
     }
 }

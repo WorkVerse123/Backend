@@ -57,6 +57,7 @@ namespace WorkVerseAPI.Configurations
             builder.RegisterType<SubscriptionService>().As<ISubscriptionService>().InstancePerLifetimeScope();
             builder.RegisterType<PaymentService>().As<IPaymentService>().InstancePerLifetimeScope();
             builder.RegisterType<PayOSService>().As<IThirdPaymentService>().InstancePerLifetimeScope();
+            builder.RegisterType<UserSubscriptionService>().As<IUserSubscriptionService>().InstancePerLifetimeScope();
         }
 	}
 }

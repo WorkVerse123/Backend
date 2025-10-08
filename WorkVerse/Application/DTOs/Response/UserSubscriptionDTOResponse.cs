@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Application.DTOs.Response
 {
-    public class UserSubsctiptionDTOResponse
+    public class UserSubscriptionDTOResponse
     {
         public int UserSubscriptionId { get; set; }
         public int UserId { get; set; }

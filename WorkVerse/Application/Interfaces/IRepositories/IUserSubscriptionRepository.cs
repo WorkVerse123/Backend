@@ -9,5 +9,6 @@ namespace Application.Interfaces.IRepositories
 {
     public interface IUserSubscriptionRepository : IGenericRepository<UserSubscription>
     {
+        Task<bool> UpdateStatusAsync(int userId, bool isActive);
     }
 }

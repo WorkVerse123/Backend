@@ -34,6 +34,7 @@ namespace Application.Interfaces.IRepositories
         IStaffProfileRepository StaffProfile { get; }
         ISubscriptionRepository Subscription { get; }
         IPaymentRepository Payment { get; }
+        IUserSubscriptionRepository UserSubscription { get; }
 
     }
 }
