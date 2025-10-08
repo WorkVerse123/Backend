@@ -21,6 +21,8 @@ namespace Application.DTOs.Response
         public string Industry { get; set; } = null!;
         public string? Website { get; set; }
         public string? Logo { get; set; }
+        public bool IsPriority { get; set; } = false;
+
     }
 
     // hồ sơ chi tiết của 1 nhà tuyển dụng 
@@ -37,6 +39,8 @@ namespace Application.DTOs.Response
         public string Description { get; set; } = null!; // 
         public string ContactEmail { get; set; } = null!; //
         public string ContactPhone { get; set; } = null!; //
+        public bool IsPriority { get; set; } = false;
+
     }
 
     public class ListEmployerProfileFilterDTOResponse

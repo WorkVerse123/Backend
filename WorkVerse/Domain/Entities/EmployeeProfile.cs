@@ -21,6 +21,7 @@ namespace Domain.Entities
         public string? WorkExperience { get; set; }
         public string? Mode { get; set; }
         public string? SearchName { get; set; }
+        public bool IsPriority { get; set; } = false;
 
         public virtual User User { get; set; } = null!;
         public virtual ICollection<BusyTime> BusyTimes { get; set; } = new List<BusyTime>();

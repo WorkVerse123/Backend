@@ -22,6 +22,8 @@ namespace Application.DTOs.Response
         public string? Mode { get; set; }
         public string? Email { get; set; } = null!;
         public string? PhoneNumber { get; set; }
+        public bool IsPriority { get; set; } = false;
+
     }
 
     public class EmployeeDashboardDTOResponse

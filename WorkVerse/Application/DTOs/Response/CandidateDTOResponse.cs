@@ -19,5 +19,7 @@ namespace Application.DTOs.Response
         public string? EmployeeLocation { get; set; }
         public string? EmployeeEducation { get; set; }
         public string? Gender { get; set; }
+        public bool IsPriority { get; set; } = false;
+
     }
 }

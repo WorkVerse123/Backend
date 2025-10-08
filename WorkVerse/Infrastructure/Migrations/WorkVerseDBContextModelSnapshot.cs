@@ -236,6 +236,11 @@ namespace Infrastructure.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
+                    b.Property<bool>("IsPriority")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
                     b.Property<string>("Mode")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
@@ -302,6 +307,11 @@ namespace Infrastructure.Migrations
 
                     b.Property<int>("EmployerTypeId")
                         .HasColumnType("int");
+
+                    b.Property<bool>("IsPriority")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
 
                     b.Property<string>("LogoUrl")
                         .HasColumnType("nvarchar(max)");

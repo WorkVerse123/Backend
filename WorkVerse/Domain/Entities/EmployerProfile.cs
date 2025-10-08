@@ -20,6 +20,7 @@ namespace Domain.Entities
         public string? SearchName { get; set; }
         public string ContactEmail { get; set; } = null!;
         public string ContactPhone { get; set; } = null!;
+        public bool IsPriority { get; set; } = false;
 
         public virtual User User { get; set; } = null!;
         public virtual EmployerType EmployerType { get; set; } = null!;

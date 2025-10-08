@@ -40,7 +40,7 @@ namespace Infrastructure.Repositories
         // Lấy tất cả Employee public
         public async Task<IEnumerable<EmployeeProfile>> GetAllPublicEmployeeAsync()
         {
-            var result = await _dbSet.ToListAsync();
+            var result = await _dbSet.OrderByDescending(c => c.IsPriority).ToListAsync();
             return result;
         }
         // Đếm tất cả employee
@@ -107,7 +107,8 @@ namespace Infrastructure.Repositories
                         + (employeeQuery?.WorkExperience != null && employeeQuery.WorkExperience.Any() &&
                            GenericMatchAI.MatchAnyField(e.WorkExperience, employeeQuery.WorkExperience) ? 1 : 0)
                 })
-                .OrderByDescending(x => x.Score)
+                 .OrderByDescending(x => x.Employee.IsPriority)  // Ưu tiên nhân viên ưu tiên
+                 .ThenByDescending(x => x.Score)
                 .Select(x => x.Employee);
 
             return ranked;

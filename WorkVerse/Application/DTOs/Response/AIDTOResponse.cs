@@ -44,6 +44,8 @@ namespace Application.DTOs.Response
         public string EmployerType { get; set; } = null!;
         public string Address { get; set; } = null!;
         public string? LogoUrl { get; set; }
+        public bool IsPriority { get; set; } = false;
+
     }
 
     public class EmployerAIDTOResponse
@@ -56,6 +58,8 @@ namespace Application.DTOs.Response
         public string? LogoUrl { get; set; }
         public DateTime? DateEstablish { get; set; }
         public string Description { get; set; } = null!;
+        public bool IsPriority { get; set; } = false;
+
     }
 
     public class EmployeeAIDTOResponse
@@ -69,6 +73,8 @@ namespace Application.DTOs.Response
         public string? Skills { get; set; }
         public string? Education { get; set; }
         public string? WorkExperience { get; set; }
+        public bool IsPriority { get; set; } = false;
+
     }
 
 }

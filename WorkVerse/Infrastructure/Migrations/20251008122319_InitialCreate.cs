@@ -180,7 +180,8 @@ namespace Infrastructure.Migrations
                     Education = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     WorkExperience = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Mode = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    SearchName = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    SearchName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsPriority = table.Column<bool>(type: "bit", nullable: false, defaultValue: false)
                 },
                 constraints: table =>
                 {
@@ -211,7 +212,8 @@ namespace Infrastructure.Migrations
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     SearchName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ContactEmail = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    ContactPhone = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false)
+                    ContactPhone = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    IsPriority = table.Column<bool>(type: "bit", nullable: false, defaultValue: false)
                 },
                 constraints: table =>
                 {

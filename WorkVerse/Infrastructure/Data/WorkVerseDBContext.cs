@@ -92,6 +92,7 @@ namespace Infrastructure.Data
                 entity.Property(e => e.FullName).IsRequired().HasMaxLength(255);
                 entity.Property(e => e.Gender).HasMaxLength(20);
                 entity.Property(e => e.Mode).HasMaxLength(50);
+                entity.Property(j => j.IsPriority).HasDefaultValue(false);
 
                 entity.HasOne(e => e.User)
                       .WithOne(u => u.EmployeeProfile)
@@ -148,6 +149,7 @@ namespace Infrastructure.Data
                 entity.Property(e => e.Description).IsRequired();
                 entity.Property(e => e.ContactEmail).IsRequired().HasMaxLength(255);
                 entity.Property(e => e.ContactPhone).IsRequired().HasMaxLength(20);
+                entity.Property(j => j.IsPriority).HasDefaultValue(false);
 
                 entity.HasOne(e => e.User)
                       .WithOne(u => u.EmployerProfile)
