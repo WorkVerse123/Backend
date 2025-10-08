@@ -1,5 +1,4 @@
-﻿
-using Autofac.Extensions.DependencyInjection;
+﻿using Autofac.Extensions.DependencyInjection;
 using Autofac;
 using WorkVerseAPI.Configurations;
 using Application.Mappers;
@@ -11,6 +10,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Application.Servicies;
 using Application.DTOs.Email;
+using Infrastructure.Models;
+using Microsoft.OpenApi.Models; // 👈 thêm dòng này để hỗ trợ Swagger Bearer
 
 namespace WorkVerseAPI
 {
@@ -30,25 +31,19 @@ namespace WorkVerseAPI
             builder.Services.AddDbContext<WorkVerseDBContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+            // Add AutoMapper profiles
+            builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
-            //Add mapper as the DI (It will seek all asembly have in mapper)
-            builder.Services.AddAutoMapper(typeof(EmployeeProfileMapper));
-            builder.Services.AddAutoMapper(typeof(BusyTimeProfile));
-            builder.Services.AddAutoMapper(typeof(BookmarkProfile));
-            builder.Services.AddAutoMapper(typeof(ApplicationProfile));
-            builder.Services.AddAutoMapper(typeof(JobProfile));
-            builder.Services.AddAutoMapper(typeof(JobCategoryProfile));
-            builder.Services.AddAutoMapper(typeof(EmployerProfileMapper));
-            builder.Services.AddAutoMapper(typeof(ReportProfile));
-            builder.Services.AddAutoMapper(typeof(FeedbackProfile));
-            builder.Services.AddAutoMapper(typeof(BlogProfile));
 
-            // Add Email SMTP
-
+            // Email SMTP
             builder.Services.Configure<EmailSettings>(
-    builder.Configuration.GetSection("EmailSettings"));
+                builder.Configuration.GetSection("EmailSettings"));
 
-            // Add Authentication
+            // PayOS config
+            builder.Services.Configure<PayOSSettings>(
+                builder.Configuration.GetSection("PayOS"));
+
+            // JWT Authentication
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
@@ -66,25 +61,57 @@ namespace WorkVerseAPI
                         ClockSkew = TimeSpan.Zero
                     };
                 });
+
             builder.Services.AddAuthorization();
 
-
-            // Add services to the container.
+            // Add controllers
             builder.Services.AddControllers();
 
-            // API key from appsettings
+            // Gemini AI key
             var apiKey = builder.Configuration["Google:GeminiApiKey"];
-
-            // Đăng ký KeywordService như 1 singleton
             builder.Services.AddSingleton<AIService>(sp => new AIService(apiKey));
 
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+            // ✅ Swagger với Bearer Token
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
+            builder.Services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Title = "WorkVerse API",
+                    Version = "v1",
+                    Description = "API for WorkVerse application"
+                });
+
+                // Thêm cấu hình JWT Bearer
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Description = "Nhập token vào đây (format: Bearer {your token})",
+                    Name = "Authorization",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.Http,
+                    Scheme = "bearer",
+                    BearerFormat = "JWT"
+                });
+
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            }
+                        },
+                        new string[] {}
+                    }
+                });
+            });
 
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
+            // Configure middleware pipeline
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
@@ -93,8 +120,9 @@ namespace WorkVerseAPI
 
             app.UseHttpsRedirection();
 
+            // ✅ Bật Authentication (quan trọng – phải nằm TRƯỚC Authorization)
+            app.UseAuthentication();
             app.UseAuthorization();
-
 
             app.MapControllers();
 

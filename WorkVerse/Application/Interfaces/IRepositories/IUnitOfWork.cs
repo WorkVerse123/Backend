@@ -29,10 +29,12 @@ namespace Application.Interfaces.IRepositories
         IReportRepository Report { get; }
         IRoleRepository Role { get; }
         IFeedbackRepository Feedback { get; }
-
         IBlogRepository Blog { get; }   
         INotificationRepository Notification { get; }
         IStaffProfileRepository StaffProfile { get; }
+        ISubscriptionRepository Subscription { get; }
+        IPaymentRepository Payment { get; }
+        IUserSubscriptionRepository UserSubscription { get; }
 
     }
 }

@@ -1,13 +1,13 @@
-﻿using Application.Interfaces.IReposervices;
-using Application.Interfaces.IRepositories;
-using Infrastructure.Data;
-using Microsoft.EntityFrameworkCore.Storage;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿    using Application.Interfaces.IReposervices;
+    using Application.Interfaces.IRepositories;
+    using Infrastructure.Data;
+    using Microsoft.EntityFrameworkCore.Storage;
+    using Microsoft.Extensions.Logging;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
 
 namespace Infrastructure.Repositories
 {
@@ -38,6 +38,9 @@ namespace Infrastructure.Repositories
             Blog = new BlogRepository(_dbContext);
             Notification = new NotificationRepository(_dbContext);
             StaffProfile = new StaffProfileRepository(_dbContext);
+            Subscription = new SubscriptionRepository(_dbContext);
+            Payment = new PaymentRepository(_dbContext);
+            UserSubscription = new UserSubscriptionRepository(_dbContext);
         }
 
         public async Task BeginTransactionAsync()
@@ -158,9 +161,11 @@ namespace Infrastructure.Repositories
         public IReportRepository Report { get; private set; }
         public IRoleRepository Role { get; private set; }
         public IFeedbackRepository Feedback { get; private set; }
-
         public IBlogRepository Blog { get; private set; }
         public INotificationRepository Notification { get; private set; }
         public IStaffProfileRepository StaffProfile { get; private set; }
+        public ISubscriptionRepository Subscription { get; private set; }
+        public IPaymentRepository Payment { get; private set; }
+        public IUserSubscriptionRepository UserSubscription { get; private set; }
     }
 }

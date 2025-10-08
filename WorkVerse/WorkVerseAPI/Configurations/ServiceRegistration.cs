@@ -6,6 +6,7 @@ using Application.Servicies;
 using Autofac;
 using Infrastructure.Data;
 using Infrastructure.Repositories;
+using Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
 using SchoolMedicalSystem.Application.Services;
@@ -51,10 +52,12 @@ namespace WorkVerseAPI.Configurations
             builder.RegisterType<StaffProfileService>().As<IStaffProfileService>().InstancePerLifetimeScope();
             builder.RegisterType<UserService>().As<IUserService>().InstancePerLifetimeScope();
             builder.RegisterType<AIService>().As<IAIService>().InstancePerLifetimeScope();
-			      builder.RegisterType<EmailService>().As<IEmailService>().InstancePerLifetimeScope();
+			builder.RegisterType<EmailService>().As<IEmailService>().InstancePerLifetimeScope();
             builder.RegisterType<EmployerTypeService>().As<IEmployerTypeSevice>().InstancePerLifetimeScope();
-
-
-		}
+            builder.RegisterType<SubscriptionService>().As<ISubscriptionService>().InstancePerLifetimeScope();
+            builder.RegisterType<PaymentService>().As<IPaymentService>().InstancePerLifetimeScope();
+            builder.RegisterType<PayOSService>().As<IThirdPaymentService>().InstancePerLifetimeScope();
+            builder.RegisterType<UserSubscriptionService>().As<IUserSubscriptionService>().InstancePerLifetimeScope();
+        }
 	}
 }
