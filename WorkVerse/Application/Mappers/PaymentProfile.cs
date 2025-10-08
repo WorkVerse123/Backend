@@ -1,4 +1,5 @@
-﻿using Application.DTOs.Response;
+﻿using Application.DTOs.Request;
+using Application.DTOs.Response;
 using AutoMapper;
 using Domain.Entities;
 using System;
@@ -14,6 +15,7 @@ namespace Application.Mappers
         public PaymentProfile()
         {
             CreateMap<Payment, PaymentDTOResponse>();
+            CreateMap<PaymentDTORequest, Payment>();
 
 
         }

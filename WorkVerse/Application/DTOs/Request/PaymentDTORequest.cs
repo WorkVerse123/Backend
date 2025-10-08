@@ -12,8 +12,8 @@ namespace Application.DTOs.Request
         public int UserId { get; set; }
         public int PlanId { get; set; }
         public decimal Amount { get; set; }
-        public string PaymentMethod { get; set; } = null!;
+        public string PaymentMethod { get; set; }
         public DateTime PaymentDate { get; set; }
-        public string Status { get; set; } = null!;
+        public string Status { get; set; }
     }
 }

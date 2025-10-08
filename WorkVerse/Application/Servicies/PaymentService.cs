@@ -1,7 +1,9 @@
-﻿using Application.DTOs.Response;
+﻿using Application.DTOs.Request;
+using Application.DTOs.Response;
 using Application.Interfaces.IRepositories;
 using Application.Interfaces.IServicies;
 using AutoMapper;
+using Domain.Entities;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -22,6 +24,16 @@ namespace Application.Servicies
             _mapper = mapper;
             _logger = logger;
         }
+
+        public async Task<PaymentDTOResponse> AddAsync(PaymentDTORequest paymentDto)
+        {
+            var payment = _mapper.Map<Domain.Entities.Payment>(paymentDto);
+            await _unitOfWork.Payment.AddAsync(payment);
+            await _unitOfWork.SaveChangesAsync();
+            var resultDto = _mapper.Map<PaymentDTOResponse>(payment);
+            return resultDto;
+        }
+
         public async Task<PaymentDTOResponse> GetById(int id)
         {
             var payment = await _unitOfWork.Payment.GetPaymentAsync(id);
@@ -33,5 +45,24 @@ namespace Application.Servicies
             var paymentDto = _mapper.Map<PaymentDTOResponse>(payment);
             return paymentDto;
         }
+
+        public async Task<PaymentDTOResponse> UpdateAsync(PaymentDTORequest paymentRequest)
+        {
+            var payment = await _unitOfWork.Payment.GetPaymentAsync(paymentRequest.PaymentId);
+            if (payment == null)
+            {
+                _logger.LogWarning($"Payment with id {paymentRequest.PaymentId} not found for update.");
+                return null;
+            }
+
+            // Ánh xạ các field có cùng tên
+            _mapper.Map<Payment>(paymentRequest);
+
+            _unitOfWork.Payment.Update(payment);
+            await _unitOfWork.SaveChangesAsync();
+
+            return _mapper.Map<PaymentDTOResponse>(payment);
+        }
+
     }
 }

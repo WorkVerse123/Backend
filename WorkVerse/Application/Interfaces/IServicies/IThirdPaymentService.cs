@@ -10,7 +10,7 @@ namespace Application.Interfaces.IServicies
 {
     public interface IThirdPaymentService
     {
-        Task<string> CreatePaymentLink(SubscriptionPlanDTORequest plan);
-        //WebhookData VerifyWebhookData(string jsonBody);
+        Task<string> CreatePaymentLink(string userId, SubscriptionPlanDTORequest plan);
+        Task<PaymentDTORequest> VerifyWebhookDataAsync(string jsonBody);
     }
 }

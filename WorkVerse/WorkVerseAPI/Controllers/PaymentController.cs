@@ -27,10 +27,11 @@ namespace WorkVerseAPI.Controllers
         {
             try
             {
+                var userIdClaim = User.FindFirst("UserId")?.Value;
                 if (plan == null || plan.PlanId <= 0 || plan.Price <= 0)
                     return BadRequest(new ApiResponse<object>("Invalid subscription plan data.", 400));
 
-                var checkoutUrl = await _payService.CreatePaymentLink(plan);
+                var checkoutUrl = await _payService.CreatePaymentLink(userIdClaim, plan);
                 if (string.IsNullOrEmpty(checkoutUrl))
                     return StatusCode(500, new ApiResponse<object>("Failed to create payment link.", 500));
 
@@ -51,12 +52,10 @@ namespace WorkVerseAPI.Controllers
 
             try
             {
-                //var data = _payService.VerifyWebhookData(body); 
+                var payment = await _payService.VerifyWebhookDataAsync(body);
+                var updatePayment = await _payment.UpdateAsync(payment);
 
-                // hoặc data.desc
-                // TODO: update DB theo trạng thái
-
-                return Ok(new ApiResponse<object>("Webhook verified successfully.", null, 200));
+                return Ok(new ApiResponse<object>("Webhook verified successfully.", updatePayment, 200));
             }
             catch (Exception ex)
             {
