@@ -2,6 +2,7 @@
 using Application.Interfaces.IServicies;
 using Application.Servicies;
 using Infrastructure.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OpenAI.Graders;
@@ -50,7 +51,7 @@ namespace WorkVerseAPI.Controllers
         public async Task<IActionResult> Webhook()
         {
             using var reader = new StreamReader(Request.Body);
-            var body = await reader.ReadToEndAsync(); 
+            var body = await reader.ReadToEndAsync();
 
             try
             {
@@ -116,5 +117,42 @@ namespace WorkVerseAPI.Controllers
                 return StatusCode(500, new ApiResponse<object>(ex.Message, 500));
             }
         }
+
+        // GET /api/payment/check-token
+        [HttpGet("check-token")]
+        [Authorize] // 👈 đảm bảo chỉ gọi được khi có JWT
+        public IActionResult CheckToken()
+        {
+            try
+            {
+                var authHeader = Request.Headers["Authorization"].ToString();
+                if (string.IsNullOrWhiteSpace(authHeader))
+                    return Unauthorized(new ApiResponse<object>("Missing Authorization header.", 401));
+
+                // Lấy token (có thể ở dạng "Bearer <token>")
+                var token = authHeader.StartsWith("Bearer ") ? authHeader.Substring(7) : authHeader;
+
+                // Lấy UserId từ claim
+                var userIdClaim = User.FindFirst("UserId")?.Value;
+                if (string.IsNullOrEmpty(userIdClaim))
+                    return Unauthorized(new ApiResponse<object>("Invalid token: UserId claim not found.", 401));
+
+                // Trả về token và userId để kiểm tra nhanh
+                return Ok(new ApiResponse<object>(
+                    "Token is valid.",
+                    new
+                    {
+                        userId = int.Parse(userIdClaim),
+                        token = token
+                    },
+                    200
+                ));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ApiResponse<object>(ex.Message, 500));
+            }
+        }
+
     }
 }

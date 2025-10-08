@@ -25,7 +25,7 @@ namespace Application.Servicies
             _logger = logger;
         }
 
-        public async Task<UserSubsctiptionDTOResponse> AddAsync(PaymentDTORequest request)
+        public async Task<UserSubscriptionDTOResponse> AddAsync(PaymentDTORequest request)
         {
             UserSubscriptionDTORequest userSubscriptionDTORequest = new UserSubscriptionDTORequest
             {
@@ -41,7 +41,7 @@ namespace Application.Servicies
                 var entity = _mapper.Map<UserSubscription>(userSubscriptionDTORequest);
                 await _unitOfWork.UserSubscription.AddAsync(entity);
                 await _unitOfWork.SaveChangesAsync();
-                var result = _mapper.Map<UserSubsctiptionDTOResponse>(entity);
+                var result = _mapper.Map<UserSubscriptionDTOResponse>(entity);
                 return result;
             }
             catch (Exception ex)
@@ -51,7 +51,7 @@ namespace Application.Servicies
             }
         }
 
-        public async Task<UserSubsctiptionDTOResponse> UpdateAsynce(UserSubscriptionDTORequest request)
+        public async Task<UserSubscriptionDTOResponse> UpdateAsynce(UserSubscriptionDTORequest request)
         {
             try
             {
@@ -61,7 +61,7 @@ namespace Application.Servicies
                 _unitOfWork.UserSubscription.Update(entity);
                 await _unitOfWork.SaveChangesAsync();
 
-                var result = _mapper.Map<UserSubsctiptionDTOResponse>(entity);
+                var result = _mapper.Map<UserSubscriptionDTOResponse>(entity);
                 return result;
             }
             catch (Exception ex)

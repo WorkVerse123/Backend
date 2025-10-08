@@ -10,8 +10,8 @@ namespace Application.Interfaces.IServicies
 {
     public interface IUserSubscriptionService
     {
-        Task<UserSubsctiptionDTOResponse> AddAsync(PaymentDTORequest request);
-        Task<UserSubsctiptionDTOResponse> UpdateAsynce(UserSubscriptionDTORequest request);
+        Task<UserSubscriptionDTOResponse> AddAsync(PaymentDTORequest request);
+        Task<UserSubscriptionDTOResponse> UpdateAsynce(UserSubscriptionDTORequest request);
         Task<bool> UpdateStatusAsync(int userId, bool status);
     }
 }

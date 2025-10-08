@@ -77,8 +77,8 @@ namespace Infrastructure.Services
                 var body = JsonConvert.DeserializeObject<WebhookType>(jsonBody)
                            ?? throw new InvalidDataException("Invalid webhook JSON");
 
-                var verified = _payOS.verifyPaymentWebhookData(body); 
-
+                var verified = _payOS.verifyPaymentWebhookData(body);
+                //var verified = body.data;
                 var desc = verified.description ?? string.Empty;
 
                 var userIdMatch = Regex.Match(desc, @"UserId:(\d+)");

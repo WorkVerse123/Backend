@@ -45,7 +45,6 @@ namespace Application.Servicies
             var paymentDto = _mapper.Map<PaymentDTOResponse>(payment);
             return paymentDto;
         }
-
         public async Task<PaymentDTOResponse> UpdateAsync(PaymentDTORequest paymentRequest)
         {
             var payment = await _unitOfWork.Payment.GetPaymentAsync(paymentRequest.PaymentId);
@@ -55,8 +54,8 @@ namespace Application.Servicies
                 return null;
             }
 
-            // Ánh xạ các field có cùng tên
-            _mapper.Map<Payment>(paymentRequest);
+            // ✅ Cập nhật dữ liệu vào object đang được EF tracking
+            _mapper.Map(paymentRequest, payment);
 
             _unitOfWork.Payment.Update(payment);
             await _unitOfWork.SaveChangesAsync();
