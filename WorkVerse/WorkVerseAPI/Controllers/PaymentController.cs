@@ -62,7 +62,7 @@ namespace WorkVerseAPI.Controllers
                 payment.UserId = paymentDb.UserId;
                 payment.PlanId = paymentDb.PlanId;
 
-                _employeeProfileServices.UpdatePriority(payment.UserId,true);
+                await _employeeProfileServices.UpdatePriority(payment.UserId,true);
                 var updatePayment = await _payment.UpdateAsync(payment);
                 var userSubscription = await _userSubscripitionService.AddAsync(payment);
 

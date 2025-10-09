@@ -243,7 +243,7 @@ namespace Application.Servicies
                 var existingProfile = await _unitOfWork.EmployeeProfile.GetByEmployeeIdAsync(employeeId);
                 if (existingProfile == null)
                 {
-                    throw new KeyNotFoundException($"Profile with ID {employeeId} not found");
+                    return false;
                 }
                 var result = await _unitOfWork.EmployeeProfile.UpdatePriority(employeeId, isPriority);
                 if (result)
