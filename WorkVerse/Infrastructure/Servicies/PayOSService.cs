@@ -42,7 +42,6 @@ namespace Infrastructure.Services
 
             var payment = await _paymentService.AddAsync(paymentDto);
             var orderCode = payment.PaymentId;
-            var description = $"UserId:{userId} | PlanId:{plan.PlanId} | Thanh toán gói {plan.PlanName}";
 
             var items = new List<ItemData>
             {
@@ -52,7 +51,7 @@ namespace Infrastructure.Services
             var paymentData = new PaymentData(
                 orderCode: orderCode,
                 amount: (int)plan.Price,
-                description: plan.Description ?? $"Thanh toán gói {plan.PlanName}",
+                description: plan.Description,
                 items: items,
                 cancelUrl: _settings.CancelUrl,
                 returnUrl: _settings.ReturnUrl
@@ -81,21 +80,14 @@ namespace Infrastructure.Services
                 //var verified = body.data;
                 var desc = verified.description ?? string.Empty;
 
-                var userIdMatch = Regex.Match(desc, @"UserId:(\d+)");
-                var planIdMatch = Regex.Match(desc, @"PlanId:(\d+)");
-
-                var userId = userIdMatch.Success ? int.Parse(userIdMatch.Groups[1].Value) : 0;
-                var planId = planIdMatch.Success ? int.Parse(planIdMatch.Groups[1].Value) : 0;
-
                 return new PaymentDTORequest
                 {
                     PaymentId = (int)verified.orderCode,
-                    UserId = userId,
-                    PlanId = planId,
                     Amount = verified.amount,
                     PaymentMethod = "PayOS",
                     PaymentDate = DateTime.Parse(verified.transactionDateTime),
-                    Status = verified.code == "PAYMENT_SUCCESS" ? "Completed" : "Failed"
+                    Status = verified.desc == "success" ? "Completed" : "Failed",
+                    Code = verified.code
                 };
             }
             catch (JsonException)
