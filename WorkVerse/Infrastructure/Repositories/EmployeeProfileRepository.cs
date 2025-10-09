@@ -113,5 +113,16 @@ namespace Infrastructure.Repositories
 
             return ranked;
         }
+
+        public async Task<bool> UpdatePriority(int employeeId, bool isPriority)
+        {
+            var employee = await _dbSet.FirstOrDefaultAsync(e => e.EmployeeId == employeeId);
+            if (employee == null)
+            {
+                return false; 
+            }
+            employee.IsPriority = isPriority;
+            return true;
+        }
     }
 }
