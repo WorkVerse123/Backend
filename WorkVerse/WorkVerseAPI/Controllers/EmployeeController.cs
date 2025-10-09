@@ -3,6 +3,7 @@ using Application.DTOs.Response;
 using Application.Helper;
 using Application.Interfaces.IServicies;
 using Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WorkVerseAPI.Models;
 
@@ -11,6 +12,7 @@ namespace WorkVerseAPI.Controllers
 
     [ApiController]
     [Route("api/employees")]
+    [Authorize]
     public class EmployeeController : ControllerBase
     {
         // This is a placeholder for the actual implementation of user service
@@ -27,6 +29,8 @@ namespace WorkVerseAPI.Controllers
         }
         // POST /employees/{id}
         [HttpPost("{userId}")]
+        [Authorize(Roles = "4")]
+
         public async Task<IActionResult> CreateProfile([FromRoute] int userId,[FromBody] EmployeeProfileDTORequest request)
         {
             try
@@ -48,6 +52,8 @@ namespace WorkVerseAPI.Controllers
         }
         // GET /employees/{id}
         [HttpGet("{id}")]
+        [Authorize]
+
         public async Task<IActionResult> GetById([FromRoute] int id)
         {
             try
@@ -72,6 +78,7 @@ namespace WorkVerseAPI.Controllers
         }
         // PUT /employees/{id}
         [HttpPut("{id}")]
+        [Authorize(Roles = "4")]
         public async Task<IActionResult> UpdateProfile([FromBody] EmployeeProfileDTORequest request, [FromRoute] int id)
         {
             try
@@ -99,6 +106,7 @@ namespace WorkVerseAPI.Controllers
 
         // GET /employees/{id}/busy-times
         [HttpGet("{id}/busy-times")]
+        [Authorize(Roles = "4")]
         public async Task<IActionResult> GetBusyTimes([FromRoute] int id)
         {
             try
@@ -127,6 +135,8 @@ namespace WorkVerseAPI.Controllers
         // POST /employees/{id}/busy-times
 
         [HttpPost("{id}/busy-times")]
+        [Authorize(Roles = "4")]
+
         public async Task<IActionResult> CreateBusyTimes([FromRoute] int id, [FromBody] BusyTimeDTORequest request)
         {
             try
@@ -147,6 +157,8 @@ namespace WorkVerseAPI.Controllers
         // PUT /employees/{id}/busy-times/{busy_time_id}
 
         [HttpPut("{id}/busy-times")]
+        [Authorize(Roles = "4")]
+
         public async Task<IActionResult> UpdateBusyTime([FromBody] BusyTimeDTORequest request, [FromRoute] int id)
         {
             try
@@ -170,6 +182,8 @@ namespace WorkVerseAPI.Controllers
 
         // DELETE /employees/{id}/busy-times/{busy_time_id}
         [HttpDelete("{id}/busy-times/{busy_time_id}")]
+        [Authorize(Roles = "4")]
+
         public async Task<IActionResult> DeleteBusyTime([FromRoute] int id, [FromRoute] int busy_time_id)
         {
             try
@@ -193,6 +207,8 @@ namespace WorkVerseAPI.Controllers
 
         // GET /employees/{id}/bookmarks
         [HttpGet("{id}/bookmarks")]
+        [Authorize(Roles = "4")]
+
         public async Task<IActionResult> GetBookmark([FromRoute] int id, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
             try
@@ -220,6 +236,8 @@ namespace WorkVerseAPI.Controllers
 
         // POST /employees/{id}/bookmarks/jobs/{job_id}
         [HttpPost("{id}/bookmarks/jobs/{job_id}")]
+        [Authorize(Roles = "4")]
+
         public async Task<IActionResult> CreateBookmark([FromRoute] int id, [FromRoute] int job_id)
         {
             try
@@ -235,6 +253,8 @@ namespace WorkVerseAPI.Controllers
 
         // DELETE /employees/{id}/bookmarks/{bookmark_id}
         [HttpDelete("{id}/bookmarks/{bookmark_id}")]
+        [Authorize(Roles = "4")]
+
         public async Task<IActionResult> DeleteBookmark([FromRoute] int id, [FromRoute] int bookmark_id)
         {
             if (id <= 0 || bookmark_id <= 0)
@@ -258,6 +278,8 @@ namespace WorkVerseAPI.Controllers
 
         // GET /employees/{id}/applications
         [HttpGet("{id}/applications")]
+        [Authorize(Roles = "4")]
+
         public async Task<IActionResult> GetApplications([FromRoute] int id, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
             try
@@ -285,6 +307,8 @@ namespace WorkVerseAPI.Controllers
 
         // POST /employees/{id}/applications
         [HttpPost("{id}/applications")]
+        [Authorize(Roles = "4")]
+
         public async Task<IActionResult> CreateApplication([FromRoute] int id, [FromBody] SendApplicationDTORequest request)
         {
             try
@@ -308,6 +332,8 @@ namespace WorkVerseAPI.Controllers
 
         // GET/employee-dashboard/{id}
         [HttpGet("/employee-dashboard/{id}")]
+        [Authorize(Roles = "4")]
+
         public async Task<IActionResult> GetEmployeeDashBoardById([FromRoute] int id, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
             try
