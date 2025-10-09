@@ -17,12 +17,14 @@ namespace WorkVerseAPI.Controllers
         private readonly IThirdPaymentService _payService;
         private readonly IPaymentService _payment;
         private readonly IUserSubscriptionService _userSubscripitionService;
+        private readonly IEmployeeProfileServices _employeeProfileServices;
 
-        public PaymentController(IThirdPaymentService payService, IPaymentService payment, IUserSubscriptionService userSubscripitionService)
+        public PaymentController(IThirdPaymentService payService, IPaymentService payment, IUserSubscriptionService userSubscripitionService, IEmployeeProfileServices employeeProfileServices)
         {
             _payService = payService;
             _payment = payment;
             _userSubscripitionService = userSubscripitionService;
+            _employeeProfileServices = employeeProfileServices;
         }
         // POST /payments
         [HttpPost]
@@ -60,6 +62,7 @@ namespace WorkVerseAPI.Controllers
                 payment.UserId = paymentDb.UserId;
                 payment.PlanId = paymentDb.PlanId;
 
+                _employeeProfileServices.UpdatePriority(payment.UserId,true);
                 var updatePayment = await _payment.UpdateAsync(payment);
                 var userSubscription = await _userSubscripitionService.AddAsync(payment);
 
@@ -115,42 +118,6 @@ namespace WorkVerseAPI.Controllers
                 if (payment == null)
                     return NotFound(new ApiResponse<object>($"Payment with id {id} not found.", 404));
                 return Ok(new ApiResponse<object>("Payment retrieved successfully.", payment, 200));
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new ApiResponse<object>(ex.Message, 500));
-            }
-        }
-
-        // GET /api/payment/check-token
-        [HttpGet("check-token")]
-        [Authorize] // 👈 đảm bảo chỉ gọi được khi có JWT
-        public IActionResult CheckToken()
-        {
-            try
-            {
-                var authHeader = Request.Headers["Authorization"].ToString();
-                if (string.IsNullOrWhiteSpace(authHeader))
-                    return Unauthorized(new ApiResponse<object>("Missing Authorization header.", 401));
-
-                // Lấy token (có thể ở dạng "Bearer <token>")
-                var token = authHeader.StartsWith("Bearer ") ? authHeader.Substring(7) : authHeader;
-
-                // Lấy UserId từ claim
-                var userIdClaim = User.FindFirst("UserId")?.Value;
-                if (string.IsNullOrEmpty(userIdClaim))
-                    return Unauthorized(new ApiResponse<object>("Invalid token: UserId claim not found.", 401));
-
-                // Trả về token và userId để kiểm tra nhanh
-                return Ok(new ApiResponse<object>(
-                    "Token is valid.",
-                    new
-                    {
-                        userId = int.Parse(userIdClaim),
-                        token = token
-                    },
-                    200
-                ));
             }
             catch (Exception ex)
             {

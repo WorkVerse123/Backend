@@ -236,5 +236,27 @@ namespace Application.Servicies
             }
         }
 
+        public async Task<bool> UpdatePriority(int employeeId, bool isPriority)
+        {
+            try
+            {
+                var existingProfile = await _unitOfWork.EmployeeProfile.GetByEmployeeIdAsync(employeeId);
+                if (existingProfile == null)
+                {
+                    throw new KeyNotFoundException($"Profile with ID {employeeId} not found");
+                }
+                var result = await _unitOfWork.EmployeeProfile.UpdatePriority(employeeId, isPriority);
+                if (result)
+                {
+                    await _unitOfWork.SaveChangesAsync();
+                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error updating priority for employee {EmployeeId}", employeeId);
+                throw;
+            }
+        }
     }
 }

@@ -16,8 +16,8 @@ namespace Application.Interfaces.IRepositories
         Task<bool> ExistsByEmployeeIdAsync(int employeeId);
         Task<IEnumerable<EmployeeProfile>> GetAllPublicEmployeeAsync();
         Task<int> CountAllEmployeeAsync();
-
         Task<IEnumerable<EmployeeProfile>> SearchEmployeeByAIResult(EmployeeQuery employeeQuery);
+        Task<bool> UpdatePriority (int employeeId, bool isPriority);
     }
 
 }
