@@ -137,6 +137,7 @@ namespace Application.Servicies
                 var pagedData = query
                     .Skip((pageNumber - 1) * pageSize)
                     .Take(pageSize)
+                    .OrderByDescending(c => c.IsPriority)
                     .ToList();
 
                 var mapped = _mapper.Map<List<CandidateItemDTO>>(pagedData);

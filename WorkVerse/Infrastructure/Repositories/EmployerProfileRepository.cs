@@ -26,6 +26,8 @@ namespace Infrastructure.Repositories
         {
             var result = await _dbSet
                  .Include(j => j.EmployerType)
+                 .OrderByDescending(c => c.IsPriority)
+                 .ThenByDescending(c => c.DateEstablish)
                 .ToListAsync();
             return result;
         }
@@ -87,18 +89,20 @@ namespace Infrastructure.Repositories
             // ========================
             // 2. Soft ranking (match mờ)
             // ========================
-            var ranked = employerList.Select(e => new
-            {
-                Employer = e,
-                Score =
-                    (employerQuery.CompanyNames != null &&
-                     GenericMatchAI.MatchAnyField(e.CompanyName, employerQuery.CompanyNames) ? 1 : 0) +
-
-                    (employerQuery.Address != null &&
-                     GenericMatchAI.MatchAnyField(e.Address, employerQuery.Address) ? 1 : 0)
-            })
-            .OrderByDescending(x => x.Score)
-            .Select(x => x.Employer);
+            var ranked = employerList
+        .Select(e => new
+        {
+            Employer = e,
+            Score =
+                (employerQuery.CompanyNames != null &&
+                 GenericMatchAI.MatchAnyField(e.CompanyName, employerQuery.CompanyNames) ? 1 : 0)
+                +
+                (employerQuery.Address != null &&
+                 GenericMatchAI.MatchAnyField(e.Address, employerQuery.Address) ? 1 : 0)
+        })
+        .OrderByDescending(x => x.Employer.IsPriority)
+        .ThenByDescending(x => x.Score)
+        .Select(x => x.Employer);
 
             return ranked;
         }

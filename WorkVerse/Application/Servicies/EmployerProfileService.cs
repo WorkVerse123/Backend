@@ -69,6 +69,8 @@ namespace Application.Servicies
                 var pagedData = query
                     .Skip((pageNumber - 1) * pageSize)
                     .Take(pageSize)
+                    .OrderByDescending(c => c.IsPriority)
+                    .ThenByDescending(c => c.DateEstablish)
                     .ToList();
 
                 var mapped = _mapper.Map<List<CompanyItemDTO>>(pagedData);
@@ -223,7 +225,9 @@ namespace Application.Servicies
             var pagedData = query
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
-                .ToList();
+                .ToList()
+                .OrderByDescending(c => c.IsPriority)
+                .ThenByDescending(c => c.DateEstablish);
 
             // Map sang DTO
             var mapped = _mapper.Map<List<EmployerProfileDTOResponse>>(pagedData);

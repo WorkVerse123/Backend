@@ -111,7 +111,7 @@ namespace WorkVerseAPI.Controllers
             }
             catch (InvalidOperationException ex)
             {
-                return BadRequest(new ApiResponse<object>(ex.Message, 404));
+                return BadRequest(new ApiResponse<object>(ex.Message, 500));
             }
             catch (Exception ex)
             {
