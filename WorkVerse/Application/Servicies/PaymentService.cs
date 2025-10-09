@@ -27,7 +27,7 @@ namespace Application.Servicies
 
         public async Task<PaymentDTOResponse> AddAsync(PaymentDTORequest paymentDto)
         {
-            var payment = _mapper.Map<Domain.Entities.Payment>(paymentDto);
+            var payment = _mapper.Map<Payment>(paymentDto);
             await _unitOfWork.Payment.AddAsync(payment);
             await _unitOfWork.SaveChangesAsync();
             var resultDto = _mapper.Map<PaymentDTOResponse>(payment);

@@ -56,6 +56,10 @@ namespace WorkVerseAPI.Controllers
             try
             {
                 var payment = await _payService.VerifyWebhookDataAsync(body);
+                var paymentDb = await _payment.GetById(payment.PaymentId);
+                payment.UserId = paymentDb.UserId;
+                payment.PlanId = paymentDb.PlanId;
+
                 var updatePayment = await _payment.UpdateAsync(payment);
                 var userSubscription = await _userSubscripitionService.AddAsync(payment);
 

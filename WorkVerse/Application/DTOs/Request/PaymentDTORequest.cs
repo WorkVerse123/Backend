@@ -15,5 +15,6 @@ namespace Application.DTOs.Request
         public string PaymentMethod { get; set; }
         public DateTime PaymentDate { get; set; }
         public string Status { get; set; }
+        public string Code { get; set; }
     }
 }
