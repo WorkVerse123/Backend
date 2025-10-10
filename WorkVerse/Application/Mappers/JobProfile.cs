@@ -55,6 +55,7 @@ namespace Application.Mappers
             CreateMap<JobDTORequest, Job>()
                 .ForMember(dest => dest.JobId, opt => opt.Ignore());
 
+            CreateMap<Job, JobDTOResponse>();
 
 
             CreateMap<Job, JobDTO>()

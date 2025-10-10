@@ -186,25 +186,23 @@ namespace WorkVerseAPI.Controllers
             return Ok(new ApiResponse<object>("Feedback updated successfully.", 200));
         }
 
-        //// ======================================================
-        //// JOBS
-        //// ======================================================
-        //[HttpGet("jobs")]
-        //public async Task<IActionResult> GetAllJobs([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
-        //{
-        //    var result = await _jobService.GetAllAsync();
-        //    return Ok(new ApiResponse<object>(result, 200));
-        //}
 
-        //[HttpPut("jobs/{id}")]
-        //public async Task<IActionResult> UpdateJob(int id, [FromBody] JobDTORequest dto)
-        //{
-        //    var result = await _jobService.UpdateAsync(id, dto);
-        //    if (result == null)
-        //        return NotFound(new ApiResponse<object>($"Job with ID {id} not found.", 404));
+        [HttpGet("jobs")]
+        public async Task<IActionResult> GetAllJobs([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
+        {
+            var result = await _jobService.GetAllAsync();
+            return Ok(new ApiResponse<object>("Get list jobs successfully", result, 200));
+        }
 
-        //    return Ok(new ApiResponse<object>("Job updated successfully.", 200));
-        //}
+        [HttpPut("jobs/{id}")]
+        public async Task<IActionResult> UpdateJob(int id, [FromBody] JobDTORequest dto)
+        {
+            var result = await _jobService.UpdateAsync(dto);
+            if (result == null)
+                return NotFound(new ApiResponse<object>($"Job with ID {id} not found.", 404));
+
+            return Ok(new ApiResponse<object>("Job updated successfully.", 200));
+        }
 
         //// ======================================================
         //// APPLICATIONS
