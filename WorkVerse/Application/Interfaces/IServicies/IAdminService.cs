@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Application.DTOs.Response;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,5 +9,7 @@ namespace Application.Interfaces.IServicies
 {
     public interface IAdminService
     {
+        Task<StatsResponse> GetSystemStatsAsync();
+        Task<ChartResponse> GetChartsAsync(DateOnly startDate, DateOnly endDate);
     }
 }

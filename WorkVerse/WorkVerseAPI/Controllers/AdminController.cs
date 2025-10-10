@@ -1,4 +1,5 @@
 ﻿using Application.DTOs.Request;
+using Application.DTOs.Response;
 using Application.Interfaces.IServicies;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -11,6 +12,7 @@ namespace WorkVerseAPI.Controllers
     public class AdminController : ControllerBase
     {
         private readonly ILogger<AdminController> _logger;
+        private readonly IAdminService _adminService;
         private readonly IStaffProfileService _staffProfileService;
         private readonly IUserService _userService;
         private readonly IEmployeeProfileServices _employeeService;
@@ -29,7 +31,8 @@ namespace WorkVerseAPI.Controllers
             IReportService reportService,
             IFeedbackService feedbackService,
             IJobService jobService,
-            IApplicationService applicationService
+            IApplicationService applicationService,
+            IAdminService adminService
         )
         {
             _logger = logger;
@@ -41,6 +44,7 @@ namespace WorkVerseAPI.Controllers
             _feedbackService = feedbackService;
             _jobService = jobService;
             _applicationService = applicationService;
+            _adminService = adminService;
         }
 
         [HttpPost("create-account")]
@@ -223,17 +227,42 @@ namespace WorkVerseAPI.Controllers
         }
 
         [HttpGet("stats")]
-        public async Task<IActionResult> GetStats()
+        public async Task<IActionResult> GetSystemStats()
         {
-            var result = await _applicationService.GetPlatformStatsAsync();
-            return Ok(new ApiResponse<object>("Get platform stats successfully", result, 200));
+            try
+            {
+                var result = await _adminService.GetSystemStatsAsync();
+                if (result == null)
+                    return NotFound(new ApiResponse<object>("Failed to retrieve system stats.", 404));
+
+                return Ok(new ApiResponse<StatsResponse>("Get system stats successfully.", result, 200));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error retrieving system stats");
+                return StatusCode(500, new ApiResponse<object>(ex.Message, 500));
+            }
         }
 
         [HttpGet("chart")]
-        public async Task<IActionResult> GetChartData()
+        public async Task<IActionResult> GetChartData([FromQuery] DateOnly? startDate = null, [FromQuery] DateOnly? endDate = null)
         {
-            var result = await _reportService.GetChartDataAsync();
-            return Ok(new ApiResponse<object>("Get chart data successfully", result, 200));
+            try
+            {
+                var start = startDate ?? DateOnly.FromDateTime(DateTime.Now.AddMonths(-1));
+                var end = endDate ?? DateOnly.FromDateTime(DateTime.Now);
+
+                var result = await _adminService.GetChartsAsync(start, end);
+                if (result == null)
+                    return NotFound(new ApiResponse<object>("Failed to retrieve chart data.", 404));
+
+                return Ok(new ApiResponse<ChartResponse>("Get chart data successfully.", result, 200));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error retrieving chart data");
+                return StatusCode(500, new ApiResponse<object>(ex.Message, 500));
+            }
         }
     }
 }
