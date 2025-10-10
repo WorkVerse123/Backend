@@ -41,6 +41,7 @@ namespace Infrastructure.Repositories
             Subscription = new SubscriptionRepository(_dbContext);
             Payment = new PaymentRepository(_dbContext);
             UserSubscription = new UserSubscriptionRepository(_dbContext);
+            Admin = new AdminRepository(_dbContext);
         }
 
         public async Task BeginTransactionAsync()
@@ -167,5 +168,7 @@ namespace Infrastructure.Repositories
         public ISubscriptionRepository Subscription { get; private set; }
         public IPaymentRepository Payment { get; private set; }
         public IUserSubscriptionRepository UserSubscription { get; private set; }
+
+        public IAdminRepository Admin { get; private set; }
     }
 }

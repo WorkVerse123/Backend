@@ -221,5 +221,19 @@ namespace WorkVerseAPI.Controllers
 
             return Ok(new ApiResponse<object>("Application updated successfully.", 200));
         }
+
+        [HttpGet("stats")]
+        public async Task<IActionResult> GetStats()
+        {
+            var result = await _applicationService.GetPlatformStatsAsync();
+            return Ok(new ApiResponse<object>("Get platform stats successfully", result, 200));
+        }
+
+        [HttpGet("chart")]
+        public async Task<IActionResult> GetChartData()
+        {
+            var result = await _reportService.GetChartDataAsync();
+            return Ok(new ApiResponse<object>("Get chart data successfully", result, 200));
+        }
     }
 }
