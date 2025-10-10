@@ -136,13 +136,14 @@ namespace WorkVerseAPI.Controllers
         public async Task<IActionResult> GetAllStaffs([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
             var result = await _staffProfileService.GetAllAsync();
-            return Ok(new ApiResponse<object>(result, 200));
+            return Ok(new ApiResponse<object>("Get list staff successfully", result, 200));
+
         }
 
         [HttpPut("staff/{id}")]
         public async Task<IActionResult> UpdateStaff(int id, [FromBody] StaffProfileDTORequest dto)
         {
-            var result = await _staffProfileService.UpdateAsync(id, dto);
+            var result = await _staffProfileService.UpdateAsync(dto);
             if (result == null)
                 return NotFound(new ApiResponse<object>($"Staff with ID {id} not found.", 404));
 
