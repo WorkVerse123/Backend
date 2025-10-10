@@ -74,9 +74,7 @@ namespace WorkVerseAPI.Controllers
             }
         }
 
-        // ======================================================
-        // USERS
-        // ======================================================
+
         [HttpGet("users")]
         public async Task<IActionResult>? GetAllUsers([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
@@ -94,9 +92,7 @@ namespace WorkVerseAPI.Controllers
             return Ok(new ApiResponse<object>("User updated successfully.", 200));
         }
 
-        // ======================================================
-        // EMPLOYEE
-        // ======================================================
+
         [HttpGet("employee")]
         public async Task<IActionResult> GetAllEmployees([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
@@ -115,9 +111,7 @@ namespace WorkVerseAPI.Controllers
             return Ok(new ApiResponse<object>("Employee updated successfully.", 200));
         }
 
-        //// ======================================================
-        //// EMPLOYER
-        //// ======================================================
+
         [HttpGet("employer")]
         public async Task<IActionResult> GetAllEmployers([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
@@ -138,22 +132,22 @@ namespace WorkVerseAPI.Controllers
         //// ======================================================
         //// STAFF
         //// ======================================================
-        //[HttpGet("staff")]
-        //public async Task<IActionResult> GetAllStaffs([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
-        //{
-        //    var result = await _staffProfileService.GetAllAsync();
-        //    return Ok(new ApiResponse<object>(result, 200));
-        //}
+        [HttpGet("staff")]
+        public async Task<IActionResult> GetAllStaffs([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
+        {
+            var result = await _staffProfileService.GetAllAsync();
+            return Ok(new ApiResponse<object>(result, 200));
+        }
 
-        //[HttpPut("staff/{id}")]
-        //public async Task<IActionResult> UpdateStaff(int id, [FromBody] StaffProfileDTORequest dto)
-        //{
-        //    var result = await _staffProfileService.UpdateAsync(id, dto);
-        //    if (result == null)
-        //        return NotFound(new ApiResponse<object>($"Staff with ID {id} not found.", 404));
+        [HttpPut("staff/{id}")]
+        public async Task<IActionResult> UpdateStaff(int id, [FromBody] StaffProfileDTORequest dto)
+        {
+            var result = await _staffProfileService.UpdateAsync(id, dto);
+            if (result == null)
+                return NotFound(new ApiResponse<object>($"Staff with ID {id} not found.", 404));
 
-        //    return Ok(new ApiResponse<object>("Staff updated successfully.", 200));
-        //}
+            return Ok(new ApiResponse<object>("Staff updated successfully.", 200));
+        }
 
         //// ======================================================
         //// REPORTS

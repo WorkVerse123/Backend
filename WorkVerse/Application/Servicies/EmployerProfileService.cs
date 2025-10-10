@@ -249,20 +249,19 @@ namespace Application.Servicies
         {
             try
             {
-                var employers = await _unitOfWork.EmployerProfile.GetAllEmployersAsync();
-                var query = employers.AsQueryable();
+                var employers = await _unitOfWork.EmployerProfile.GetAllAsync(
+                    order: q => q.OrderBy(e => e.EmployerId),
+                    pageIndex: pageIndex,
+                    pageSize: pageSize);
 
-                var totalRecords = query.Count();
-                var pagedData = query
-                    .OrderByDescending(e => e.IsPriority)
-                    .ThenByDescending(e => e.DateEstablish)
-                    .Skip((pageIndex - 1) * pageSize)
-                    .Take(pageSize)
-                    .ToList();
+                var employerDTOs = _mapper.Map<List<EmployerProfileDTOResponse>>(employers.Data);
 
-                var employerDTOs = _mapper.Map<List<EmployerProfileDTOResponse>>(pagedData);
-
-                return new PaginationResult<List<EmployerProfileDTOResponse>>(employerDTOs, totalRecords, pageIndex, pageSize);
+                return new PaginationResult<List<EmployerProfileDTOResponse>>(
+                    employerDTOs,
+                    employers.TotalRecords,
+                    employers.PageIndex,
+                    employers.PageSize
+                );
             }
             catch (Exception ex)
             {

@@ -264,19 +264,19 @@ namespace Application.Servicies
         {
             try
             {
-                var employees = await _unitOfWork.EmployeeProfile.GetAllPublicEmployeeAsync();
-                var query = employees.AsQueryable();
+                var employees = await _unitOfWork.EmployeeProfile.GetAllAsync(
+                    order: q => q.OrderBy(e => e.EmployeeId),
+                    pageIndex: pageIndex,
+                    pageSize: pageSize);
 
-                var totalRecords = query.Count();
-                var pagedData = query
-                    .OrderByDescending(e => e.IsPriority)
-                    .Skip((pageIndex - 1) * pageSize)
-                    .Take(pageSize)
-                    .ToList();
+                var employeeDTOs = _mapper.Map<List<EmployeeProfileDTOResponse>>(employees.Data);
 
-                var employeeDTOs = _mapper.Map<List<EmployeeProfileDTOResponse>>(pagedData);
-
-                return new PaginationResult<List<EmployeeProfileDTOResponse>>(employeeDTOs, totalRecords, pageIndex, pageSize);
+                return new PaginationResult<List<EmployeeProfileDTOResponse>>(
+                    employeeDTOs,
+                    employees.TotalRecords,
+                    employees.PageIndex,
+                    employees.PageSize
+                );
             }
             catch (Exception ex)
             {
