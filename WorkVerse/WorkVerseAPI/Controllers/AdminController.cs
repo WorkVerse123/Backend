@@ -118,22 +118,22 @@ namespace WorkVerseAPI.Controllers
         //// ======================================================
         //// EMPLOYER
         //// ======================================================
-        //[HttpGet("employer")]
-        //public async Task<IActionResult> GetAllEmployers([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
-        //{
-        //    var result = await _employerService.GetAllAsync();
-        //    return Ok(new ApiResponse<object>(result, 200));
-        //}
+        [HttpGet("employer")]
+        public async Task<IActionResult> GetAllEmployers([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
+        {
+            var result = await _employerService.GetAllAsync();
+            return Ok(new ApiResponse<object>("Get list employer successfully", result, 200));
+        }
 
-        //[HttpPut("employer/{id}")]
-        //public async Task<IActionResult> UpdateEmployer(int id, [FromBody] EmployerProfileDTORequest dto)
-        //{
-        //    var result = await _employerService.UpdateAsync(id, dto);
-        //    if (result == null)
-        //        return NotFound(new ApiResponse<object>($"Employer with ID {id} not found.", 404));
+        [HttpPut("employer/{id}")]
+        public async Task<IActionResult> UpdateEmployer(int id, [FromBody] EmployerProfileDTORequest dto)
+        {
+            var result = await _employerService.UpdateAsync(dto);
+            if (result == null)
+                return NotFound(new ApiResponse<object>($"Employer with ID {id} not found.", 404));
 
-        //    return Ok(new ApiResponse<object>("Employer updated successfully.", 200));
-        //}
+            return Ok(new ApiResponse<object>("Employer updated successfully.", 200));
+        }
 
         //// ======================================================
         //// STAFF
