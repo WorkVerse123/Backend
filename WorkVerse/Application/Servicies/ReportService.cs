@@ -1,4 +1,5 @@
-﻿using Application.DTOs.Request;
+﻿using Application.DTOs.Common;
+using Application.DTOs.Request;
 using Application.DTOs.Response;
 using Application.ExceptionHandler;
 using Application.Interfaces.IRepositories;
@@ -85,6 +86,8 @@ namespace Application.Servicies
             }
         }
 
+
+
         public async Task<ReportListDTOResponse> GetReportListAsync(int pageNumber, int pageSize)
         {
 
@@ -150,6 +153,51 @@ namespace Application.Servicies
                 },
                 Reports = result
             };
+        }
+        public async Task<PaginationResult<List<ReportDTORespone>>> GetAllAsync(int pageIndex = 1, int pageSize = 10)
+        {
+            try
+            {
+                var reports = await _unitOfWork.Report.GetAllAsync(
+                    order: q => q.OrderBy(r => r.ReportId),
+                    pageIndex: pageIndex,
+                    pageSize: pageSize);
+
+                var reportDTOs = _mapper.Map<List<ReportDTORespone>>(reports.Data);
+
+                return new PaginationResult<List<ReportDTORespone>>(
+                    reportDTOs,
+                    reports.TotalRecords,
+                    reports.PageIndex,
+                    reports.PageSize
+                );
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "GetAllAsync: Error retrieving reports");
+                throw;
+            }
+        }
+        public async Task<ReportDTORespone> UpdateAsync(ReportDTORequest entity)
+        {
+            try
+            {
+                var report = await _unitOfWork.Report.GetReportByIdAsync(entity.ReportId);
+                if (report == null)
+                {
+                    _logger.LogWarning("UpdateAsync: Report with id {ReportId} not found.", entity.ReportId);
+                    throw new KeyNotFoundException($"Report with id {entity.ReportId} not found.");
+                }
+                _mapper.Map(entity, report);
+                _unitOfWork.Report.Update(report);
+                await _unitOfWork.SaveChangesAsync();
+                return _mapper.Map<ReportDTORespone>(report);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "UpdateAsync: Error updating report with id {ReportId}", entity.ReportId);
+                throw;
+            }
         }
 
         public async Task<bool> UpdateReportStatusAsync(int reportId, UpdateReportStatusDTORequest request)

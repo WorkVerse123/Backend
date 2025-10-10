@@ -150,25 +150,23 @@ namespace WorkVerseAPI.Controllers
             return Ok(new ApiResponse<object>("Staff updated successfully.", 200));
         }
 
-        //// ======================================================
-        //// REPORTS
-        //// ======================================================
-        //[HttpGet("reports")]
-        //public async Task<IActionResult> GetAllReports([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
-        //{
-        //    var result = await _reportService.GetAllAsync();
-        //    return Ok(new ApiResponse<object>(result, 200));
-        //}
 
-        //[HttpPut("reports/{id}")]
-        //public async Task<IActionResult> UpdateReport(int id, [FromBody] ReportDTORequest dto)
-        //{
-        //    var result = await _reportService.UpdateAsync(id, dto);
-        //    if (result == null)
-        //        return NotFound(new ApiResponse<object>($"Report with ID {id} not found.", 404));
+        [HttpGet("reports")]
+        public async Task<IActionResult> GetAllReports([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
+        {
+            var result = await _reportService.GetAllAsync();
+            return Ok(new ApiResponse<object>("Get list reports successfully", result, 200));
+        }
 
-        //    return Ok(new ApiResponse<object>("Report updated successfully.", 200));
-        //}
+        [HttpPut("reports/{id}")]
+        public async Task<IActionResult> UpdateReport(int id, [FromBody] ReportDTORequest dto)
+        {
+            var result = await _reportService.UpdateAsync( dto);
+            if (result == null)
+                return NotFound(new ApiResponse<object>($"Report with ID {id} not found.", 404));
+
+            return Ok(new ApiResponse<object>("Report updated successfully.", 200));
+        }
 
         //// ======================================================
         //// FEEDBACKS

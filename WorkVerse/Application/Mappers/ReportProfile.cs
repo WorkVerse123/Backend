@@ -16,9 +16,11 @@ namespace Application.Mappers
             CreateMap<Report, ReportDetailsDTOResponse>();
 
             CreateMap<SubmitReportDTORequest, Report>()
-     .ForMember(dest => dest.Status, opt => opt.MapFrom(src => "pending"))
-     .ForMember(dest => dest.ReportedAt, opt => opt.MapFrom(src => DateTime.Now));
+             .ForMember(dest => dest.Status, opt => opt.MapFrom(src => "pending"))
+             .ForMember(dest => dest.ReportedAt, opt => opt.MapFrom(src => DateTime.Now));
 
+            CreateMap<Report, ReportDTORespone>();
+            CreateMap<ReportDTORequest, Report>();
         }
     }
 }
