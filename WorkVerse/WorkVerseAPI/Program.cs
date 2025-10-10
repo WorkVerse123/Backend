@@ -71,6 +71,16 @@ namespace WorkVerseAPI
             var apiKey = builder.Configuration["Google:GeminiApiKey"];
             builder.Services.AddSingleton<AIService>(sp => new AIService(apiKey));
 
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowDev", policy =>
+                {
+                    policy.WithOrigins("http://localhost:5173")
+                          .AllowAnyHeader()
+                          .AllowAnyMethod()
+                          .AllowCredentials();
+                });
+            });
             // ✅ Swagger với Bearer Token
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen(c =>
@@ -123,7 +133,8 @@ namespace WorkVerseAPI
             // ✅ Bật Authentication (quan trọng – phải nằm TRƯỚC Authorization)
             app.UseAuthentication();
             app.UseAuthorization();
-
+            app.UseCors("AllowDev");
+            app.UseRouting();
             app.MapControllers();
 
             app.Run();
