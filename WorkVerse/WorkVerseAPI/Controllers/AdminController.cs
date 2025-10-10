@@ -168,25 +168,23 @@ namespace WorkVerseAPI.Controllers
             return Ok(new ApiResponse<object>("Report updated successfully.", 200));
         }
 
-        //// ======================================================
-        //// FEEDBACKS
-        //// ======================================================
-        //[HttpGet("feedbacks")]
-        //public async Task<IActionResult> GetAllFeedbacks([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
-        //{
-        //    var result = await _feedbackService.GetAllAsync();
-        //    return Ok(new ApiResponse<object>(result, 200));
-        //}
 
-        //[HttpPut("feedbacks/{id}")]
-        //public async Task<IActionResult> UpdateFeedback(int id, [FromBody] FeedbackDTORequest dto)
-        //{
-        //    var result = await _feedbackService.UpdateAsync(id, dto);
-        //    if (result == null)
-        //        return NotFound(new ApiResponse<object>($"Feedback with ID {id} not found.", 404));
+        [HttpGet("feedbacks")]
+        public async Task<IActionResult> GetAllFeedbacks([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
+        {
+            var result = await _feedbackService.GetAllAsync();
+            return Ok(new ApiResponse<object>("Get list feedbacks successfully", result, 200));
+        }
 
-        //    return Ok(new ApiResponse<object>("Feedback updated successfully.", 200));
-        //}
+        [HttpPut("feedbacks/{id}")]
+        public async Task<IActionResult> UpdateFeedback(int id, [FromBody] FeedbackDTORequest dto)
+        {
+            var result = await _feedbackService.UpdateAsync(dto);
+            if (result == null)
+                return NotFound(new ApiResponse<object>($"Feedback with ID {id} not found.", 404));
+
+            return Ok(new ApiResponse<object>("Feedback updated successfully.", 200));
+        }
 
         //// ======================================================
         //// JOBS

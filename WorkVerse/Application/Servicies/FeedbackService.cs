@@ -1,4 +1,5 @@
-﻿using Application.DTOs.Request;
+﻿using Application.DTOs.Common;
+using Application.DTOs.Request;
 using Application.DTOs.Response;
 using Application.Interfaces.IRepositories;
 using Application.Interfaces.IServicies;
@@ -49,6 +50,8 @@ namespace Application.Servicies
                 throw;
             }
         }
+
+
 
         public async Task<FeedbackListDTOResponse> GetFeedbackListAsync(int pageNumber, int pageSize)
         {
@@ -105,6 +108,52 @@ namespace Application.Servicies
                 },
                 Feedbacks = result
             };
+        }
+
+        public async Task<PaginationResult<List<FeedbackDTOResponse>>> GetAllAsync(int pageIndex = 1, int pageSize = 10)
+        {
+            try
+            {
+                var feedbacks = await _unitOfWork.Feedback.GetAllAsync(
+                    order: q => q.OrderBy(f => f.FeedbackId),
+                    pageIndex: pageIndex,
+                    pageSize: pageSize);
+
+                var feedbackDTOs = _mapper.Map<List<FeedbackDTOResponse>>(feedbacks.Data);
+
+                return new PaginationResult<List<FeedbackDTOResponse>>(
+                    feedbackDTOs,
+                    feedbacks.TotalRecords,
+                    feedbacks.PageIndex,
+                    feedbacks.PageSize
+                );
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "GetAllAsync: Error retrieving feedbacks");
+                throw;
+            }
+        }
+        public async Task<FeedbackDTOResponse> UpdateAsync(FeedbackDTORequest entity)
+        {
+            try
+            {
+                var feedback = await _unitOfWork.Feedback.GetFeedbackByIdAsync(entity.FeedbackId);
+                if (feedback == null)
+                {
+                    _logger.LogWarning("UpdateAsync: Feedback with id {FeedbackId} not found.", entity.FeedbackId);
+                    throw new KeyNotFoundException($"Feedback with id {entity.FeedbackId} not found.");
+                }
+                _mapper.Map(entity, feedback);
+                _unitOfWork.Feedback.Update(feedback);
+                await _unitOfWork.SaveChangesAsync();
+                return _mapper.Map<FeedbackDTOResponse>(feedback);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "UpdateAsync: Error updating feedback with id {FeedbackId}", entity.FeedbackId);
+                throw;
+            }
         }
 
         public async Task<bool> UpdateFeedbackHandleAsync(int feedbackId, UpdateFeedbackHandlerDTORequest request)

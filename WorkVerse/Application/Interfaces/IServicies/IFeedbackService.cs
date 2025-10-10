@@ -1,4 +1,5 @@
-﻿using Application.DTOs.Request;
+﻿using Application.DTOs.Common;
+using Application.DTOs.Request;
 using Application.DTOs.Response;
 using System;
 using System.Collections.Generic;
@@ -15,6 +16,9 @@ namespace Application.Interfaces.IServicies
         Task<FeedbackListDTOResponse> GetFeedbackListAsync(int pageNumber, int pageSize);
 
         Task<bool> UpdateFeedbackHandleAsync(int feedbackId, UpdateFeedbackHandlerDTORequest request);
+        Task<PaginationResult<List<FeedbackDTOResponse>>> GetAllAsync(int pageIndex = 1, int pageSize = 10);
+
+        Task<FeedbackDTOResponse> UpdateAsync(FeedbackDTORequest entity);
 
     }
 }

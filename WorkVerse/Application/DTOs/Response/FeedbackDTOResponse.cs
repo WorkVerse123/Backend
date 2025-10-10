@@ -46,5 +46,13 @@ namespace Application.DTOs.Response
         public int UserId { get; set; }
         public string FullName { get; set; } = null!;
     }
-
+    public class FeedbackDTOResponse
+    {
+        public int FeedbackId { get; set; }
+        public int UserId { get; set; }
+        public string Content { get; set; } = null!;
+        public DateTime CreatedAt { get; set; }
+        public int? HandledBy { get; set; }
+        public DateTime? HandledAt { get; set; }
+    }
 }

@@ -20,6 +20,9 @@ namespace Application.Mappers
             .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(_ => DateTime.Now))
             .ForMember(dest => dest.HandledBy, opt => opt.Ignore())
             .ForMember(dest => dest.HandledAt, opt => opt.Ignore());
+
+            CreateMap<FeedbackDTORequest, Feedback>();
+            CreateMap<Feedback, FeedbackDTOResponse>();
         }
     }
 }
