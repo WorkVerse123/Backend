@@ -42,4 +42,17 @@ namespace Application.DTOs.Request
         public int UserId { get; set; }
         public string NewStatus { get; set; } = null!;
     }
+    public class UserUpdateDTORespone
+    {
+        public int UserId { get; set; }
+        public string Email { get; set; } = null!;
+        public string PhoneNumber { get; set; } = null!;
+        public string Token { get; set; } = null!;
+        public int RoleId { get; set; }
+        public bool IsPremium { get; set; }
+        public int EmployeeId { get; set; }
+        public int EmployerId { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public DateTime UpdatedAt { get; set; }
+    }
 }
