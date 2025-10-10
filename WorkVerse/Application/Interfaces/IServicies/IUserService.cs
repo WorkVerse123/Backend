@@ -15,6 +15,6 @@ namespace Application.Interfaces.IServicies
         Task<bool> UpdateStatusAsync(int userId, string newStatus);
         Task<PaginationResult<List<UserDTORespone>>> GetAllAsync(int pageIndex = 1, int pageSize = 10);
 
-        Task<UserDTORespone> UpdateAsync(UserUpdateDTORespone entity);
+        Task<UserDTORespone> UpdateAsync(UserUpdateDTORequest entity);
     }
 }

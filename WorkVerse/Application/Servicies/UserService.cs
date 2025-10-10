@@ -44,7 +44,7 @@ namespace Application.Servicies
             }
         }
 
-        public async Task<UserDTORespone> UpdateAsync(UserUpdateDTORespone entity)
+        public async Task<UserDTORespone> UpdateAsync(UserUpdateDTORequest entity)
         {
             try
             {

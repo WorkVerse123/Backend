@@ -42,7 +42,7 @@ namespace Application.DTOs.Request
         public int UserId { get; set; }
         public string NewStatus { get; set; } = null!;
     }
-    public class UserUpdateDTORespone
+    public class UserUpdateDTORequest
     {
         public int UserId { get; set; }
         public string Email { get; set; } = null!;

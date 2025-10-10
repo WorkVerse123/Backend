@@ -85,7 +85,7 @@ namespace WorkVerseAPI.Controllers
         }
 
         [HttpPut("users/{id}")]
-        public async Task<IActionResult> UpdateUser(int id, [FromBody] UserUpdateDTORespone userDto)
+        public async Task<IActionResult> UpdateUser(int id, [FromBody] UserUpdateDTORequest userDto)
         {
             var result = await _userService.UpdateAsync(userDto);
             if (result == null)
@@ -97,22 +97,23 @@ namespace WorkVerseAPI.Controllers
         // ======================================================
         // EMPLOYEE
         // ======================================================
-        //[HttpGet("employee")]
-        //public async Task<IActionResult> GetAllEmployees([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
-        //{
-        //    var result = await _employeeService.GetAllAsync();
-        //    return Ok(new ApiResponse<object>(result, 200));
-        //}
+        [HttpGet("employee")]
+        public async Task<IActionResult> GetAllEmployees([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
+        {
+            var result = await _employeeService.GetAllAsync(pageNumber, pageSize);
+            return Ok(new ApiResponse<object>("Get list employee successfully", result, 200));
 
-        //[HttpPut("employee/{id}")]
-        //public async Task<IActionResult> UpdateEmployee(int id, [FromBody] EmployeeProfileDTORequest dto)
-        //{
-        //    var result = await _employeeService.UpdateAsync(id, dto);
-        //    if (result == null)
-        //        return NotFound(new ApiResponse<object>($"Employee with ID {id} not found.", 404));
+        }
 
-        //    return Ok(new ApiResponse<object>("Employee updated successfully.", 200));
-        //}
+        [HttpPut("employee/{id}")]
+        public async Task<IActionResult> UpdateEmployee(int id, [FromBody] EmployeeProfileUpdateDTORequest dto)
+        {
+            var result = await _employeeService.UpdateAsync(dto);
+            if (result == null)
+                return NotFound(new ApiResponse<object>($"Employee with ID {id} not found.", 404));
+
+            return Ok(new ApiResponse<object>("Employee updated successfully.", 200));
+        }
 
         //// ======================================================
         //// EMPLOYER
