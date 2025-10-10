@@ -1,4 +1,5 @@
-﻿using Application.DTOs.Request;
+﻿using Application.DTOs.Common;
+using Application.DTOs.Request;
 using Application.DTOs.Response;
 using System;
 using System.Collections.Generic;
@@ -19,6 +20,9 @@ namespace Application.Interfaces.IServicies
         Task<PlatformStatsResponseDTOResponse> GetPlatformStatsAsync();
 
         Task<bool> UpdateApplicationStatusAsync(int applicationId, UpdateApplicationStatusDTORequest request);
+        Task<PaginationResult<List<ApplicationDTOResponse>>> GetAllAsync(int pageIndex = 1, int pageSize = 10);
+
+        Task<ApplicationDTOResponse> UpdateAsync(ApplicationDTORequest entity);
 
     }
 }

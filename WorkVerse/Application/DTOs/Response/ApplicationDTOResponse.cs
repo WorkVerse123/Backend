@@ -17,14 +17,14 @@ namespace Application.DTOs.Response
     public class JobApplicationItemDTO
     {
         public int ApplicationId { get; set; }
-		public int JobId { get; set; }
-		public string JobTitle { get; set; } = null!;
+        public int JobId { get; set; }
+        public string JobTitle { get; set; } = null!;
         public string JobLocation { get; set; } = null!;
         public List<string> JobCategory { get; set; } = new();
         public string ApplicationStatus { get; set; } = null!;
     }
     // chi tiết 1 hồ sơ ứng tuyển
-    public class JobApplicationDetailsDTOResponse   
+    public class JobApplicationDetailsDTOResponse
     {
         public int ApplicationId { get; set; }
         public DateTime AppliedAt { get; set; }
@@ -66,5 +66,14 @@ namespace Application.DTOs.Response
         public int Companies { get; set; }
         public int Candidates { get; set; }
         public int NewJobs { get; set; }
+    }
+    public class ApplicationDTOResponse
+    {
+        public int ApplicationId { get; set; }
+        public int JobId { get; set; }
+        public int EmployeeId { get; set; }
+        public string? CoverLetter { get; set; }
+        public string Status { get; set; } = null!;
+        public DateTime AppliedAt { get; set; }
     }
 }

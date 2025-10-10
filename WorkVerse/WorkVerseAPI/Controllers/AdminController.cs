@@ -204,24 +204,22 @@ namespace WorkVerseAPI.Controllers
             return Ok(new ApiResponse<object>("Job updated successfully.", 200));
         }
 
-        //// ======================================================
-        //// APPLICATIONS
-        //// ======================================================
-        //[HttpGet("applications")]
-        //public async Task<IActionResult> GetAllApplications([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
-        //{
-        //    var result = await _applicationService.GetAllAsync();
-        //    return Ok(new ApiResponse<object>(result, 200));
-        //}
 
-        //[HttpPut("applications/{id}")]
-        //public async Task<IActionResult> UpdateApplication(int id, [FromBody] ApplicationDTORequest dto)
-        //{
-        //    var result = await _applicationService.UpdateAsync(id, dto);
-        //    if (result == null)
-        //        return NotFound(new ApiResponse<object>($"Application with ID {id} not found.", 404));
+        [HttpGet("applications")]
+        public async Task<IActionResult> GetAllApplications([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
+        {
+            var result = await _applicationService.GetAllAsync();
+            return Ok(new ApiResponse<object>("Get list applications successfully", result, 200));
+        }
 
-        //    return Ok(new ApiResponse<object>("Application updated successfully.", 200));
-        //}
+        [HttpPut("applications/{id}")]
+        public async Task<IActionResult> UpdateApplication(int id, [FromBody] ApplicationDTORequest dto)
+        {
+            var result = await _applicationService.UpdateAsync(dto);
+            if (result == null)
+                return NotFound(new ApiResponse<object>($"Application with ID {id} not found.", 404));
+
+            return Ok(new ApiResponse<object>("Application updated successfully.", 200));
+        }
     }
 }
