@@ -119,7 +119,7 @@ namespace WorkVerseAPI.Controllers
         [HttpGet("employer")]
         public async Task<IActionResult> GetAllEmployers([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
-            var result = await _employerService.GetAllAsync();
+            var result = await _employerService.GetAllAsync(pageNumber, pageSize));
             return Ok(new ApiResponse<object>("Get list employer successfully", result, 200));
         }
 
@@ -139,7 +139,7 @@ namespace WorkVerseAPI.Controllers
         [HttpGet("staff")]
         public async Task<IActionResult> GetAllStaffs([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
-            var result = await _staffProfileService.GetAllAsync();
+            var result = await _staffProfileService.GetAllAsync(pageNumber, pageSize));
             return Ok(new ApiResponse<object>("Get list staff successfully", result, 200));
 
         }
@@ -158,7 +158,7 @@ namespace WorkVerseAPI.Controllers
         [HttpGet("reports")]
         public async Task<IActionResult> GetAllReports([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
-            var result = await _reportService.GetAllAsync();
+            var result = await _reportService.GetAllAsync(pageNumber, pageSize));
             return Ok(new ApiResponse<object>("Get list reports successfully", result, 200));
         }
 
@@ -176,7 +176,7 @@ namespace WorkVerseAPI.Controllers
         [HttpGet("feedbacks")]
         public async Task<IActionResult> GetAllFeedbacks([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
-            var result = await _feedbackService.GetAllAsync();
+            var result = await _feedbackService.GetAllAsync(pageNumber, pageSize));
             return Ok(new ApiResponse<object>("Get list feedbacks successfully", result, 200));
         }
 
@@ -194,7 +194,7 @@ namespace WorkVerseAPI.Controllers
         [HttpGet("jobs")]
         public async Task<IActionResult> GetAllJobs([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
-            var result = await _jobService.GetAllAsync();
+            var result = await _jobService.GetAllAsync(pageNumber, pageSize));
             return Ok(new ApiResponse<object>("Get list jobs successfully", result, 200));
         }
 
@@ -212,7 +212,7 @@ namespace WorkVerseAPI.Controllers
         [HttpGet("applications")]
         public async Task<IActionResult> GetAllApplications([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
-            var result = await _applicationService.GetAllAsync();
+            var result = await _applicationService.GetAllAsync(pageNumber, pageSize));
             return Ok(new ApiResponse<object>("Get list applications successfully", result, 200));
         }
 
