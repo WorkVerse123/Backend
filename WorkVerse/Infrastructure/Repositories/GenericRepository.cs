@@ -1,4 +1,5 @@
-﻿using Application.Interfaces.IRepositories;
+﻿using Application.DTOs.Common;
+using Application.Interfaces.IRepositories;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -109,5 +110,46 @@ namespace Infrastructure.Repositories
                 prop.SetValue(entity, value);
             }
         }
+
+        public async Task<PaginationResult<List<T>>> GetAllAsync(
+            Expression<Func<T, bool>>? filter = null,
+            Func<IQueryable<T>, IOrderedQueryable<T>>? order = null,
+            Func<IQueryable<T>, IQueryable<T>>? include = null,
+            int? pageIndex = null,
+            int? pageSize = null)
+            {   
+            IQueryable<T> query = _dbSet.AsQueryable();
+
+            // 1️⃣ Apply filter nếu có
+            if (filter != null)
+                query = query.Where(filter);
+
+            // 2️⃣ Include các navigation property nếu có
+            if (include != null)
+                query = include(query);
+
+            // 3️⃣ Apply sort nếu có
+            if (order != null)
+                query = order(query);
+
+            // 4️⃣ Lấy tổng số record trước khi phân trang
+            var totalRecords = await query.CountAsync();
+
+            // 5️⃣ Phân trang (nếu có)
+            if (pageIndex.HasValue && pageSize.HasValue)
+            {
+                var skip = (pageIndex.Value - 1) * pageSize.Value;
+                query = query.Skip(skip).Take(pageSize.Value);
+            }
+
+            // 6️⃣ Thực thi query
+            var data = await query.AsNoTracking().ToListAsync();
+
+            int effectivePageIndex = pageIndex ?? 1;
+            int effectivePageSize = pageSize ?? totalRecords;
+
+            return new PaginationResult<List<T>>(data, totalRecords, effectivePageIndex, effectivePageSize);
+        }
+
     }
 }

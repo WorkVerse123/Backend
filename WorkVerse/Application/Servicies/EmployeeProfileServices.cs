@@ -1,4 +1,5 @@
-﻿using Application.DTOs.Request;
+﻿using Application.DTOs.Common;
+using Application.DTOs.Request;
 using Application.DTOs.Response;
 using Application.Helper;
 using Application.Interfaces.IRepositories;
@@ -258,6 +259,54 @@ namespace Application.Servicies
                 _logger.LogError(ex, "Error updating priority for employee {EmployeeId}", employeeId);
                 throw;
             }
+        }
+
+        public async Task<PaginationResult<List<EmployeeProfileDTOResponse>>> GetAllAsync(int pageIndex = 1, int pageSize = 10)
+        {
+            try
+            {
+                var employees = await _unitOfWork.EmployeeProfile.GetAllAsync(
+                    order: q => q.OrderBy(e => e.EmployeeId),
+                    pageIndex: pageIndex,
+                    pageSize: pageSize);
+
+                var employeeDTOs = _mapper.Map<List<EmployeeProfileDTOResponse>>(employees.Data);
+
+                return new PaginationResult<List<EmployeeProfileDTOResponse>>(
+                    employeeDTOs,
+                    employees.TotalRecords,
+                    employees.PageIndex,
+                    employees.PageSize
+                );
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "GetAllAsync: Error retrieving employee profiles");
+                throw;
+            }
+        }
+
+        public async Task<EmployeeProfileDTOResponse> UpdateAsync(EmployeeProfileUpdateDTORequest entity)
+        {
+            try
+            {
+                var profile = await _unitOfWork.EmployeeProfile.GetByEmployeeIdAsync(entity.EmployeeId);
+                if (profile == null)
+                {
+                    _logger.LogWarning("UpdateAsync: EmployeeProfile with id {EmployeeId} not found.", entity.EmployeeId);
+                    throw new KeyNotFoundException($"EmployeeProfile with id {entity.EmployeeId} not found.");
+                }
+                _mapper.Map(entity, profile);
+                _unitOfWork.EmployeeProfile.Update(profile);
+                await _unitOfWork.SaveChangesAsync();
+                return _mapper.Map<EmployeeProfileDTOResponse>(profile);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "UpdateAsync: Error updating employee profile with id {EmployeeId}", entity.EmployeeId);
+                throw;
+            }
+        }
         }
 
         public async Task<CandidateListDTOResponse> GetEmployeesFilter(EmployeeFilterRequest filter, int pageNumber, int pageSize)

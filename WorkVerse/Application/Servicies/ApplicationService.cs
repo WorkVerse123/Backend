@@ -1,4 +1,5 @@
-﻿using Application.DTOs.Request;
+﻿using Application.DTOs.Common;
+using Application.DTOs.Request;
 using Application.DTOs.Response;
 using Application.Interfaces.IRepositories;
 using Application.Interfaces.IServicies;
@@ -285,6 +286,53 @@ namespace Application.Servicies
             }
 
 
+        }
+
+        public async Task<PaginationResult<List<ApplicationDTOResponse>>> GetAllAsync(int pageIndex = 1, int pageSize = 10)
+        {
+            try
+            {
+                var applications = await _unitOfWork.Application.GetAllAsync(
+                    order: q => q.OrderBy(a => a.ApplicationId),
+                    pageIndex: pageIndex,
+                    pageSize: pageSize);
+
+                var applicationDTOs = _mapper.Map<List<ApplicationDTOResponse>>(applications.Data);
+
+                return new PaginationResult<List<ApplicationDTOResponse>>(
+                    applicationDTOs,
+                    applications.TotalRecords,
+                    applications.PageIndex,
+                    applications.PageSize
+                );
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "GetAllAsync: Error retrieving applications");
+                throw;
+            }
+        }
+
+        public async Task<ApplicationDTOResponse> UpdateAsync(ApplicationDTORequest entity)
+        {
+            try
+            {
+                var application = await _unitOfWork.Application.GetByIdAsync(entity.ApplicationId);
+                if (application == null)
+                {
+                    _logger.LogWarning("UpdateAsync: Application with id {ApplicationId} not found.", entity.ApplicationId);
+                    throw new KeyNotFoundException($"Application with id {entity.ApplicationId} not found.");
+                }
+                _mapper.Map(entity, application);
+                _unitOfWork.Application.Update(application);
+                await _unitOfWork.SaveChangesAsync();
+                return _mapper.Map<ApplicationDTOResponse>(application);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "UpdateAsync: Error updating application with id {ApplicationId}", entity.ApplicationId);
+                throw;
+            }
         }
     }
 }

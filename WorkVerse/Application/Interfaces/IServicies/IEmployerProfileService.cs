@@ -1,4 +1,5 @@
-﻿using Application.DTOs.Request;
+﻿using Application.DTOs.Common;
+using Application.DTOs.Request;
 using Application.DTOs.Response;
 using Domain.Entities;
 using System;
@@ -19,5 +20,8 @@ namespace Application.Interfaces.IServicies
         Task<IEnumerable<EmployerAIDTOResponse>> SearchEmployerByAIResult(EmployerQuery employerQuery);
         Task<bool> UpdateUserByEmployerId(int employerId, string newPhone, string newEmail);
         Task<ListEmployerProfileFilterDTOResponse> GetEmployersFilter(EmployerFilterRequest filter, int pageNumber, int pageSize);
+        Task<PaginationResult<List<EmployerProfileDTOResponse>>> GetAllAsync(int pageIndex = 1, int pageSize = 10);
+
+        Task<EmployerProfileDTOResponse> UpdateAsync(EmployerProfileDTORequest entity);
     }
 }

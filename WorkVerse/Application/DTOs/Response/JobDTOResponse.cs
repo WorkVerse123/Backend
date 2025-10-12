@@ -49,4 +49,21 @@ namespace Application.DTOs.Response
         public DateTime JobExpiredAt { get; set; }
         public string JobStatus { get; set; } = null!;
     }
+    public class JobDTOResponse
+    {
+        public int JobId { get; set; } //
+        public int EmployerId { get; set; } //
+        public string Title { get; set; } = null!; //
+        public List<int> CategoryIds { get; set; } = new(); //
+        public string Description { get; set; } = null!; //
+        public string? Requirements { get; set; } //
+        public string Location { get; set; } = null!; //
+        public decimal SalaryMin { get; set; } //
+        public decimal SalaryMax { get; set; } //
+        public string JobTime { get; set; } = null!; // 
+        public bool IsPriority { get; set; } = false;
+        public DateTime CreatedAt { get; set; } //
+        public DateTime ExpiredAt { get; set; } //
+        public string Status { get; set; } = null!; //
+    }
 }

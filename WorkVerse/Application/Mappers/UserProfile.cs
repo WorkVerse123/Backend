@@ -64,6 +64,8 @@ namespace Application.Mappers
                 .ForMember(dest => dest.UpdatedAt, opt => opt.Ignore());    
 
              CreateMap<User, UserPaymentRespone>();
+             CreateMap<UserUpdateDTORequest, User>();
+
         }
     }
 }

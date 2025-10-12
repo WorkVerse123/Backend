@@ -1,4 +1,5 @@
-﻿using Application.DTOs.Request;
+﻿using Application.DTOs.Common;
+using Application.DTOs.Request;
 using Application.DTOs.Response;
 using System;
 using System.Collections.Generic;
@@ -15,6 +16,9 @@ namespace Application.Interfaces.IServicies
         Task<ReportListDTOResponse> GetReportListAsync(int pageNumber, int pageSize);
 
         Task<bool> UpdateReportStatusAsync(int reportId, UpdateReportStatusDTORequest request);
+        Task<PaginationResult<List<ReportDTORespone>>> GetAllAsync(int pageIndex = 1, int pageSize = 10);
+
+        Task<ReportDTORespone> UpdateAsync(ReportDTORequest entity);
 
     }
 }

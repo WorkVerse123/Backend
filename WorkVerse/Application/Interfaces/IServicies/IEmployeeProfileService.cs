@@ -1,4 +1,5 @@
-﻿using Application.DTOs.Request;
+﻿using Application.DTOs.Common;
+using Application.DTOs.Request;
 using Application.DTOs.Response;
 using Application.Interfaces.IRepositories;
 using Domain.Entities;
@@ -21,6 +22,10 @@ namespace Application.Interfaces.IServicies
         Task<int?> GetEmployeeIdByUserIdAsync(int userId);
         Task<IEnumerable<EmployeeAIDTOResponse>> SearchEmployeeByAIResult(EmployeeQuery employeeQuery);
         Task<bool> UpdatePriority(int employeeId, bool isPriority);
+        Task<PaginationResult<List<EmployeeProfileDTOResponse>>> GetAllAsync(int pageIndex = 1, int pageSize = 10);
+
+        Task<EmployeeProfileDTOResponse> UpdateAsync(EmployeeProfileUpdateDTORequest entity);
+
         Task<CandidateListDTOResponse> GetEmployeesFilter(EmployeeFilterRequest filter, int pageNumber, int pageSize);
 
     }

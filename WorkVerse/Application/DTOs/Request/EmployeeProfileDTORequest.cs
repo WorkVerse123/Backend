@@ -20,6 +20,24 @@ namespace Application.DTOs.Request
         public string? WorkExperience { get; set; }
         public string? Mode { get; set; }
     }
+    public class EmployeeProfileUpdateDTORequest
+    {
+        public int EmployeeId { get; set; }
+        public string FullName { get; set; } = null!;
+        public DateTime? DateOfBirth { get; set; }
+        public string? Gender { get; set; }
+        public string? Address { get; set; }
+        public string? AvatarUrl { get; set; }
+        public string? Bio { get; set; }
+        public string? Skills { get; set; }
+        public string? Education { get; set; }
+        public string? WorkExperience { get; set; }
+        public string? Mode { get; set; }
+        public string? Email { get; set; } = null!;
+        public string? PhoneNumber { get; set; }
+        public bool IsPriority { get; set; } = false;
+
+    }
 
     public class EmployeeFilterRequest
     {

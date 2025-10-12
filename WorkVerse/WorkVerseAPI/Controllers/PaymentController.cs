@@ -28,6 +28,7 @@ namespace WorkVerseAPI.Controllers
         }
         // POST /payments
         [HttpPost]
+        [Authorize(Roles = "3,4")]
         public async Task<IActionResult> CreatePayment([FromBody] SubscriptionPlanDTORequest plan)
         {
             try

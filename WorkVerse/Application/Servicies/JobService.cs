@@ -1,4 +1,5 @@
-﻿using Application.DTOs.Request;
+﻿using Application.DTOs.Common;
+using Application.DTOs.Request;
 using Application.DTOs.Response;
 using Application.Helper;
 using Application.Interfaces.IRepositories;
@@ -267,5 +268,51 @@ namespace Application.Servicies
 			};
 		}
 
-	}
+        public async Task<PaginationResult<List<JobDTOResponse>>> GetAllAsync(int pageIndex = 1, int pageSize = 10)
+        {
+            try
+            {
+                var jobs = await _unitOfWork.Job.GetAllAsync(
+                    order: q => q.OrderBy(j => j.JobId),
+                    pageIndex: pageIndex,
+                    pageSize: pageSize);
+
+                var jobDTOs = _mapper.Map<List<JobDTOResponse>>(jobs.Data);
+
+                return new PaginationResult<List<JobDTOResponse>>(
+                    jobDTOs,
+                    jobs.TotalRecords,
+                    jobs.PageIndex,
+                    jobs.PageSize
+                );
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "GetAllAsync: Error retrieving jobs");
+                throw;
+            }
+        }
+
+        public async Task<JobDTOResponse> UpdateAsync(JobDTORequest entity)
+        {
+            try
+            {
+                var job = await _unitOfWork.Job.GetByIdAsync(entity.JobId);
+                if (job == null)
+                {
+                    _logger.LogWarning("UpdateAsync: Job with id {JobId} not found.", entity.JobId);
+                    throw new KeyNotFoundException($"Job with id {entity.JobId} not found.");
+                }
+                _mapper.Map(entity, job);
+                _unitOfWork.Job.Update(job);
+                await _unitOfWork.SaveChangesAsync();
+                return _mapper.Map<JobDTOResponse>(job);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "UpdateAsync: Error updating job with id {JobId}", entity.JobId);
+                throw;
+            }
+        }
+    }
 }

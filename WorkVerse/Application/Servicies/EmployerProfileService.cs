@@ -1,4 +1,5 @@
-﻿using Application.DTOs.Request;
+﻿using Application.DTOs.Common;
+using Application.DTOs.Request;
 using Application.DTOs.Response;
 using Application.Helper;
 using Application.Interfaces.IRepositories;
@@ -244,5 +245,61 @@ namespace Application.Servicies
             };
         }
 
+        public async Task<PaginationResult<List<EmployerProfileDTOResponse>>> GetAllAsync(int pageIndex = 1, int pageSize = 10)
+        {
+            try
+            {
+                var employers = await _unitOfWork.EmployerProfile.GetAllAsync(
+                    order: q => q.OrderBy(e => e.EmployerId),
+                    pageIndex: pageIndex,
+                    pageSize: pageSize);
+
+                var employerDTOs = _mapper.Map<List<EmployerProfileDTOResponse>>(employers.Data);
+
+                return new PaginationResult<List<EmployerProfileDTOResponse>>(
+                    employerDTOs,
+                    employers.TotalRecords,
+                    employers.PageIndex,
+                    employers.PageSize
+                );
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "GetAllAsync: Error retrieving employer profiles");
+                throw;
+            }
+        }
+
+        public async Task<EmployerProfileDTOResponse> UpdateAsync(EmployerProfileDTORequest entity)
+        {
+            try
+            {
+                var profile = await _unitOfWork.EmployerProfile.GetByIdAsync(entity.EmployerId);
+                if (profile == null)
+                {
+                    _logger.LogWarning("UpdateAsync: EmployerProfile with id {EmployerId} not found.", entity.EmployerId);
+                    throw new KeyNotFoundException($"EmployerProfile with id {entity.EmployerId} not found.");
+                }
+
+                // Map các trường từ DTO sang entity, trừ EmployerType (xử lý riêng)
+                _mapper.Map(entity, profile);
+
+                // Nếu có thay đổi loại hình, cập nhật lại reference
+                if (profile.EmployerTypeId != entity.EmployerType)
+                {
+                    var employerType = await _unitOfWork.EmployerType.GetAsync(entity.EmployerType);
+                    profile.EmployerType = employerType;
+                }
+
+                _unitOfWork.EmployerProfile.Update(profile);
+                await _unitOfWork.SaveChangesAsync();
+                return _mapper.Map<EmployerProfileDTOResponse>(profile);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "UpdateAsync: Error updating employer profile with id {EmployerId}", entity.EmployerId);
+                throw;
+            }
+        }
     }
 }

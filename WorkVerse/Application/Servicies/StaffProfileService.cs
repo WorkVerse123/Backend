@@ -1,4 +1,5 @@
-﻿using Application.DTOs.Request;
+﻿using Application.DTOs.Common;
+using Application.DTOs.Request;
 using Application.DTOs.Response;
 using Application.Interfaces.IRepositories;
 using Application.Interfaces.IServicies;
@@ -66,6 +67,7 @@ namespace Application.Servicies
             }
         }
 
+
         public async Task<StaffProfileDTOResponse> Update(StaffProfileDTORequest staffProfile)
         {
             try
@@ -92,6 +94,53 @@ namespace Application.Servicies
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error updating StaffProfile with id {Id}", staffProfile.StaffId);
+                throw;
+            }
+        }
+
+        public async Task<PaginationResult<List<StaffProfileDTOResponse>>> GetAllAsync(int pageIndex = 1, int pageSize = 10)
+        {
+            try
+            {
+                var staffProfiles = await _unitOfWork.StaffProfile.GetAllAsync(
+                    order: q => q.OrderBy(s => s.StaffId),
+                    pageIndex: pageIndex,
+                    pageSize: pageSize);
+
+                var staffDTOs = _mapper.Map<List<StaffProfileDTOResponse>>(staffProfiles.Data);
+
+                return new PaginationResult<List<StaffProfileDTOResponse>>(
+                    staffDTOs,
+                    staffProfiles.TotalRecords,
+                    staffProfiles.PageIndex,
+                    staffProfiles.PageSize
+                );
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "GetAllAsync: Error retrieving staff profiles");
+                throw;
+            }
+        }
+
+        public async Task<StaffProfileDTOResponse> UpdateAsync(StaffProfileDTORequest entity)
+        {
+            try
+            {
+                var profile = await _unitOfWork.StaffProfile.GetAsync(entity.StaffId);
+                if (profile == null)
+                {
+                    _logger.LogWarning("UpdateAsync: StaffProfile with id {StaffId} not found.", entity.StaffId);
+                    throw new KeyNotFoundException($"StaffProfile with id {entity.StaffId} not found.");
+                }
+                _mapper.Map(entity, profile);
+                _unitOfWork.StaffProfile.Update(profile);
+                await _unitOfWork.SaveChangesAsync();
+                return _mapper.Map<StaffProfileDTOResponse>(profile);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "UpdateAsync: Error updating staff profile with id {StaffId}", entity.StaffId);
                 throw;
             }
         }

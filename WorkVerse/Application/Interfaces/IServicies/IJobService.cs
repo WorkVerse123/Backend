@@ -1,4 +1,5 @@
-﻿using Application.DTOs.Request;
+﻿using Application.DTOs.Common;
+using Application.DTOs.Request;
 using Application.DTOs.Response;
 using Domain.Entities;
 using System;
@@ -22,6 +23,9 @@ namespace Application.Interfaces.IServicies
         Task<JobListDTOResponse> GetJobsFilter(JobFilterRequest filter, int pageNumber, int pageSize);
         Task<IEnumerable<JobAIDTOResponse>> SearchJobByAIResult(JobQuery jobQuery);
         Task<IEnumerable<JobWithEmployerAIDTOResponse>> SearchJobByEmployerAIResult(JobQuery jobQuery, EmployerQuery employerQuery);
+        Task<PaginationResult<List<JobDTOResponse>>> GetAllAsync(int pageIndex = 1, int pageSize = 10);
+
+        Task<JobDTOResponse> UpdateAsync(JobDTORequest entity);
 
     }
 }

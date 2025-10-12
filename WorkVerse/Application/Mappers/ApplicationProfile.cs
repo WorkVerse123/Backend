@@ -1,4 +1,5 @@
-﻿using Application.DTOs.Response;
+﻿using Application.DTOs.Request;
+using Application.DTOs.Response;
 using AutoMapper;
 using Domain.Entities;
 using System;
@@ -38,8 +39,11 @@ namespace Application.Mappers
            .ForMember(dest => dest.AppliedAt, opt => opt.MapFrom(src => src.AppliedAt));
 
             CreateMap<Domain.Entities.Application, EmployeeApplicationDTO>()
-    .ForMember(dest => dest.Job, opt => opt.MapFrom(src => src.Job))
-    .ForMember(dest => dest.Employer, opt => opt.MapFrom(src => src.Job.Employer));
+            .ForMember(dest => dest.Job, opt => opt.MapFrom(src => src.Job))
+            .ForMember(dest => dest.Employer, opt => opt.MapFrom(src => src.Job.Employer));
+
+            CreateMap<ApplicationDTORequest, Domain.Entities.Application>();
+            CreateMap<Domain.Entities.Application, ApplicationDTOResponse>();
 
         }
     }
