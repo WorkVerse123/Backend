@@ -125,6 +125,8 @@ namespace WorkVerseAPI
 
             var app = builder.Build();
 
+            //app.UseMiddleware<Application.ExceptionHandler.GlobalExceptionHandlerMiddleware>();
+
             // Configure middleware pipeline
             if (app.Environment.IsDevelopment())
             {
@@ -134,12 +136,15 @@ namespace WorkVerseAPI
 
             app.UseHttpsRedirection();
 
-            // ✅ Bật Authentication (quan trọng – phải nằm TRƯỚC Authorization)
-            app.UseAuthentication();
-            app.UseAuthorization();
+            app.UseRouting();              // ✅ Đặt trước Authentication và Authorization
+
             app.UseCors("AllowDev");
-            app.UseRouting();
+
+            app.UseAuthentication();       // ✅ Sau UseRouting
+            app.UseAuthorization();        // ✅ Sau UseAuthentication
+
             app.MapControllers();
+
 
             app.Run();
         }
