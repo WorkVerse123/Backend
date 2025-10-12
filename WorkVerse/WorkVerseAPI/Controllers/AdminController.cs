@@ -1,4 +1,5 @@
-﻿using Application.DTOs.Request;
+﻿using Application.DTOs.Common;
+using Application.DTOs.Request;
 using Application.DTOs.Response;
 using Application.Interfaces.IServicies;
 using Microsoft.AspNetCore.Http;
@@ -119,7 +120,7 @@ namespace WorkVerseAPI.Controllers
         [HttpGet("employer")]
         public async Task<IActionResult> GetAllEmployers([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
-            var result = await _employerService.GetAllAsync(pageNumber, pageSize));
+            var result = await _employerService.GetAllAsync(pageNumber, pageSize);
             return Ok(new ApiResponse<object>("Get list employer successfully", result, 200));
         }
 
@@ -139,7 +140,7 @@ namespace WorkVerseAPI.Controllers
         [HttpGet("staff")]
         public async Task<IActionResult> GetAllStaffs([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
-            var result = await _staffProfileService.GetAllAsync(pageNumber, pageSize));
+            var result = await _staffProfileService.GetAllAsync(pageNumber, pageSize);
             return Ok(new ApiResponse<object>("Get list staff successfully", result, 200));
 
         }
@@ -158,7 +159,7 @@ namespace WorkVerseAPI.Controllers
         [HttpGet("reports")]
         public async Task<IActionResult> GetAllReports([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
-            var result = await _reportService.GetAllAsync(pageNumber, pageSize));
+            var result = await _reportService.GetAllAsync(pageNumber, pageSize);
             return Ok(new ApiResponse<object>("Get list reports successfully", result, 200));
         }
 
@@ -176,7 +177,7 @@ namespace WorkVerseAPI.Controllers
         [HttpGet("feedbacks")]
         public async Task<IActionResult> GetAllFeedbacks([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
-            var result = await _feedbackService.GetAllAsync(pageNumber, pageSize));
+            var result = await _feedbackService.GetAllAsync(pageNumber, pageSize);
             return Ok(new ApiResponse<object>("Get list feedbacks successfully", result, 200));
         }
 
@@ -194,7 +195,7 @@ namespace WorkVerseAPI.Controllers
         [HttpGet("jobs")]
         public async Task<IActionResult> GetAllJobs([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
-            var result = await _jobService.GetAllAsync(pageNumber, pageSize));
+            var result = await _jobService.GetAllAsync(pageNumber, pageSize);
             return Ok(new ApiResponse<object>("Get list jobs successfully", result, 200));
         }
 
@@ -212,7 +213,7 @@ namespace WorkVerseAPI.Controllers
         [HttpGet("applications")]
         public async Task<IActionResult> GetAllApplications([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
-            var result = await _applicationService.GetAllAsync(pageNumber, pageSize));
+            var result = await _applicationService.GetAllAsync(pageNumber, pageSize);
             return Ok(new ApiResponse<object>("Get list applications successfully", result, 200));
         }
 
@@ -261,6 +262,28 @@ namespace WorkVerseAPI.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error retrieving chart data");
+                return StatusCode(500, new ApiResponse<object>(ex.Message, 500));
+            }
+        }
+
+        [HttpPost("payments/filter")]
+        public async Task<IActionResult> FilterPayments([FromBody] PaymentFilterDTORequest filter, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
+        {
+            try
+            {
+                var result = await _adminService.FilterPayment(filter, pageNumber, pageSize);
+                if (result == null || result.Data == null || !result.Data.Any())
+                    return NotFound(new ApiResponse<object>("No payments found matching the filter criteria.", 404));
+
+                return Ok(new ApiResponse<PaginationResult<List<PaymentDTOResponse>>>(
+                    "Filtered payments retrieved successfully.",
+                    result,
+                    200
+                ));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error filtering payments");
                 return StatusCode(500, new ApiResponse<object>(ex.Message, 500));
             }
         }

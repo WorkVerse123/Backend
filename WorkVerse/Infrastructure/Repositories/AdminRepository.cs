@@ -1,5 +1,8 @@
-﻿using Application.DTOs.Response;
+﻿using Application.DTOs.Common;
+using Application.DTOs.Request;
+using Application.DTOs.Response;
 using Application.Interfaces.IRepositories;
+using Domain.Entities;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -102,6 +105,63 @@ namespace Infrastructure.Repositories
                 })
                 .OrderBy(x => x.Date)
                 .ToListAsync();
+        }
+
+        public async Task<PaginationResult<List<Payment>>> FilterPayment(PaymentFilterDTORequest filter, int pageNumber, int pageSize)
+        {
+            var query = _dbContext.Payments
+                .Include(p => p.User)
+                .Include(p => p.Plan)
+                .AsQueryable();
+
+            // Filter by UserId
+            if (filter.UserId.HasValue)
+                query = query.Where(p => p.UserId == filter.UserId.Value);
+
+            // Filter by PlanId
+            if (filter.PlanId.HasValue)
+                query = query.Where(p => p.PlanId == filter.PlanId.Value);
+
+            // Filter by Type (1 = Employee, 2 = Employer)
+            if (filter.Type.HasValue)
+            {
+                if (filter.Type.Value == 1)
+                    query = query.Where(p => p.User.Role.RoleName == "employee");
+                else if (filter.Type.Value == 2)
+                    query = query.Where(p => p.User.Role.RoleName == "employer");
+            }
+
+            // Filter by Status
+            if (!string.IsNullOrWhiteSpace(filter.Status))
+                query = query.Where(p => p.Status == filter.Status);
+
+            // Filter by PaymentMethod
+            if (!string.IsNullOrWhiteSpace(filter.PaymentMethod))
+                query = query.Where(p => p.PaymentMethod == filter.PaymentMethod);
+
+            // Filter by Date range
+            if (filter.FromDate.HasValue)
+                query = query.Where(p => p.PaymentDate >= filter.FromDate.Value);
+            if (filter.ToDate.HasValue)
+                query = query.Where(p => p.PaymentDate <= filter.ToDate.Value);
+
+            // Filter by Amount range
+            if (filter.MinAmount.HasValue)
+                query = query.Where(p => p.Amount >= filter.MinAmount.Value);
+            if (filter.MaxAmount.HasValue)
+                query = query.Where(p => p.Amount <= filter.MaxAmount.Value);
+
+            // Total records after filter
+            var totalRecords = await query.CountAsync();
+
+            // Paging
+            var pagedData = await query
+                .OrderByDescending(p => p.PaymentDate)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            return new PaginationResult<List<Payment>>(pagedData, totalRecords, pageNumber, pageSize);
         }
     }
 }
