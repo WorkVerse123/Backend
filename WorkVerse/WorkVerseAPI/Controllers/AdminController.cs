@@ -2,6 +2,7 @@
 using Application.DTOs.Request;
 using Application.DTOs.Response;
 using Application.Interfaces.IServicies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WorkVerseAPI.Models;
@@ -10,6 +11,7 @@ namespace WorkVerseAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "1,2")]
     public class AdminController : ControllerBase
     {
         private readonly ILogger<AdminController> _logger;
