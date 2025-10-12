@@ -140,10 +140,18 @@ namespace WorkVerseAPI.Controllers
 
         // GET/candidates
         [HttpGet("candidates")]
-        [Authorize(Roles = "3", Policy = "IsPremium")]
+        [Authorize(Roles = "1,2,3")]
+
 
         public async Task<IActionResult> GetAllCandidates([FromQuery] EmployeeFilterRequest request, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
+            var role = User.FindFirst("RoleId")?.Value;
+            var isPremium = User.FindFirst("IsPremium")?.Value;
+
+            if (role == "3" && isPremium != "True")
+            {
+                return Forbid(); // Role 3 mà không premium thì bị chặn
+            }
             try
             {
                 var result = await _employeeProfileService.GetEmployeesFilter(request,pageNumber, pageSize);
