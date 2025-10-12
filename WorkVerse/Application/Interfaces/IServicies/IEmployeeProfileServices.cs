@@ -21,6 +21,7 @@ namespace Application.Interfaces.IServicies
         Task<int?> GetEmployeeIdByUserIdAsync(int userId);
         Task<IEnumerable<EmployeeAIDTOResponse>> SearchEmployeeByAIResult(EmployeeQuery employeeQuery);
         Task<bool> UpdatePriority(int employeeId, bool isPriority);
+        Task<CandidateListDTOResponse> GetEmployeesFilter(EmployeeFilterRequest filter, int pageNumber, int pageSize);
 
     }
 }

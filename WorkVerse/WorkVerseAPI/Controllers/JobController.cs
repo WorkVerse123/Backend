@@ -142,11 +142,11 @@ namespace WorkVerseAPI.Controllers
         [HttpGet("candidates")]
         [Authorize(Roles = "3", Policy = "IsPremium")]
 
-        public async Task<IActionResult> GetAllCandidates([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
+        public async Task<IActionResult> GetAllCandidates([FromQuery] EmployeeFilterRequest request, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
             try
             {
-                var result = await _employeeProfileService.GetEmployeeListAsync(pageNumber, pageSize);
+                var result = await _employeeProfileService.GetEmployeesFilter(request,pageNumber, pageSize);
                 if (result == null)
                 {
                     return NotFound(new ApiResponse<object>(
@@ -182,5 +182,27 @@ namespace WorkVerseAPI.Controllers
 				return StatusCode(500, new ApiResponse<object>(ex.Message, 500));
 			}
 		}
-	}
+        //// GET/candidates
+        //[HttpGet("candidates")]
+        //[Authorize(Roles = "3", Policy = "IsPremium")]
+
+        //public async Task<IActionResult> GetAllCandidates([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
+        //{
+        //    try
+        //    {
+        //        var result = await _employeeProfileService.GetEmployeeListAsync(pageNumber, pageSize);
+        //        if (result == null)
+        //        {
+        //            return NotFound(new ApiResponse<object>(
+        //                "Something went wrong. Please try again later.", 404));
+        //        }
+
+        //        return Ok(new ApiResponse<CandidateListDTOResponse>("Get list of candidates successfully", result, 200));
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return StatusCode(500, new ApiResponse<object>(ex.Message, 500));
+        //    }
+        //}
+    }
 }

@@ -1,5 +1,6 @@
 ﻿using Application.DTOs.Request;
 using Application.DTOs.Response;
+using Application.Helper;
 using Application.Interfaces.IRepositories;
 using Application.Interfaces.IServicies;
 using AutoMapper;
@@ -258,5 +259,87 @@ namespace Application.Servicies
                 throw;
             }
         }
+
+        public async Task<CandidateListDTOResponse> GetEmployeesFilter(EmployeeFilterRequest filter, int pageNumber, int pageSize)
+        {
+            var query = (await _unitOfWork.EmployeeProfile.GetAllPublicEmployeeAsync())
+                            .AsQueryable();
+
+            // 1. Search chung (tìm theo tên, kỹ năng, mô tả, học vấn, kinh nghiệm)
+            if (!string.IsNullOrWhiteSpace(filter.Search))
+            {
+                string search = filter.Search.Trim().ToLower();
+                query = query.Where(e =>
+                    (!string.IsNullOrEmpty(e.FullName) && e.FullName.ToLower().Contains(search)) ||
+                    (!string.IsNullOrEmpty(e.Skills) && e.Skills.ToLower().Contains(search)) ||
+                    (!string.IsNullOrEmpty(e.Bio) && e.Bio.ToLower().Contains(search)) ||
+                    (!string.IsNullOrEmpty(e.Education) && e.Education.ToLower().Contains(search)) ||
+                    (!string.IsNullOrEmpty(e.WorkExperience) && e.WorkExperience.ToLower().Contains(search))
+                );
+            }
+
+            // 2. Lọc theo địa chỉ / tỉnh thành
+            if (filter.EmployeeLocation != null && filter.EmployeeLocation.Any())
+            {
+                var provinceNames = filter.EmployeeLocation
+                    .Select(p => JobValidationHelper.GetDescription((EmployeeLocation)p).ToLower())
+                    .ToList();
+
+                query = query.Where(e =>
+                    !string.IsNullOrEmpty(e.Address) &&
+                    provinceNames.Any(prov => e.Address.ToLower().Contains(prov))
+                );
+            }
+
+            // 3. Lọc theo học vấn (text search mềm)
+            if (filter.EmployeeEducation != null && filter.EmployeeEducation.Any())
+            {
+                query = query.Where(e => EducationMatchingHelper.MatchesEducation(e, filter.EmployeeEducation));
+            }
+
+            //  4. Lọc theo giới tính
+            if (filter.Gender != null && filter.Gender.Any())
+            {
+                var genderList = filter.Gender.Select(g =>
+                {
+                    return g switch
+                    {
+                        1 => "male",
+                        2 => "female",
+                        3 => "others",
+                        _ => string.Empty
+                    };
+                }).Where(g => !string.IsNullOrEmpty(g)).ToList();
+
+                query = query.Where(e =>
+                    !string.IsNullOrEmpty(e.Gender) &&
+                    genderList.Any(g => e.Gender.ToLower().Equals(g.ToLower()))
+                );
+            }
+
+            // 5. Tổng số record
+            var totalRecords = query.Count();
+
+            var pagedData = query
+                    .Skip((pageNumber - 1) * pageSize)
+                    .Take(pageSize)
+                    .OrderByDescending(c => c.IsPriority)
+                    .ToList();
+
+            // 7. Map sang DTO
+            var mapped = _mapper.Map<List<CandidateItemDTO>>(pagedData);
+
+            return new CandidateListDTOResponse
+            {
+                Candidates = mapped,
+                Paging = new PaginatedResponse
+                {
+                    Page = pageNumber,
+                    PageSize = pageSize,
+                    TotalPages = (int)Math.Ceiling(totalRecords / (double)pageSize),
+                }
+            };
+        }
+
     }
 }
