@@ -3,6 +3,7 @@ using Application.DTOs.Response;
 using Application.Helper;
 using Application.Interfaces.IServicies;
 using Application.Servicies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WorkVerseAPI.Models;
 
@@ -10,6 +11,8 @@ namespace WorkVerseAPI.Controllers
 {
     [ApiController]
     [Route("api/feedbacks")]
+    [Authorize]
+
     public class FeedbackController : ControllerBase
     {
         private readonly IFeedbackService _feedbackService;
@@ -21,6 +24,8 @@ namespace WorkVerseAPI.Controllers
 
         // POST /feedbacks
         [HttpPost]
+        [Authorize(Roles = "3,4")]
+
         public async Task<IActionResult> CreateFeedback([FromBody] SendFeedbackDTORequest request)
         {
             try
@@ -43,6 +48,7 @@ namespace WorkVerseAPI.Controllers
 
         // GET /feedbacks
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> GetAllFeedbacks([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
             try
@@ -64,6 +70,8 @@ namespace WorkVerseAPI.Controllers
 
         // PUT /feedbacks/{id}/handle
         [HttpPut("{id}/handle")]
+        [Authorize(Roles = "1,2")]
+
         public async Task<IActionResult> UpdateFeedbackHandler([FromRoute] int id, [FromBody] UpdateFeedbackHandlerDTORequest request)
         {
             try

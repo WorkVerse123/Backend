@@ -4,6 +4,7 @@ using Application.Helper;
 using Application.Interfaces.IServicies;
 using Application.Servicies;
 using Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WorkVerseAPI.Models;
 
@@ -12,6 +13,7 @@ namespace WorkVerseAPI.Controllers
 
     [ApiController]
     [Route("api/applications")]
+    [Authorize]
     public class ApplicationController : ControllerBase
     {
         
@@ -26,6 +28,7 @@ namespace WorkVerseAPI.Controllers
         // PUT /applications/{id}/withdrawn
 
         [HttpPut("{id}/withdrawn")]
+        [Authorize(Roles = "3")]
         public async Task<IActionResult> UpdateApplicationWithdrawn([FromRoute] int id)
         {
             try
@@ -45,6 +48,7 @@ namespace WorkVerseAPI.Controllers
 
         // GET /applications/{id}
         [HttpGet("{id}")]
+        [Authorize(Roles = "3,4")]
         public async Task<IActionResult> GetApplicationDetailById([FromRoute] int id)
         {
             try
@@ -72,6 +76,7 @@ namespace WorkVerseAPI.Controllers
 
         // GET/stats
         [HttpGet("stats")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetStatInformation()
         {
             try
@@ -93,6 +98,8 @@ namespace WorkVerseAPI.Controllers
 
         // PUT /applications/{id}/status
         [HttpPut("{id}/status")]
+        [Authorize(Roles = "3")]
+
         public async Task<IActionResult> UpdateApplicationStatus([FromRoute] int id, [FromBody] UpdateApplicationStatusDTORequest request)
         {
             try

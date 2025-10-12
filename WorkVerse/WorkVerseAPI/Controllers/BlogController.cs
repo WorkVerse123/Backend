@@ -3,6 +3,7 @@ using Application.DTOs.Response;
 using Application.Helper;
 using Application.Interfaces.IServicies;
 using Application.Servicies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WorkVerseAPI.Models;
@@ -11,6 +12,8 @@ namespace WorkVerseAPI.Controllers
 {
     [Route("api/blogs")]
     [ApiController]
+    [Authorize(Roles = "1,2")]
+
     public class BlogController : ControllerBase
     {
         private readonly IBlogService _blogService;

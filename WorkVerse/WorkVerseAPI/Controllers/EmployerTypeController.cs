@@ -1,4 +1,5 @@
 ﻿using Application.Interfaces.IServicies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WorkVerseAPI.Models;
@@ -7,6 +8,8 @@ namespace WorkVerseAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
+
     public class EmployerTypeController : ControllerBase
     {
         private readonly IEmployerTypeSevice _employerTypeSevice;
@@ -15,6 +18,7 @@ namespace WorkVerseAPI.Controllers
             _employerTypeSevice = employerTypeSevice;
         }
         [HttpGet("types")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetAllEmployerTypes()
         {
             try

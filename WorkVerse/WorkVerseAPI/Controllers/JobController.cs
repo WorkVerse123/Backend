@@ -2,6 +2,7 @@
 using Application.DTOs.Response;
 using Application.Helper;
 using Application.Interfaces.IServicies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WorkVerseAPI.Models;
 
@@ -9,6 +10,8 @@ namespace WorkVerseAPI.Controllers
 {
     [ApiController]
     [Route("api/jobs")]
+    [Authorize]
+
     public class JobController : ControllerBase
     {
         // This is a placeholder for the actual implementation of user service
@@ -26,6 +29,7 @@ namespace WorkVerseAPI.Controllers
 
         // GET /jobs
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> GetAllJobs([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
             try
@@ -47,6 +51,8 @@ namespace WorkVerseAPI.Controllers
 
         // GET /jobs/{id}
         [HttpGet("{id}")]
+        [AllowAnonymous]
+
         public async Task<IActionResult> GetJobById([FromRoute] int id)
         {
             try
@@ -68,6 +74,8 @@ namespace WorkVerseAPI.Controllers
 
         // GET /categories
         [HttpGet("categories")] // GET api/categories
+        [AllowAnonymous]
+
         public async Task<IActionResult> GetAllJobCategories()
         {
             try
@@ -89,6 +97,8 @@ namespace WorkVerseAPI.Controllers
 
         // GET /jobs/{id}/reviews
         [HttpGet("{id}/reviews")]
+        [AllowAnonymous]
+
         public async Task<IActionResult> GetReviewsByJobId([FromRoute] int id,[FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
             try
@@ -110,6 +120,8 @@ namespace WorkVerseAPI.Controllers
 
         // POST /jobs/{id}/reviews
         [HttpPost("{id}/reviews")]
+        [Authorize(Roles = "4")]
+
         public async Task<IActionResult> CreateReview([FromRoute] int id, [FromBody] ReviewDTORequest request)
         {
             try
@@ -128,11 +140,13 @@ namespace WorkVerseAPI.Controllers
 
         // GET/candidates
         [HttpGet("candidates")]
-        public async Task<IActionResult> GetAllCandidates([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
+        [Authorize(Roles = "3", Policy = "IsPremium")]
+
+        public async Task<IActionResult> GetAllCandidates([FromQuery] EmployeeFilterRequest request, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
             try
             {
-                var result = await _employeeProfileService.GetEmployeeListAsync(pageNumber, pageSize);
+                var result = await _employeeProfileService.GetEmployeesFilter(request,pageNumber, pageSize);
                 if (result == null)
                 {
                     return NotFound(new ApiResponse<object>(
@@ -149,6 +163,7 @@ namespace WorkVerseAPI.Controllers
 
 		// GET /jobs-filter
 		[HttpGet("/job-filter")]
+        [AllowAnonymous]
 		public async Task<IActionResult> GetJobFilters([FromQuery] JobFilterRequest request,[FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
 		{
 			try
@@ -167,5 +182,27 @@ namespace WorkVerseAPI.Controllers
 				return StatusCode(500, new ApiResponse<object>(ex.Message, 500));
 			}
 		}
-	}
+        //// GET/candidates
+        //[HttpGet("candidates")]
+        //[Authorize(Roles = "3", Policy = "IsPremium")]
+
+        //public async Task<IActionResult> GetAllCandidates([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
+        //{
+        //    try
+        //    {
+        //        var result = await _employeeProfileService.GetEmployeeListAsync(pageNumber, pageSize);
+        //        if (result == null)
+        //        {
+        //            return NotFound(new ApiResponse<object>(
+        //                "Something went wrong. Please try again later.", 404));
+        //        }
+
+        //        return Ok(new ApiResponse<CandidateListDTOResponse>("Get list of candidates successfully", result, 200));
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return StatusCode(500, new ApiResponse<object>(ex.Message, 500));
+        //    }
+        //}
+    }
 }

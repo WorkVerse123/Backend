@@ -26,6 +26,7 @@ namespace Application.Interfaces.IServicies
 
         Task<EmployeeProfileDTOResponse> UpdateAsync(EmployeeProfileUpdateDTORequest entity);
 
+        Task<CandidateListDTOResponse> GetEmployeesFilter(EmployeeFilterRequest filter, int pageNumber, int pageSize);
 
     }
 }

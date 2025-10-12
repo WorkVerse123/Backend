@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 using Application.DTOs.Response;
+using Microsoft.AspNetCore.Authorization;
 
 
 namespace WorkVerseAPI.Controllers
@@ -26,7 +27,8 @@ namespace WorkVerseAPI.Controllers
 		}
 
 		[HttpPost("employee")]
-		public async Task<IActionResult> ChatBotAIEmployee([FromBody] QueryAIDTORequest req)
+        [Authorize(Roles = "4", Policy = "IsPremium")]
+        public async Task<IActionResult> ChatBotAIEmployee([FromBody] QueryAIDTORequest req)
 		{
 			if (string.IsNullOrWhiteSpace(req.Query))
 				return BadRequest(new { error = "Query is required." });
@@ -115,7 +117,9 @@ namespace WorkVerseAPI.Controllers
 		}
 
 		[HttpPost("employer")]
-		public async Task<IActionResult> ChatBotAIEmployer([FromBody] QueryAIDTORequest req)
+        [Authorize(Roles = "3", Policy = "IsPremium")]
+
+        public async Task<IActionResult> ChatBotAIEmployer([FromBody] QueryAIDTORequest req)
 		{
 			if (string.IsNullOrWhiteSpace(req.Query))
 				return BadRequest(new { error = "Query is required." });

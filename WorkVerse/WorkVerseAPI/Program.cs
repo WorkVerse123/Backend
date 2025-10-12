@@ -62,7 +62,11 @@ namespace WorkVerseAPI
                     };
                 });
 
-            builder.Services.AddAuthorization();
+            builder.Services.AddAuthorization(options =>
+            {
+                options.AddPolicy("IsPremium", policy =>
+                    policy.RequireClaim("IsPremium", "True"));
+            });
 
             // Add controllers
             builder.Services.AddControllers();

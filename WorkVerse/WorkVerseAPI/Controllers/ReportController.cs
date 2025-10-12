@@ -3,6 +3,7 @@ using Application.DTOs.Response;
 using Application.Helper;
 using Application.Interfaces.IServicies;
 using Application.Servicies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WorkVerseAPI.Models;
 
@@ -10,6 +11,8 @@ namespace WorkVerseAPI.Controllers
 {
     [ApiController]
     [Route("api/reports")]
+    [Authorize]
+
     public class ReportController : ControllerBase
     {
         private readonly IReportService _reportService;
@@ -21,6 +24,8 @@ namespace WorkVerseAPI.Controllers
 
         // POST /reports
         [HttpPost]
+        [Authorize(Roles = "3,4")]
+
         public async Task<IActionResult> CreateReport([FromBody] SubmitReportDTORequest request)
         {
             try
@@ -43,6 +48,8 @@ namespace WorkVerseAPI.Controllers
 
         // GET /reports
         [HttpGet]
+        [Authorize(Roles = "1,2")]
+
         public async Task<IActionResult> GetAllCandidates([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
             try
@@ -63,6 +70,8 @@ namespace WorkVerseAPI.Controllers
         }
         // PUT /reports/{id}/status
         [HttpPut("{id}")]
+        [Authorize(Roles = "1,2")]
+
         public async Task<IActionResult> UpdateReportStatus([FromRoute] int id, [FromBody] UpdateReportStatusDTORequest request)
         {
             try

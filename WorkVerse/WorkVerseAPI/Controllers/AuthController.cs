@@ -135,25 +135,60 @@ namespace WorkVerseAPI.Controllers
 				return BadRequest(new ApiResponse<object>($"{result.ErrorMessage}", 400));
 
 			string subject, body;
-			switch (req.Purpose)
-			{
-				case "AccountVerification":
-					subject = "Mã OTP xác thực tài khoản";
-					body = $"Mã OTP xác thực tài khoản của bạn là: {otp}";
-					break;
-				case "PasswordReset":
-					subject = "Mã OTP đặt lại mật khẩu";
-					body = $"Mã OTP đặt lại mật khẩu của bạn là: {otp}";
-					break;
-				case "ChangeEmail":
-					subject = "Mã OTP thay đổi email";
-					body = $"Mã OTP thay đổi email của bạn là: {otp}";
-					break;
-				default:
-					return BadRequest(new ApiResponse<object>("Purpose không hợp lệ.", 400));
-			}
+            switch (req.Purpose)
+            {
+                case "AccountVerification":
+                    subject = "[WorkVerse] Xác thực tài khoản của bạn";
+                    body = $@"
+			<p>Xin chào,</p>
+			<p>Cảm ơn bạn đã đăng ký tài khoản tại <strong>WorkVerse</strong> — nền tảng việc làm thông minh dành cho sinh viên part-time và doanh nghiệp SME.</p>
+			<p>Mã OTP xác thực tài khoản của bạn là:</p>
+			<h2 style='color:#2d89ef; letter-spacing:3px'>{otp}</h2>
+			<p>Mã này có hiệu lực trong vòng <strong>5 phút</strong>. Vui lòng không chia sẻ mã này với bất kỳ ai.</p>
+			<hr>
+			<p><strong>Thông tin bảo mật:</strong><br>
+			WorkVerse sẽ không bao giờ yêu cầu bạn cung cấp mã OTP qua điện thoại hoặc email khác. 
+			Nếu bạn không thực hiện yêu cầu này, vui lòng bỏ qua email.</p>
+			<p>Trân trọng,<br>Đội ngũ <strong>WorkVerse</strong></p>
+		";
+                    break;
 
-			await _emailService.SendEmailAsync(req.Email, subject, body);
+                case "PasswordReset":
+                    subject = "[WorkVerse] Mã OTP đặt lại mật khẩu của bạn";
+                    body = $@"
+			<p>Xin chào,</p>
+			<p>Chúng tôi nhận được yêu cầu đặt lại mật khẩu cho tài khoản WorkVerse của bạn.</p>
+			<p>Mã OTP để đặt lại mật khẩu là:</p>
+			<h2 style='color:#e67e22; letter-spacing:3px'>{otp}</h2>
+			<p>Mã này chỉ có hiệu lực trong <strong>5 phút</strong>. Nếu bạn không yêu cầu đặt lại mật khẩu, vui lòng bỏ qua email này.</p>
+			<hr>
+			<p><strong>Lưu ý bảo mật:</strong><br>
+			Không chia sẻ mã này cho bất kỳ ai. Nếu nghi ngờ tài khoản bị truy cập trái phép, vui lòng đổi mật khẩu ngay sau khi đăng nhập.</p>
+			<p>Thân mến,<br>Đội ngũ <strong>WorkVerse</strong></p>
+		";
+                    break;
+
+                case "ChangeEmail":
+                    subject = "[WorkVerse] Xác nhận thay đổi địa chỉ email";
+                    body = $@"
+			<p>Xin chào,</p>
+			<p>Bạn đang thực hiện thao tác thay đổi địa chỉ email trong hệ thống WorkVerse.</p>
+			<p>Mã OTP xác nhận thay đổi email là:</p>
+			<h2 style='color:#27ae60; letter-spacing:3px'>{otp}</h2>
+			<p>Mã này có hiệu lực trong vòng <strong>5 phút</strong>.</p>
+			<hr>
+			<p><strong>Cảnh báo bảo mật:</strong><br>
+			Nếu bạn không yêu cầu thay đổi email, vui lòng không cung cấp mã này cho bất kỳ ai và liên hệ ngay với bộ phận hỗ trợ WorkVerse.</p>
+			<p>Trân trọng,<br>Đội ngũ <strong>WorkVerse</strong></p>
+		";
+                    break;
+
+                default:
+                    return BadRequest(new ApiResponse<object>("Purpose không hợp lệ.", 400));
+            }
+
+
+            await _emailService.SendEmailAsync(req.Email, subject, body);
 			return Ok(new ApiResponse<object>("Nếu email tồn tại, mã OTP đã được gửi.", 200));
 		}
 

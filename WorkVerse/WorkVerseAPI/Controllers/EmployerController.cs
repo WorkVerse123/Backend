@@ -13,6 +13,8 @@ namespace WorkVerseAPI.Controllers
 {
     [Route("api/employer")]
     [ApiController]
+    [Authorize]
+
     public class EmployerController : ControllerBase
     {
         private readonly IEmployerProfileService _employerProfileService;
@@ -34,6 +36,8 @@ namespace WorkVerseAPI.Controllers
 
         // GET /employers/{id}
         [HttpGet("{id}")]
+        [AllowAnonymous]
+
         public async Task<IActionResult> GetEmployerById(int id)
         {
             try
@@ -59,6 +63,8 @@ namespace WorkVerseAPI.Controllers
 
         // PUT /employers/{id}
         [HttpPut("{id}")]
+        [Authorize(Roles = "3")]
+
         public async Task<IActionResult> UpdateEmployer(int id, [FromBody] EmployerProfileDTORequest employerDto)
         {
             try
@@ -94,6 +100,8 @@ namespace WorkVerseAPI.Controllers
 
         // GET /employers/{id}/jobs
         [HttpGet("{id}/jobs")]
+        [AllowAnonymous]
+
         public async Task<IActionResult> GetJobsByEmployer(int id, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
             try
@@ -119,7 +127,7 @@ namespace WorkVerseAPI.Controllers
 
         // POST /employers/{id}/jobs
         [HttpPost("{id}/jobs")]
-        //[Authorize]
+        [Authorize(Roles = "3")]
         public async Task<IActionResult> CreateJobForEmployer(int id, [FromBody] JobDTORequest jobDto)
         {
             try
@@ -164,6 +172,8 @@ namespace WorkVerseAPI.Controllers
 
         // PUT /employers/{id}/jobs/{job_id}
         [HttpPut("{id}/jobs/{job_id}")]
+        [Authorize(Roles = "3")]
+
         public async Task<IActionResult> UpdateJobForEmployer(int id, int job_id, [FromBody] JobDTORequest jobDto)
         {
             try
@@ -202,6 +212,7 @@ namespace WorkVerseAPI.Controllers
 
         // PUT /employers/{id}/jobs/{job_id}/status1
         [HttpPut("{id}/jobs/{job_id}/status")]
+        [Authorize(Roles = "3")]
         public async Task<IActionResult> UpdateJobStatus(int id, int job_id, [FromBody] string statusDto)
         {
             try
@@ -236,6 +247,8 @@ namespace WorkVerseAPI.Controllers
 
         // GET /employers/{id}/job/{job_id}/applications
         [HttpGet("{id}/job/{job_id}/applications")]
+        [Authorize(Roles = "3")]
+
         public async Task<IActionResult> GetAllJobApplication([FromRoute] int id, [FromRoute] int job_id, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
             try
@@ -257,6 +270,8 @@ namespace WorkVerseAPI.Controllers
 
         // GET /employers-filter
         [HttpGet("/employers-filter")]
+        [AllowAnonymous]
+
         public async Task<IActionResult> GetEmployersFilters([FromQuery] EmployerFilterRequest request, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
             try

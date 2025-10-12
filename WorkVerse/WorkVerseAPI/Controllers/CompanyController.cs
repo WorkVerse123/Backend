@@ -2,6 +2,7 @@
 using Application.DTOs.Response;
 using Application.Helper;
 using Application.Interfaces.IServicies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WorkVerseAPI.Models;
 
@@ -9,6 +10,7 @@ namespace WorkVerseAPI.Controllers
 {
     [ApiController]
     [Route("api/companies")]
+    [Authorize]
     public class CompanyController : ControllerBase
     {
         
@@ -20,6 +22,8 @@ namespace WorkVerseAPI.Controllers
 
         // GET /companies
         [HttpGet]
+        [AllowAnonymous]
+
         public async Task<IActionResult> GetAllCompanies( [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
             try
@@ -41,6 +45,8 @@ namespace WorkVerseAPI.Controllers
 
         // POST/company-setup
         [HttpPost("company-setup")]
+        [Authorize(Roles = "3")]
+
         public async Task<IActionResult> CreateEmployerProfile([FromBody] EmployerProfileDTORequest request)
         {
             try
