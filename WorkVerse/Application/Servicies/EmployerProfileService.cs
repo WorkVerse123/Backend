@@ -133,7 +133,7 @@ namespace Application.Servicies
 
                 // Get existing profile
                 var existingProfile = await _unitOfWork.EmployerProfile.GetByIdAsync(id);
-                var employerType = await _unitOfWork.EmployerType.GetAsync(request.EmployerType);
+                var employerType = await _unitOfWork.EmployerType.GetAsync(request.EmployerTypeId);
                 if (existingProfile == null)
                 {
                     throw new KeyNotFoundException($"Employer profile with ID {id} not found.");
@@ -141,7 +141,7 @@ namespace Application.Servicies
 
                 // Update fields
                 existingProfile.CompanyName = request.CompanyName;
-                existingProfile.EmployerType = employerType;
+                existingProfile.EmployerTypeId = employerType.EmployerTypeId;
                 existingProfile.Address = request.Address;
                 existingProfile.WebsiteUrl = request.WebsiteUrl;
                 existingProfile.LogoUrl = request.LogoUrl;
@@ -285,9 +285,9 @@ namespace Application.Servicies
                 _mapper.Map(entity, profile);
 
                 // Nếu có thay đổi loại hình, cập nhật lại reference
-                if (profile.EmployerTypeId != entity.EmployerType)
+                if (profile.EmployerTypeId != entity.EmployerTypeId)
                 {
-                    var employerType = await _unitOfWork.EmployerType.GetAsync(entity.EmployerType);
+                    var employerType = await _unitOfWork.EmployerType.GetAsync(entity.EmployerTypeId);
                     profile.EmployerType = employerType;
                 }
 

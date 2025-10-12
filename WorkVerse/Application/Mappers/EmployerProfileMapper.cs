@@ -25,7 +25,7 @@ namespace Application.Mappers
             CreateMap<EmployerProfileDTORequest, EmployerProfile>()
            .ForMember(dest => dest.Address, opt => opt.MapFrom(src => src.Address))
            .ForMember(dest => dest.CompanyName, opt => opt.MapFrom(src => src.CompanyName))
-           .ForMember(dest => dest.EmployerTypeId, opt => opt.MapFrom(src => src.EmployerType))
+           .ForMember(dest => dest.EmployerTypeId, opt => opt.MapFrom(src => src.EmployerTypeId))
            .ForMember(dest => dest.WebsiteUrl, opt => opt.MapFrom(src => src.WebsiteUrl))
            .ForMember(dest => dest.LogoUrl, opt => opt.MapFrom(src => src.LogoUrl))
            .ForMember(dest => dest.DateEstablish, opt => opt.MapFrom(src => src.DateEstablished))

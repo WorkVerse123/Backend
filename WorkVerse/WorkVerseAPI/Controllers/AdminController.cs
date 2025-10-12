@@ -268,7 +268,7 @@ namespace WorkVerseAPI.Controllers
             }
         }
 
-        [HttpGet("payments/filter")]
+        [HttpPost("payments/filter")]
         public async Task<IActionResult> FilterPayments([FromBody] PaymentFilterDTORequest filter, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
             try

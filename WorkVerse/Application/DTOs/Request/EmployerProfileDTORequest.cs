@@ -12,7 +12,7 @@ namespace Application.DTOs.Request
         public int EmployerId { get; set; } // 
         public int UserId { get; set; }
         public string CompanyName { get; set; } = null!; //
-        public int EmployerType { get; set; }
+        public int EmployerTypeId { get; set; }
         public string Address { get; set; } = null!; //
         public string? WebsiteUrl { get; set; } //
         public string? LogoUrl { get; set; } //
