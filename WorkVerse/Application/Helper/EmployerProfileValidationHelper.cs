@@ -21,7 +21,7 @@ namespace Application.Helper
                 return (false, "CompanyName cannot exceed 255 characters.");
 
             // EmployerType
-            if (request.EmployerType <= 0)
+            if (request.EmployerTypeId <= 0)
                 return (false, "EmployerType must be a valid positive number.");
 
             // Address
