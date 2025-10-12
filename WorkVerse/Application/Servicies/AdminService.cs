@@ -76,7 +76,9 @@ namespace Application.Services
                     User = p.User != null ? new UserPaymentRespone { UserId = p.User.UserId } : null,
                     Plan = p.Plan != null ? new PlanPaymentDTORespone
                     {
+                        PlanName = p.Plan.PlanName,
                         PlanId = p.Plan.PlanId,
+                        Price = p.Plan.Price,
                         DurationDays = p.Plan.DurationDays
                     } : null
                 }).ToList();

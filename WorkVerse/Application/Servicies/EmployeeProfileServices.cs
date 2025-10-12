@@ -307,7 +307,7 @@ namespace Application.Servicies
                 throw;
             }
         }
-        }
+        
 
         public async Task<CandidateListDTOResponse> GetEmployeesFilter(EmployeeFilterRequest filter, int pageNumber, int pageSize)
         {
