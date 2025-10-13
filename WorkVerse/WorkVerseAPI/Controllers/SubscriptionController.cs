@@ -1,5 +1,6 @@
 ﻿using Application.DTOs.Response;
 using Application.Interfaces.IServicies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WorkVerseAPI.Models;
@@ -8,6 +9,7 @@ namespace WorkVerseAPI.Controllers
 {
     [Route("api/subscriptions")]
     [ApiController]
+    [Authorize(Roles = "3,4")]
     public class SubscriptionController : ControllerBase
     {
         private readonly ISubscriptionService _subscriptionService;
