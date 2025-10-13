@@ -135,10 +135,6 @@ namespace Infrastructure.Repositories
             if (!string.IsNullOrWhiteSpace(filter.Status))
                 query = query.Where(p => p.Status == filter.Status);
 
-            // Filter by PaymentMethod
-            if (!string.IsNullOrWhiteSpace(filter.PaymentMethod))
-                query = query.Where(p => p.PaymentMethod == filter.PaymentMethod);
-
             // Filter by Date range
             if (filter.FromDate.HasValue)
                 query = query.Where(p => p.PaymentDate >= filter.FromDate.Value);

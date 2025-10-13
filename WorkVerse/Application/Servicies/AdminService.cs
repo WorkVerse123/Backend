@@ -70,7 +70,6 @@ namespace Application.Services
                     UserId = p.UserId,
                     PlanId = p.PlanId,
                     Amount = p.Amount,
-                    PaymentMethod = p.PaymentMethod,
                     PaymentDate = p.PaymentDate,
                     Status = p.Status,
                     User = p.User != null ? new UserPaymentRespone { UserId = p.User.UserId } : null,

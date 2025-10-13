@@ -23,7 +23,6 @@ namespace Application.DTOs.Request
         public int? PlanId { get; set; }
         public int? Type { get; set; } // 1 = Employee, 2 = Employer
         public string? Status { get; set; }
-        public string? PaymentMethod { get; set; }
         public DateTime? FromDate { get; set; }
         public DateTime? ToDate { get; set; }
         public decimal? MinAmount { get; set; }
