@@ -1,0 +1,28 @@
+﻿using Application.DTOs.Common;
+using Application.DTOs.Request;
+using Application.DTOs.Response;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Application.Interfaces.IServicies
+{
+    public interface IApplicationService
+    {
+        Task<JobApplicationListDTOResponse> GetApplicationsByEmployeeAsync(int employeeId, int pageNumber, int pageSize);
+        Task<JobApplicationItemDTO> CreateApplyJobAsync(int employeeId, SendApplicationDTORequest request);
+        Task<JobApplicationItemDTO> WithdrawApplicationAsync(int applicationId);
+        Task<JobApplicationDetailsDTOResponse> GetApplicationDetailsByIdAsync(int applicationId);
+        Task<EmployerJobApplicationsDTOResponse> GetApplicationsByJobAsync(int employerId, int jobId,int pageNumber, int pageSize);
+
+        Task<PlatformStatsResponseDTOResponse> GetPlatformStatsAsync();
+
+        Task<bool> UpdateApplicationStatusAsync(int applicationId, UpdateApplicationStatusDTORequest request);
+        Task<PaginationResult<List<ApplicationDTOResponse>>> GetAllAsync(int pageIndex = 1, int pageSize = 10);
+
+        Task<ApplicationDTOResponse> UpdateAsync(ApplicationDTORequest entity);
+
+    }
+}
