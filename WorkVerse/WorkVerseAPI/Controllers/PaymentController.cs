@@ -58,7 +58,7 @@ namespace WorkVerseAPI.Controllers
 
             if (body.Contains("\"id\":\"webhook\""))
             {
-                return Ok(new ApiResponse<object>("Webhook verified successfully (Ping test).", null, 200));
+                return Ok();
             }
 
             try
