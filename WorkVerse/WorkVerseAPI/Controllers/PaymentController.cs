@@ -49,12 +49,17 @@ namespace WorkVerseAPI.Controllers
             }
         }
 
-        // POST /payments/webhook
+        // POST /payment/webhook
         [HttpPost("webhook")]
         public async Task<IActionResult> Webhook()
         {
             using var reader = new StreamReader(Request.Body);
             var body = await reader.ReadToEndAsync();
+
+            if (body.Contains("\"id\":\"webhook\""))
+            {
+                return Ok(new ApiResponse<object>("Webhook verified successfully (Ping test).", null, 200));
+            }
 
             try
             {
