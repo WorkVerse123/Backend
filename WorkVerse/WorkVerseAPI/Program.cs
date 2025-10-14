@@ -79,12 +79,17 @@ namespace WorkVerseAPI
             {
                 options.AddPolicy("AllowDev", policy =>
                 {
-                    policy.WithOrigins("http://localhost:5173")
-                          .AllowAnyHeader()
-                          .AllowAnyMethod()
-                          .AllowCredentials();
+                    policy.WithOrigins(
+                        "http://localhost:5173",
+                        "https://workverse-sage.vercel.app",    
+                        "https://www.workverse-sage.vercel.app" 
+                    )
+                    .AllowAnyHeader()
+                    .AllowAnyMethod()
+                    .AllowCredentials();
                 });
             });
+
             // ✅ Swagger với Bearer Token
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen(c =>
