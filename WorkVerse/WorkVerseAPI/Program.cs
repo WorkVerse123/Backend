@@ -133,11 +133,10 @@ namespace WorkVerseAPI
             //app.UseMiddleware<Application.ExceptionHandler.GlobalExceptionHandlerMiddleware>();
 
             // Configure middleware pipeline
-            if (app.Environment.IsDevelopment())
-            {
+
                 app.UseSwagger();
                 app.UseSwaggerUI();
-            }
+
 
             app.UseHttpsRedirection();
 
