@@ -56,23 +56,19 @@ namespace WorkVerseAPI.Controllers
             using var reader = new StreamReader(Request.Body);
             var body = await reader.ReadToEndAsync();
 
-            if (body.Contains("\"id\":\"webhook\""))
-            {
-                return Ok();
-            }
 
             try
             {
-                //var payment = await _payService.VerifyWebhookDataAsync(body);
-                //var paymentDb = await _payment.GetById(payment.PaymentId);
-                //payment.UserId = paymentDb.UserId;
-                //payment.PlanId = paymentDb.PlanId;
+                var payment = await _payService.VerifyWebhookDataAsync(body);
+                var paymentDb = await _payment.GetById(payment.PaymentId);
+                payment.UserId = paymentDb.UserId;
+                payment.PlanId = paymentDb.PlanId;
 
-                //await _employeeProfileServices.UpdatePriority(payment.UserId,true);
-                //var updatePayment = await _payment.UpdateAsync(payment);
-                //var userSubscription = await _userSubscripitionService.AddAsync(payment);
+                await _employeeProfileServices.UpdatePriority(payment.UserId,true);
+                var updatePayment = await _payment.UpdateAsync(payment);
+                var userSubscription = await _userSubscripitionService.AddAsync(payment);
 
-                return Ok(new ApiResponse<object>("Webhook verified successfully.", null, 200));
+                return Ok(new ApiResponse<object>("Webhook verified successfully.", updatePayment, 200));
             }
             catch (Exception ex)
             {
