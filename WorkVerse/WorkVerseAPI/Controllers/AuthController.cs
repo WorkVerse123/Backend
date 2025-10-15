@@ -122,10 +122,7 @@ namespace WorkVerseAPI.Controllers
 			if (string.IsNullOrWhiteSpace(req.Purpose))
 				return BadRequest(new ApiResponse<object>("Purpose không được để trống.", 400));
             var existsUser = await _authService.ExsitedUser(req.Email);
-            if (existsUser)
-            {
-                return Conflict(new ApiResponse<object>("Email đã tồn tại.", 409));
-            }
+
 
             // Chuẩn hóa Purpose để tránh lỗi client truyền sai kiểu
             var allowedPurposes = new[] { "AccountVerification", "PasswordReset", "ChangeEmail" };
@@ -155,6 +152,10 @@ namespace WorkVerseAPI.Controllers
 			Nếu bạn không thực hiện yêu cầu này, vui lòng bỏ qua email.</p>
 			<p>Trân trọng,<br>Đội ngũ <strong>WorkVerse</strong></p>
 		";
+                    if (existsUser)
+                    {
+                        return Conflict(new ApiResponse<object>("Email đã tồn tại.", 409));
+                    }
                     break;
 
                 case "PasswordReset":
@@ -170,6 +171,10 @@ namespace WorkVerseAPI.Controllers
 			Không chia sẻ mã này cho bất kỳ ai. Nếu nghi ngờ tài khoản bị truy cập trái phép, vui lòng đổi mật khẩu ngay sau khi đăng nhập.</p>
 			<p>Thân mến,<br>Đội ngũ <strong>WorkVerse</strong></p>
 		";
+                    if (!existsUser)
+                    {
+                        return Conflict(new ApiResponse<object>("Email không tồn tại.", 409));
+                    }
                     break;
 
                 case "ChangeEmail":
@@ -185,6 +190,10 @@ namespace WorkVerseAPI.Controllers
 			Nếu bạn không yêu cầu thay đổi email, vui lòng không cung cấp mã này cho bất kỳ ai và liên hệ ngay với bộ phận hỗ trợ WorkVerse.</p>
 			<p>Trân trọng,<br>Đội ngũ <strong>WorkVerse</strong></p>
 		";
+                    if (!existsUser)
+                    {
+                        return Conflict(new ApiResponse<object>("Email không tồn tại.", 409));
+                    }
                     break;
 
                 default:
