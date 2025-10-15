@@ -143,7 +143,12 @@ namespace Application.Servicies
 
                 // Get existing profile
                 var existingProfile = await _unitOfWork.EmployerProfile.GetByIdAsync(id);
-                var employerType = await _unitOfWork.EmployerType.GetAsync(request.EmployerTypeId);
+                var employerType = await _unitOfWork.EmployerType.GetByIdAsync(request.EmployerTypeId);
+
+                if (!employerType)
+                {
+                    throw new KeyNotFoundException($"Employer Type with ID {request.EmployerTypeId} not found.");
+                }
                 if (existingProfile == null)
                 {
                     throw new KeyNotFoundException($"Employer profile with ID {id} not found.");

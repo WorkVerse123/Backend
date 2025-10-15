@@ -1,6 +1,7 @@
 ﻿using Application.Interfaces.IRepositories;
 using Domain.Entities;
 using Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,5 +20,10 @@ namespace Infrastructure.Repositories
         {
             return Task.FromResult(_dbSet.ToList());
         }
+        public async Task<bool> GetByIdAsync(int employerTypeId)
+        {
+            return await _context.EmployerTypes.AnyAsync(x => x.EmployerTypeId == employerTypeId);
+        }
+
     }
 }
