@@ -151,7 +151,7 @@ namespace Application.Servicies
 
                 // Update fields
                 existingProfile.CompanyName = request.CompanyName;
-                existingProfile.EmployerTypeId = employerType.EmployerTypeId;
+                existingProfile.EmployerTypeId = request.EmployerTypeId;
                 existingProfile.Address = request.Address;
                 existingProfile.WebsiteUrl = request.WebsiteUrl;
                 existingProfile.LogoUrl = request.LogoUrl;
