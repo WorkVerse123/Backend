@@ -75,9 +75,8 @@ namespace WorkVerseAPI.Controllers
 			var (isValid, error) = UserValidationHelper.ValidateRegister(request);
 			if (!isValid)
 				return BadRequest(new ApiResponse<object>(error, 400));
-			string account = request.Email ?? request.PhoneNumber;
 
-			var existsUser = await _authService.ExsitedUser(request.Email, request.PhoneNumber);
+			var existsUser = await _authService.ExsitedUser(request.Email);
 			if (existsUser)
 			{
 				return Conflict(new ApiResponse<object>("Email already exists.", 409));
@@ -197,6 +196,11 @@ namespace WorkVerseAPI.Controllers
 		[AllowAnonymous]
 		public IActionResult VerifyOtp([FromBody] VerifyOtpDTORequest req)
 		{
+            var existsUser =  _authService.ExsitedUser(req.Email).Result;
+            if (existsUser)
+            {
+                return Conflict(new ApiResponse<object>("Email already exists.", 409));
+            }
 			if (string.IsNullOrWhiteSpace(req.Email) ||
 				string.IsNullOrWhiteSpace(req.OtpCode) ||
 				string.IsNullOrWhiteSpace(req.Purpose))

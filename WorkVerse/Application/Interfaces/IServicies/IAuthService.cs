@@ -13,7 +13,7 @@ namespace Application.Interfaces.IServices
     {
         Task<UserDTORespone?> ValidateUserAsync(string account, string password);
         Task<UserDTORespone?> CreatedAccountAsync(UserDTORequest user);
-        Task<bool> ExsitedUser(string? email, string? phoneNumber);
+        Task<bool> ExsitedUser(string? email);
         Task<bool> ExsitedRole(int roleId);
         Task<bool> UpdatePasswordAsync(UserChangePasswordDTORequest user);
         Task<bool> IsPremiumAsync(int userId);

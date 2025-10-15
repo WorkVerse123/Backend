@@ -78,7 +78,7 @@ namespace SchoolMedicalSystem.Application.Services
             return BCrypt.Net.BCrypt.Verify(password, hashPassword);
         }
 
-        public async Task<bool> ExsitedUser(string? email, string? phoneNumber)
+        public async Task<bool> ExsitedUser(string? email)
         {
             var exists = await _unitOfWork.User.ExistsAsync(email);
             if (exists)
