@@ -190,9 +190,9 @@ namespace WorkVerseAPI.Controllers
 			Nếu bạn không yêu cầu thay đổi email, vui lòng không cung cấp mã này cho bất kỳ ai và liên hệ ngay với bộ phận hỗ trợ WorkVerse.</p>
 			<p>Trân trọng,<br>Đội ngũ <strong>WorkVerse</strong></p>
 		";
-                    if (!existsUser)
+                    if (existsUser)
                     {
-                        return Conflict(new ApiResponse<object>("Email không tồn tại.", 409));
+                        return Conflict(new ApiResponse<object>("Email đã tồn tại.", 409));
                     }
                     break;
 
