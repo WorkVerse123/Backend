@@ -45,8 +45,7 @@ namespace WorkVerseAPI.Controllers
 
         // POST/company-setup
         [HttpPost("company-setup")]
-        [Authorize(Roles = "3")]
-
+        [AllowAnonymous]
         public async Task<IActionResult> CreateEmployerProfile([FromBody] EmployerProfileDTORequest request)
         {
             try

@@ -29,8 +29,7 @@ namespace WorkVerseAPI.Controllers
         }
         // POST /employees/{id}
         [HttpPost("{userId}")]
-        [Authorize(Roles = "4")]
-
+        [AllowAnonymous]
         public async Task<IActionResult> CreateProfile([FromRoute] int userId,[FromBody] EmployeeProfileDTORequest request)
         {
             try
