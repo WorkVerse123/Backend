@@ -76,11 +76,6 @@ namespace WorkVerseAPI.Controllers
 			if (!isValid)
 				return BadRequest(new ApiResponse<object>(error, 400));
 
-			var existsUser = await _authService.ExsitedUser(request.Email);
-			if (existsUser)
-			{
-				return Conflict(new ApiResponse<object>("Email already exists.", 409));
-			}
 			var existsRole = await _authService.ExsitedRole(request.RoleId);
 			if (!existsRole)
 			{
