@@ -121,9 +121,14 @@ namespace WorkVerseAPI.Controllers
 
 			if (string.IsNullOrWhiteSpace(req.Purpose))
 				return BadRequest(new ApiResponse<object>("Purpose không được để trống.", 400));
+            var existsUser = await _authService.ExsitedUser(req.Email);
+            if (existsUser)
+            {
+                return Conflict(new ApiResponse<object>("Email đã tồn tại.", 409));
+            }
 
-			// Chuẩn hóa Purpose để tránh lỗi client truyền sai kiểu
-			var allowedPurposes = new[] { "AccountVerification", "PasswordReset", "ChangeEmail" };
+            // Chuẩn hóa Purpose để tránh lỗi client truyền sai kiểu
+            var allowedPurposes = new[] { "AccountVerification", "PasswordReset", "ChangeEmail" };
 			if (!allowedPurposes.Contains(req.Purpose))
 				return BadRequest(new ApiResponse<object>("Purpose không hợp lệ.", 400));
 
@@ -196,11 +201,7 @@ namespace WorkVerseAPI.Controllers
 		[AllowAnonymous]
 		public IActionResult VerifyOtp([FromBody] VerifyOtpDTORequest req)
 		{
-            var existsUser =  _authService.ExsitedUser(req.Email).Result;
-            if (existsUser)
-            {
-                return Conflict(new ApiResponse<object>("Email already exists.", 409));
-            }
+
 			if (string.IsNullOrWhiteSpace(req.Email) ||
 				string.IsNullOrWhiteSpace(req.OtpCode) ||
 				string.IsNullOrWhiteSpace(req.Purpose))
