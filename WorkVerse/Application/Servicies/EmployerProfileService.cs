@@ -37,6 +37,16 @@ namespace Application.Servicies
                 {
                     throw new InvalidOperationException($"User not exists for User {request.UserId}");
                 }
+                var phoneExist = await _unitOfWork.EmployerProfile.ExistsByContactPhoneAsync(request.ContactPhone);
+                if (phoneExist)
+                {
+                    throw new InvalidOperationException($"Phone already exists in the system");
+                }
+                var emailExist = await _unitOfWork.EmployerProfile.ExistsByContactEmailAsync(request.ContactEmail);
+                if (emailExist)
+                {
+                    throw new InvalidOperationException($"Email already exists in the system");
+                }
                 var existingProfile = await _unitOfWork.EmployerProfile.ExistsByUserIdAsync(request.UserId);
                 if (existingProfile)
                 {

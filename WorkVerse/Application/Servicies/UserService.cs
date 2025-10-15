@@ -26,6 +26,20 @@ namespace Application.Servicies
             _logger = logger;
         }
 
+        public async Task<bool> ExistsByUserPhoneAsync(string phone)
+        {
+            try
+            {
+                var phoneExist = await _unitOfWork.User.ExistsByUserPhoneAsync(phone);
+                return phoneExist;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "GetAllAsync: Error retrieving users");
+                throw;
+            }
+        }
+
         public async Task<PaginationResult<List<UserDTORespone>>> GetAllAsync(int pageIndex = 1, int pageSize = 10)
         {
             try

@@ -51,7 +51,19 @@ namespace Application.Helper
             {
                 return (false, "LogoUrl must be a valid URL.");
             }
+            // Phone
+            if (string.IsNullOrWhiteSpace(request.ContactPhone))
+                return (false, "Phone number is required.");
+            if (request.ContactPhone.Length != 10)
+                return (false, "Phone number must be 10 digits.");
+            if (!request.ContactPhone.All(char.IsDigit))
+                return (false, "Phone number must contain only digits.");
 
+            // Email
+            if (string.IsNullOrWhiteSpace(request.ContactEmail))
+                return (false, "Email is required.");
+            if (!request.ContactEmail.Contains("@"))
+                return (false, "Email is not valid.");
 
             return (true, string.Empty);
         }

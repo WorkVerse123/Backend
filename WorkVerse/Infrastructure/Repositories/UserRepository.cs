@@ -89,5 +89,11 @@ namespace Infrastructure.Repositories
                 return true;
             });
         }
+
+        // Kiểm tra tồn tại theo Phone
+        public async Task<bool> ExistsByUserPhoneAsync(string phone)
+        {
+            return await _dbSet.AnyAsync(j => j.PhoneNumber == phone);
+        }
     }
 }
