@@ -16,7 +16,7 @@ namespace Application.DTOs.Request
         public string Address { get; set; } = null!; //
         public string? WebsiteUrl { get; set; } //
         public string? LogoUrl { get; set; } //
-        public DateTime? DateEstablished { get; set; } //
+        public DateTime? DateEstablish { get; set; } //
         public string Description { get; set; } = null!; //
         public string ContactPhone { get; set; } //
         public string ContactEmail { get; set; } //

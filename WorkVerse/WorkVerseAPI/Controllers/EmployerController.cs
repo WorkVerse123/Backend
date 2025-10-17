@@ -6,6 +6,7 @@ using Application.Interfaces.IServicies;
 using Application.Servicies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using WorkVerseAPI.Models;
 
@@ -87,6 +88,10 @@ namespace WorkVerseAPI.Controllers
                 }
 
                 return Ok(new ApiResponse<object>("Employer profile updated successfully.", null, 200));
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(new ApiResponse<object>(ex.Message, 409));
             }
             catch (KeyNotFoundException ex)
             {

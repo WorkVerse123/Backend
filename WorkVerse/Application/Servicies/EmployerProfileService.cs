@@ -140,7 +140,16 @@ namespace Application.Servicies
                 {
                     throw new ArgumentException(errorMessage);
                 }
-
+                var phoneExist = await _unitOfWork.EmployerProfile.ExistsByContactPhoneAsync(request.ContactPhone, id);
+                if (phoneExist)
+                {
+                    throw new InvalidOperationException($"Phone already exists in the system");
+                }
+                var emailExist = await _unitOfWork.EmployerProfile.ExistsByContactEmailAsync(request.ContactEmail, id);
+                if (emailExist)
+                {
+                    throw new InvalidOperationException($"Email already exists in the system");
+                }
                 // Get existing profile
                 var existingProfile = await _unitOfWork.EmployerProfile.GetByIdAsync(id);
                 var employerType = await _unitOfWork.EmployerType.GetByIdAsync(request.EmployerTypeId);
@@ -160,8 +169,11 @@ namespace Application.Servicies
                 existingProfile.Address = request.Address;
                 existingProfile.WebsiteUrl = request.WebsiteUrl;
                 existingProfile.LogoUrl = request.LogoUrl;
-                existingProfile.DateEstablish = request.DateEstablished;
+                existingProfile.DateEstablish = request.DateEstablish;
                 existingProfile.Description = request.Description;
+                existingProfile.ContactEmail = request.ContactEmail;
+                existingProfile.ContactPhone = request.ContactPhone;
+
 
                 // Save changes
                 _unitOfWork.EmployerProfile.Update(existingProfile);

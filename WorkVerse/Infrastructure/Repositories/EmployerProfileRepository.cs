@@ -106,15 +106,22 @@ namespace Infrastructure.Repositories
 
             return ranked;
         }
-        // Kiểm tra tồn tại theo ContactPhone
-        public async Task<bool> ExistsByContactPhoneAsync(string contactPhone)
+        // Kiểm tra tồn tại theo ContactPhone (gộp Create + Update)
+        public async Task<bool> ExistsByContactPhoneAsync(string contactPhone, int? excludeId = null)
         {
-            return await _dbSet.AnyAsync(j => j.ContactPhone == contactPhone);
+            return await _dbSet.AnyAsync(j =>
+                j.ContactPhone == contactPhone &&
+                (excludeId == null || j.EmployerId != excludeId));
         }
-        // Kiểm tra tồn tại theo ContactEmail
-        public async Task<bool> ExistsByContactEmailAsync(string contactEmail)
+
+        // Kiểm tra tồn tại theo ContactEmail (gộp Create + Update)
+        public async Task<bool> ExistsByContactEmailAsync(string contactEmail, int? excludeId = null)
         {
-            return await _dbSet.AnyAsync(j => j.ContactEmail == contactEmail);
+            return await _dbSet.AnyAsync(j =>
+                j.ContactEmail == contactEmail &&
+                (excludeId == null || j.EmployerId != excludeId));
         }
+
+
     }
 }
