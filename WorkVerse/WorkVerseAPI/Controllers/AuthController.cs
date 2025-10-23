@@ -5,6 +5,8 @@ using Application.Interfaces.IRepositories;
 using Application.Interfaces.IServices;
 using Application.Interfaces.IServicies;
 using Application.Servicies;
+using Domain.Entities;
+using Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity.Data;
@@ -23,14 +25,17 @@ namespace WorkVerseAPI.Controllers
 		private readonly IEmployerProfileService _employerProfileServices;
 		private readonly IJWTService _jwtService;
 		private readonly IEmailService _emailService;
+        private readonly IUserService _userService;
 
-		public AuthController(IAuthService authService, IJWTService jwtService, IEmployeeProfileServices employeeProfileServices, IEmployerProfileService employerProfileServices, IEmailService emailService)
+
+        public AuthController(IAuthService authService, IJWTService jwtService, IEmployeeProfileServices employeeProfileServices, IEmployerProfileService employerProfileServices, IEmailService emailService, IUserService userService)
 		{
 			_authService = authService;
 			_jwtService = jwtService;
 			_employeeProfileServices = employeeProfileServices;
 			_employerProfileServices = employerProfileServices;
 			_emailService = emailService;
+			_userService = userService;
 		}
 
 		[HttpPost("login")]
@@ -81,8 +86,12 @@ namespace WorkVerseAPI.Controllers
 			{
 				return BadRequest(new ApiResponse<object>("RoleId not found.", 400));
 			}
-
-			var newUser = await _authService.CreatedAccountAsync(request);
+            var existsPhone = await _userService.ExistsByUserPhoneAsync(request.PhoneNumber);
+            if (existsPhone)
+            {
+                return BadRequest(new ApiResponse<object>("Phone has already exist.", 400));
+            }
+            var newUser = await _authService.CreatedAccountAsync(request);
 			if (newUser == null)
 			{
 				return BadRequest(new ApiResponse<object>("Failed to create account.", 400));

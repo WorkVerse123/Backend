@@ -16,5 +16,6 @@ namespace Application.Interfaces.IServicies
         Task<PaginationResult<List<UserDTORespone>>> GetAllAsync(int pageIndex = 1, int pageSize = 10);
 
         Task<UserDTORespone> UpdateAsync(UserUpdateDTORequest entity);
+        Task<bool> ExistsByUserPhoneAsync(string phone);
     }
 }

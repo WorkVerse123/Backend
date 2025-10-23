@@ -28,7 +28,7 @@ namespace Application.Mappers
            .ForMember(dest => dest.EmployerTypeId, opt => opt.MapFrom(src => src.EmployerTypeId))
            .ForMember(dest => dest.WebsiteUrl, opt => opt.MapFrom(src => src.WebsiteUrl))
            .ForMember(dest => dest.LogoUrl, opt => opt.MapFrom(src => src.LogoUrl))
-           .ForMember(dest => dest.DateEstablish, opt => opt.MapFrom(src => src.DateEstablished))
+           .ForMember(dest => dest.DateEstablish, opt => opt.MapFrom(src => src.DateEstablish))
            .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
            .ForMember(dest => dest.EmployerType, opt => opt.Ignore());
 

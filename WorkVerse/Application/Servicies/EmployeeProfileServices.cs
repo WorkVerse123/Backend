@@ -38,6 +38,7 @@ namespace Application.Servicies
                     _logger.LogWarning("Attempted to add a null employee profile");
                     throw new ArgumentNullException(nameof(employeeProfile), "Profile cannot be null");
                 }
+                
                 var existsUser = await _unitOfWork.User.ExistByIdAsync(userId);
                 if (!existsUser)
                 {

@@ -37,6 +37,16 @@ namespace Application.Servicies
                 {
                     throw new InvalidOperationException($"User not exists for User {request.UserId}");
                 }
+                var phoneExist = await _unitOfWork.EmployerProfile.ExistsByContactPhoneAsync(request.ContactPhone);
+                if (phoneExist)
+                {
+                    throw new InvalidOperationException($"Phone already exists in the system");
+                }
+                var emailExist = await _unitOfWork.EmployerProfile.ExistsByContactEmailAsync(request.ContactEmail);
+                if (emailExist)
+                {
+                    throw new InvalidOperationException($"Email already exists in the system");
+                }
                 var existingProfile = await _unitOfWork.EmployerProfile.ExistsByUserIdAsync(request.UserId);
                 if (existingProfile)
                 {
@@ -130,10 +140,24 @@ namespace Application.Servicies
                 {
                     throw new ArgumentException(errorMessage);
                 }
-
+                var phoneExist = await _unitOfWork.EmployerProfile.ExistsByContactPhoneAsync(request.ContactPhone, id);
+                if (phoneExist)
+                {
+                    throw new InvalidOperationException($"Phone already exists in the system");
+                }
+                var emailExist = await _unitOfWork.EmployerProfile.ExistsByContactEmailAsync(request.ContactEmail, id);
+                if (emailExist)
+                {
+                    throw new InvalidOperationException($"Email already exists in the system");
+                }
                 // Get existing profile
                 var existingProfile = await _unitOfWork.EmployerProfile.GetByIdAsync(id);
-                var employerType = await _unitOfWork.EmployerType.GetAsync(request.EmployerTypeId);
+                var employerType = await _unitOfWork.EmployerType.GetByIdAsync(request.EmployerTypeId);
+
+                if (!employerType)
+                {
+                    throw new KeyNotFoundException($"Employer Type with ID {request.EmployerTypeId} not found.");
+                }
                 if (existingProfile == null)
                 {
                     throw new KeyNotFoundException($"Employer profile with ID {id} not found.");
@@ -141,12 +165,15 @@ namespace Application.Servicies
 
                 // Update fields
                 existingProfile.CompanyName = request.CompanyName;
-                existingProfile.EmployerTypeId = employerType.EmployerTypeId;
+                existingProfile.EmployerTypeId = request.EmployerTypeId;
                 existingProfile.Address = request.Address;
                 existingProfile.WebsiteUrl = request.WebsiteUrl;
                 existingProfile.LogoUrl = request.LogoUrl;
-                existingProfile.DateEstablish = request.DateEstablished;
+                existingProfile.DateEstablish = request.DateEstablish;
                 existingProfile.Description = request.Description;
+                existingProfile.ContactEmail = request.ContactEmail;
+                existingProfile.ContactPhone = request.ContactPhone;
+
 
                 // Save changes
                 _unitOfWork.EmployerProfile.Update(existingProfile);

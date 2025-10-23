@@ -10,5 +10,6 @@ namespace Application.Interfaces.IRepositories
     public interface IEmployerTypeRepository : IGenericRepository<EmployerType>
     {
         Task<List<EmployerType>> GetAllEmployerTypesAsync();
+        Task<bool> GetByIdAsync(int employerTypeId);
     }
 }

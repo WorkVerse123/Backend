@@ -18,8 +18,8 @@ namespace Application.Interfaces.IRepositories
         Task<int> CountAllEmployersAsync();
         Task<bool> ExistsByUserIdAsync(int userId);
         Task<IEnumerable<EmployerProfile>> SearchEmployerByAIResult(EmployerQuery jobQuery);
-
-
+        Task<bool> ExistsByContactPhoneAsync(string contactPhone, int? excludeId = null);
+        Task<bool> ExistsByContactEmailAsync(string contactEmail, int? excludeId = null);
     }
 }
 
