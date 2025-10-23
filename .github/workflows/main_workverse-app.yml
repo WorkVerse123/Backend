@@ -14,7 +14,7 @@ env:
   WORKING_DIRECTORY: WorkVerse/WorkVerseAPI
   CONFIGURATION: Release
   DOTNET_VERSION: 8.x
-  PUBLISH_OUTPUT: ${{ env.WORKING_DIRECTORY }}/publish
+  PUBLISH_OUTPUT: WorkVerse/WorkVerseAPI/publish
 
 jobs:
   build:
@@ -32,13 +32,13 @@ jobs:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
       - name: Restore dependencies
-        run: dotnet restore "${{ env.WORKING_DIRECTORY }}"
+        run: dotnet restore ${{ env.WORKING_DIRECTORY }}
 
       - name: Build with dotnet
-        run: dotnet build "${{ env.WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-restore
+        run: dotnet build ${{ env.WORKING_DIRECTORY }} --configuration ${{ env.CONFIGURATION }} --no-restore
 
       - name: Publish application
-        run: dotnet publish "${{ env.WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-build --output "${{ env.PUBLISH_OUTPUT }}"
+        run: dotnet publish ${{ env.WORKING_DIRECTORY }} --configuration ${{ env.CONFIGURATION }} --no-build --output ${{ env.PUBLISH_OUTPUT }}
 
       - name: Upload artifact for deployment
         uses: actions/upload-artifact@v4
