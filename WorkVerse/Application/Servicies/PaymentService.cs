@@ -54,7 +54,6 @@ namespace Application.Servicies
                 return null;
             }
 
-            // ✅ Cập nhật dữ liệu vào object đang được EF tracking
             _mapper.Map(paymentRequest, payment);
 
             _unitOfWork.Payment.Update(payment);
