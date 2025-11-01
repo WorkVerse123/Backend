@@ -18,15 +18,17 @@ namespace WorkVerseAPI.Controllers
         private readonly IPaymentService _payment;
         private readonly IUserSubscriptionService _userSubscripitionService;
         private readonly IEmployeeProfileServices _employeeProfileServices;
+        private readonly IEmployerProfileService _employerProfileServices;
         private readonly ILogger _logger;
 
-        public PaymentController(IThirdPaymentService payService, IPaymentService payment, IUserSubscriptionService userSubscripitionService, IEmployeeProfileServices employeeProfileServices, ILogger logger)
+        public PaymentController(IThirdPaymentService payService, IPaymentService payment, IUserSubscriptionService userSubscripitionService, IEmployeeProfileServices employeeProfileServices, ILogger logger, IEmployerProfileService employerProfileServices)
         {
             _payService = payService;
             _payment = payment;
             _userSubscripitionService = userSubscripitionService;
             _employeeProfileServices = employeeProfileServices;
             _logger = logger;
+            _employerProfileServices = employerProfileServices;
         }
         // POST /payments
         [HttpPost]
@@ -72,6 +74,14 @@ namespace WorkVerseAPI.Controllers
                 catch (Exception ex)
                 {
                     _logger.LogWarning(ex, "This user is employee", payment.UserId);
+                }
+                try
+                {
+                    await _employerProfileServices.UpdatePriority(payment.UserId, true);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogWarning(ex, "This user is employer", payment.UserId);
                 }
 
                 var updatePayment = await _payment.UpdateAsync(payment);

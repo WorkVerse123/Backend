@@ -328,5 +328,28 @@ namespace Application.Servicies
                 throw;
             }
         }
+
+        public async Task<bool> UpdatePriority(int employerId, bool isPriority)
+        {
+            try
+            {
+                var existingProfile = await _unitOfWork.EmployerProfile.ExistsByEmployerIdAsync(employerId);
+                if (!existingProfile)
+                {
+                    return false;
+                }
+                var result = await _unitOfWork.EmployerProfile.UpdatePriority(employerId, isPriority);
+                if (result)
+                {
+                    await _unitOfWork.SaveChangesAsync();
+                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error updating priority for employee {EmployerId}", employerId);
+                throw;
+            }
+        }
     }
 }

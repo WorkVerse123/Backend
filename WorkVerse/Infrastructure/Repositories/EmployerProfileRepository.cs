@@ -122,6 +122,16 @@ namespace Infrastructure.Repositories
                 (excludeId == null || j.EmployerId != excludeId));
         }
 
+        public async Task<bool> UpdatePriority(int employerId, bool isPriority)
+        {
+            var employee = await _dbSet.FirstOrDefaultAsync(e => e.EmployerId == employerId);
+            if (employee == null)
+            {
+                return false;
+            }
+            employee.IsPriority = isPriority;
+            return true;
+        }
 
     }
 }
