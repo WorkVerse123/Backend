@@ -19,9 +19,9 @@ namespace WorkVerseAPI.Controllers
         private readonly IUserSubscriptionService _userSubscripitionService;
         private readonly IEmployeeProfileServices _employeeProfileServices;
         private readonly IEmployerProfileService _employerProfileServices;
-        private readonly ILogger _logger;
+        private readonly ILogger<PaymentController> _logger;
 
-        public PaymentController(IThirdPaymentService payService, IPaymentService payment, IUserSubscriptionService userSubscripitionService, IEmployeeProfileServices employeeProfileServices, ILogger logger, IEmployerProfileService employerProfileServices)
+        public PaymentController(IThirdPaymentService payService, IPaymentService payment, IUserSubscriptionService userSubscripitionService, IEmployeeProfileServices employeeProfileServices, ILogger<PaymentController> logger, IEmployerProfileService employerProfileServices)
         {
             _payService = payService;
             _payment = payment;
