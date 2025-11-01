@@ -122,9 +122,9 @@ namespace Infrastructure.Repositories
                 (excludeId == null || j.EmployerId != excludeId));
         }
 
-        public async Task<bool> UpdatePriority(int employerId, bool isPriority)
+        public async Task<bool> UpdatePriority(int userId, bool isPriority)
         {
-            var employee = await _dbSet.FirstOrDefaultAsync(e => e.EmployerId == employerId);
+            var employee = await _dbSet.FirstOrDefaultAsync(e => e.UserId == userId);
             if (employee == null)
             {
                 return false;

@@ -21,7 +21,7 @@ namespace Application.Interfaces.IServicies
         Task<EmployeeDashboardDTOResponse> GetEmployeeDashBoardAsync(int employeeId ,int pageNumber, int pageSize);
         Task<int?> GetEmployeeIdByUserIdAsync(int userId);
         Task<IEnumerable<EmployeeAIDTOResponse>> SearchEmployeeByAIResult(EmployeeQuery employeeQuery);
-        Task<bool> UpdatePriority(int employeeId, bool isPriority);
+        Task<bool> UpdatePriority(int userId, bool isPriority);
         Task<PaginationResult<List<EmployeeProfileDTOResponse>>> GetAllAsync(int pageIndex = 1, int pageSize = 10);
 
         Task<EmployeeProfileDTOResponse> UpdateAsync(EmployeeProfileUpdateDTORequest entity);

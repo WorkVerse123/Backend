@@ -239,16 +239,16 @@ namespace Application.Servicies
             }
         }
 
-        public async Task<bool> UpdatePriority(int employeeId, bool isPriority)
+        public async Task<bool> UpdatePriority(int userId, bool isPriority)
         {
             try
             {
-                var existingProfile = await _unitOfWork.EmployeeProfile.GetByEmployeeIdAsync(employeeId);
+                var existingProfile = await _unitOfWork.EmployeeProfile.GetByEmployeeIdAsync(userId);
                 if (existingProfile == null)
                 {
                     return false;
                 }
-                var result = await _unitOfWork.EmployeeProfile.UpdatePriority(employeeId, isPriority);
+                var result = await _unitOfWork.EmployeeProfile.UpdatePriority(userId, isPriority);
                 if (result)
                 {
                     await _unitOfWork.SaveChangesAsync();
@@ -257,7 +257,7 @@ namespace Application.Servicies
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error updating priority for employee {EmployeeId}", employeeId);
+                _logger.LogError(ex, "Error updating priority for employee {EmployeeId}", userId);
                 throw;
             }
         }

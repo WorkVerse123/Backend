@@ -20,7 +20,7 @@ namespace Application.Interfaces.IRepositories
         Task<IEnumerable<EmployerProfile>> SearchEmployerByAIResult(EmployerQuery jobQuery);
         Task<bool> ExistsByContactPhoneAsync(string contactPhone, int? excludeId = null);
         Task<bool> ExistsByContactEmailAsync(string contactEmail, int? excludeId = null);
-        Task<bool> UpdatePriority(int employerId, bool isPriority);
+        Task<bool> UpdatePriority(int userId, bool isPriority);
 
     }
 }

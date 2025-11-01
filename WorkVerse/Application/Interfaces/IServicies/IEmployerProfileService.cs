@@ -23,7 +23,7 @@ namespace Application.Interfaces.IServicies
         Task<PaginationResult<List<EmployerProfileDTOResponse>>> GetAllAsync(int pageIndex = 1, int pageSize = 10);
 
         Task<EmployerProfileDTOResponse> UpdateAsync(EmployerProfileDTORequest entity);
-        Task<bool> UpdatePriority(int employerId, bool isPriority);
+        Task<bool> UpdatePriority(int userId, bool isPriority);
 
     }
 }
