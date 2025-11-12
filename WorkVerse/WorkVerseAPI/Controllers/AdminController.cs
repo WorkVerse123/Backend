@@ -11,7 +11,7 @@ namespace WorkVerseAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "1,2")]
+    [Authorize(Roles = "1,2,8")]
     public class AdminController : ControllerBase
     {
         private readonly ILogger<AdminController> _logger;
